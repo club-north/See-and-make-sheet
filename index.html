@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>👀みてつくるシート🚗</title>
+<style>
+/* ============================================================================
+   スマホ最適化レイアウト - 高齢者・初心者向け
+   ============================================================================ */
+
+/* ベース設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'BIZ UDPGothic', sans-serif;
+  background: #f8f9fa;
+  color: #333;
+  line-height: 1.8;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ヘッダー設定 */
+.header {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  text-align: center;
+  padding: 1.8rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+/* ナビゲーション設定 */
+.nav-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: white;
+  padding: 0.8rem 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.nav-scroll {
+  display: inline-flex;
+  gap: 0.6rem;
+  padding: 0 0.5rem;
+  min-width: min-content;
+}
+
+.nav-btn {
+  flex-shrink: 0;
+  padding: 1.2rem 1.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  background: #2196F3;
+  color: white;
+  cursor: pointer;
+  min-width: 130px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+  transition: all 0.3s ease;
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.3);
+}
+
+/* メインコンテンツ設定 */
+.main-content {
+  padding: 1rem;
+}
+
+.step-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e0e0e0;
+}
+
+.step-title {
+  font-size: 1.6rem;
+  color: #1565C0;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px dashed #BBDEFB;
+}
+
+.photo-container {
+  position: relative;
+  margin: 1.2rem 0;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #f5f5f5;
+  min-height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.photo-label {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 0.8rem 1.4rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+}
+
+.status-box {
+  border-radius: 15px;
+  padding: 1.2rem;
+  margin: 1.2rem 0;
+  font-size: 1.2rem;
+}
+
+.status-ok {
+  background: #E8F5E9;
+  border-left: 6px solid #4CAF50;
+  color: #1B5E20;
+  font-weight: bold;
+}
+
+.status-note {
+  background: #FFF3E0;
+  border-left: 6px solid #FF9800;
+  color: #E65100;
+}
+
+/* 状態別カード設定 */
+.card-danger .status-note {
+  background: #FFEBEE;
+  border-left-color: #F44336;
+}
+
+.card-final .status-ok {
+  background: #E3F2FD;
+  border-left-color: #2196F3;
+  font-size: 1.3rem;
+}
+
+/* オーバーレイ設定 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.98);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.overlay.active {
+  display: flex;
+}
+
+.overlay-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.overlay-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  touch-action: none;
+  transform-origin: center center;
+  transition: transform 0.1s ease-out;
+}
+
+.close-btn {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 10001;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* PC向け設定 */
+@media (min-width: 768px) {
+  body {
+    padding: 1.5rem;
+  }
+  
+  .header {
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 0;
+  }
+  
+  .nav-container {
+    border-radius: 0 0 15px 15px;
+  }
+  
+  .nav-scroll {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .nav-btn {
+    flex: 1;
+    min-width: auto;
+    padding: 1.5rem 0.5rem;
+    font-size: 1.3rem;
+  }
+  
+  .header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .step-title {
+    font-size: 1.8rem;
+  }
+  
+  .status-box {
+    font-size: 1.3rem;
+    padding: 1.5rem;
+  }
+  
+  .close-btn {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2rem;
+  }
+}
+
+/* 小さなスマホ向け設定 */
+@media (max-width: 480px) {
+  .nav-btn {
+    padding: 1rem 1.2rem;
+    font-size: 1.1rem;
+    min-width: 110px;
+  }
+  
+  .step-title {
+    font-size: 1.4rem;
+  }
+  
+  .status-box {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+}
+
+/* タッチ操作向け最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .nav-btn, .close-btn, .step-image {
+    min-height: 44px;
+  }
+  
+  .photo-label {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================================
+     ヘッダー部 - タイトルと説明
+     ============================================================================ -->
+<header class="header">
+  <h1>👀みてつくるシート🚗</h1>
+  <p>リモコンカーの作り方を写真で確認</p>
+</header>
+
+<!-- ============================================================================
+     ナビゲーション部 - 工程選択
+     ============================================================================ -->
+<div class="nav-container">
+  <div class="nav-scroll" id="navButtons"></div>
+</div>
+
+<!-- ============================================================================
+     メインコンテンツ部 - 工程詳細表示
+     ============================================================================ -->
+<main class="main-content" id="content"></main>
+
+<script>
+// ============================================================================
+//     工程データ定義
+//     ----------------------------------------------------------------------------
+//     nav:  ナビゲーションボタン表示テキスト
+//     title: 工程タイトル
+//     img:   画像ファイルパス
+//     ok:    OK確認テキスト
+//     note:  注意事項テキスト
+//     danger:危険工程フラグ（trueの場合警告表示）
+//     final: 最終工程フラグ（trueの場合特別表示）
+// ============================================================================
+const steps = [
+  { 
+    nav: "① でんち", 
+    title: "① でんち（BOX）", 
+    img: "images/battery_box.jpg",
+    ok: "電池の向きOK！", 
+    note: "＋と－を確認します。" 
+  },
+  { 
+    nav: "② せん", 
+    title: "② 電池につける電線", 
+    img: "images/wire_magnet.jpg",
+    ok: "線がつながった！", 
+    note: "磁石がしっかり付いているか確認。外れていないか見ます。" 
+  },
+  { 
+    nav: "③ スイッチ", 
+    title: "③ 前後切り替えスイッチ", 
+    img: "images/switch_complete.jpg",
+    ok: "前後が切り替わる！", 
+    note: "左右SWを押して切り替わるか確認。向きを確認します。" 
+  },
+  { 
+    nav: "④ まわる", 
+    title: "④ モーターは回る？", 
+    img: "images/motor_test.jpg",
+    ok: "回れば OK（又は、LEDチェッカーで調べる）", 
+    note: "指を近づけないよう注意。回らない（つかない）場合は配線を確認。" 
+  },
+  { 
+    nav: "⑤ みため", 
+    title: "⑤ 見た目完成（実験中）", 
+    img: "images/car_complete.jpg",
+    ok: "つなぎ方をためそう！", 
+    note: "前後が逆なら入れ替えてみよう。", 
+    danger: true 
+  },
+  { 
+    nav: "⑥ かんせい", 
+    title: "⑥ ほんとうの完成！", 
+    img: "images/complete.jpg",
+    ok: "前後に動いたら大成功！", 
+    note: "安全に走らせよう。", 
+    final: true 
+  }
+];
+
+// ============================================================================
+//     グローバル変数宣言
+//     ----------------------------------------------------------------------------
+//     currentStep: 現在表示中の工程インデックス
+//     navButtons:  ナビゲーションボタンコンテナ要素
+//     content:     メインコンテンツ表示要素
+// ============================================================================
+let currentStep = 0;
+const navButtons = document.getElementById('navButtons');
+const content = document.getElementById('content');
+
+// ============================================================================
+//     ナビゲーションボタン作成関数
+//     ----------------------------------------------------------------------------
+//     機能: 6つの工程ボタンを生成し、クリックイベントを設定
+//     特徴: アクティブなボタンは視覚的に強調表示
+// ============================================================================
+function renderNavigation() {
+  navButtons.innerHTML = '';
+  
+  steps.forEach((step, index) => {
+    const button = document.createElement('button');
+    button.className = `nav-btn ${index === currentStep ? 'active' : ''}`;
+    button.textContent = step.nav;
+    button.addEventListener('click', () => {
+      currentStep = index;
+      renderContent();
+      updateNavigation();
+    });
+    navButtons.appendChild(button);
+  });
+}
+
+// ============================================================================
+//     ナビゲーションボタン更新関数
+//     ----------------------------------------------------------------------------
+//     機能: アクティブなボタンのスタイルを更新
+// ============================================================================
+function updateNavigation() {
+  Array.from(navButtons.children).forEach((button, index) => {
+    button.classList.toggle('active', index === currentStep);
+  });
+}
+
+// ============================================================================
+//     メインコンテンツ表示関数
+//     ----------------------------------------------------------------------------
+//     機能: 現在の工程の詳細情報を表示
+//     表示内容: 工程タイトル、写真、OK確認、注意事項
+//     状態別表示: 危険工程(danger)、最終工程(final)でスタイル変更
+// ============================================================================
+function renderContent() {
+  const step = steps[currentStep];
+  
+  let cardClass = 'step-card';
+  if (step.danger) cardClass += ' card-danger';
+  if (step.final) cardClass += ' card-final';
+  
+  content.innerHTML = `
+    <div class="${cardClass}">
+      <div class="step-title">${step.title}</div>
+      <div class="photo-container">
+        <img src="${step.img}" alt="${step.title}" class="step-image">
+        <div class="photo-label">タップで拡大</div>
+      </div>
+      <div class="status-box status-ok">${step.ok}</div>
+      <div class="status-box status-note">${step.note}</div>
+    </div>
+  `;
+  
+  const stepImage = content.querySelector('.step-image');
+  stepImage.addEventListener('click', openOverlay);
+}
+
+// ============================================================================
+//     オーバーレイ変数宣言
+//     ----------------------------------------------------------------------------
+//     scale:          画像拡大率 (1〜5倍)
+//     posX, posY:     画像位置オフセット
+//     pointers:       アクティブなポインター管理オブジェクト
+//     initialDistance:ピンチ開始時の指間距離
+//     lastScale:      前回の拡大率（ピンチ計算用）
+// ============================================================================
+let scale = 1;
+let posX = 0;
+let posY = 0;
+let pointers = {};
+let initialDistance = 0;
+let lastScale = 1;
+
+// ============================================================================
+//     オーバーレイ表示関数
+//     ----------------------------------------------------------------------------
+//     機能: 写真を全画面で拡大表示
+//     処理:
+//       1. オーバーレイ要素を作成・追加
+//       2. 画像のピンチズーム・ドラッグ機能を設定
+//       3. スマホ縦向きの場合、90度回転して表示
+// ============================================================================
+function openOverlay(e) {
+  // オーバーレイ要素の作成
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'overlay-content';
+  
+  const img = document.createElement('img');
+  img.className = 'overlay-image';
+  img.src = e.target.src;
+  
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', () => closeOverlay(overlay));
+  
+  // 要素の追加
+  contentDiv.appendChild(img);
+  overlay.appendChild(contentDiv);
+  overlay.appendChild(closeBtn);
+  document.body.appendChild(overlay);
+  
+  // 表示アニメーション
+  setTimeout(() => overlay.classList.add('active'), 10);
+  document.body.style.overflow = 'hidden';
+  
+  // 初期状態の設定
+  scale = 1;
+  posX = 0;
+  posY = 0;
+  pointers = {};
+  initialDistance = 0;
+  lastScale = 1;
+  
+  const isMobile = window.innerHeight > window.innerWidth;
+  updateOverlayTransform(img, isMobile);
+  
+  // ==========================================================================
+  //     ポインターイベント設定
+  //     ----------------------------------------------------------------------
+  //     要件通り: pointerイベントの伝播を遮断
+  //     処理内容: 
+  //       - 1本指: ドラッグ移動 (scale > 1.01 の場合のみ)
+  //       - 2本指: ピンチズーム (最大5倍まで)
+  // ==========================================================================
+  
+  // ポインター開始
+  img.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    
+    if (Object.keys(pointers).length === 1) {
+      // 1本指: ドラッグ開始位置を記録
+      startX = e.clientX - posX;
+      startY = e.clientY - posY;
+    } else if (Object.keys(pointers).length === 2) {
+      // 2本指: 初期距離を記録
+      const ids = Object.keys(pointers);
+      const p1 = pointers[ids[0]];
+      const p2 = pointers[ids[1]];
+      initialDistance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      lastScale = scale;
+    }
+  });
+  
+  // ポインター移動
+  img.addEventListener('pointermove', (e) => {
+    e.stopPropagation();
+    if (!pointers[e.pointerId]) return;
+    
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    const ids = Object.keys(pointers);
+    
+    if (ids.length === 2) {
+      // 2本指ピンチズーム
+      const p1 = pointers[ids[0]];
+      const p2 = pointers[ids[1]];
+      const currentDistance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      
+      if (initialDistance > 0) {
+        // 拡大率計算 (1〜5倍に制限)
+        scale = Math.min(5, Math.max(1, lastScale * (currentDistance / initialDistance)));
+        updateOverlayTransform(img, isMobile);
+      }
+    } else if (ids.length === 1) {
+      // 1本指ドラッグ (要件通り: scale <= 1.01 の場合は無効)
+      if (scale <= 1.01) return;
+      posX = e.clientX - startX;
+      posY = e.clientY - startY;
+      updateOverlayTransform(img, isMobile);
+    }
+  });
+  
+  // ポインター終了
+  const handlePointerUp = (e) => {
+    e.stopPropagation();
+    delete pointers[e.pointerId];
+    
+    if (Object.keys(pointers).length === 1) {
+      // 2本指→1本指になった場合、残りの指を基準に設定
+      const remainingId = Object.keys(pointers)[0];
+      startX = pointers[remainingId].x - posX;
+      startY = pointers[remainingId].y - posY;
+      initialDistance = 0;
+    } else if (Object.keys(pointers).length === 0) {
+      initialDistance = 0;
+      lastScale = scale;
+    }
+  };
+  
+  img.addEventListener('pointerup', handlePointerUp);
+  img.addEventListener('pointercancel', handlePointerUp);
+  
+  // 背景タップで閉じる (要件通り: overlayのみ)
+  overlay.addEventListener('pointerdown', (e) => {
+    if (e.target === overlay) {
+      closeOverlay(overlay);
+    }
+  });
+  
+  // 要件通りのイベント伝播遮断
+  img.addEventListener('pointerdown', e => e.stopPropagation());
+  img.addEventListener('pointermove', e => e.stopPropagation());
+  img.addEventListener('pointerup', e => e.stopPropagation());
+  img.addEventListener('pointercancel', e => e.stopPropagation());
+}
+
+// ============================================================================
+//     オーバーレイ画像変形関数
+//     ----------------------------------------------------------------------------
+//     機能: 画像の位置・拡大率・回転を更新
+//     要件: transform順序を厳守
+//         スマホ: translate → scale → rotate(90deg)
+//         PC:     translate → scale
+// ============================================================================
+function updateOverlayTransform(imgElement, isMobile) {
+  if (isMobile) {
+    imgElement.style.transform = `translate(${posX}px, ${posY}px) scale(${scale}) rotate(90deg)`;
+  } else {
+    imgElement.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+  }
+}
+
+// ============================================================================
+//     オーバーレイ閉じる関数
+//     ----------------------------------------------------------------------------
+//     機能: オーバーレイを閉じて状態をリセット
+//     処理: 
+//       1. オーバーレイを非表示
+//       2. 変数を初期値にリセット
+//       3. スクロールを有効化
+// ============================================================================
+function closeOverlay(overlay) {
+  overlay.classList.remove('active');
+  setTimeout(() => {
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+    document.body.style.overflow = '';
+    scale = 1;
+    posX = 0;
+    posY = 0;
+  }, 300);
+}
+
+// ============================================================================
+//     初期化処理
+//     ----------------------------------------------------------------------------
+//     機能: アプリケーションの初期表示を設定
+//     実行: ページ読み込み時に自動実行
+// ============================================================================
+function initializeApp() {
+  renderNavigation();
+  renderContent();
+}
+
+// ページ読み込み完了時に初期化
+window.addEventListener('DOMContentLoaded', initializeApp);
+
+// ウィンドウリサイズ時にモバイル判定を更新
+window.addEventListener('resize', () => {
+  if (document.querySelector('.overlay-image')) {
+    const img = document.querySelector('.overlay-image');
+    const isMobile = window.innerHeight > window.innerWidth;
+    updateOverlayTransform(img, isMobile);
+  }
+});
+</script>
+</body>
+</html>
