@@ -5,155 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>👀みてつくるシート🚗</title>
 <style>
-/* ============================================================================
-   基本設定
-   ============================================================================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'BIZ UDPGothic', sans-serif;
-  background: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
-  max-width: 960px;
-  margin: 0 auto;
-}
+/* --- 基本設定 --- */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: sans-serif; background: #f0f2f5; color: #333; max-width: 960px; margin: 0 auto; }
 
 /* ヘッダー */
 .header {
   background: linear-gradient(135deg, #4CAF50, #2E7D32);
-  color: white;
-  text-align: center;
-  padding: 1.2rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  color: white; text-align: center; padding: 1.2rem;
 }
 
-/* ナビゲーション */
+/* ナビ */
 .nav-container {
-  width: 100%;
-  overflow-x: auto;
-  background: white;
-  padding: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%; overflow-x: auto; background: white; padding: 10px;
+  position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-
-.nav-scroll {
-  display: inline-flex;
-  gap: 8px;
-}
-
+.nav-scroll { display: inline-flex; gap: 8px; }
 .nav-btn {
-  flex-shrink: 0;
-  padding: 12px 15px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  background: #e1f5fe;
-  color: #0288d1;
-  min-width: 110px;
+  flex-shrink: 0; padding: 12px 15px; font-size: 1.1rem; font-weight: bold;
+  border: none; border-radius: 12px; background: #e1f5fe; color: #0288d1; min-width: 110px;
 }
-
-.nav-btn.active {
-  background: #ff9800;
-  color: white;
-}
+.nav-btn.active { background: #ff9800; color: white; }
 
 /* メインカード */
 .main-content { padding: 15px; }
-
 .step-card {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
+  background: white; border-radius: 18px; padding: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
+.step-title { font-size: 1.4rem; color: #1565C0; margin-bottom: 15px; font-weight: bold; }
 
-.step-title {
-  font-size: 1.4rem;
-  color: #1565C0;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
+/* 写真2枚を縦に並べるための設定 */
+.photo-list { display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; }
 
 .photo-container {
-  position: relative;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 15px;
-  line-height: 0;
+  position: relative; background: #000; border-radius: 12px; overflow: hidden; line-height: 0;
 }
-
-.step-image {
-  width: 100%;
-  height: auto;
-  cursor: pointer;
-}
-
+.step-image { width: 100%; height: auto; cursor: pointer; }
 .photo-label {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  position: absolute; bottom: 10px; right: 10px;
+  background: rgba(0,0,0,0.6); color: white; padding: 5px 12px;
+  border-radius: 20px; font-size: 0.8rem;
 }
 
-.status-box {
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
+/* 説明文 */
+.status-box { border-radius: 10px; padding: 12px; font-size: 1.1rem; margin-bottom: 10px; }
 .status-ok { background: #e8f5e9; border-left: 5px solid #4caf50; color: #2e7d32; font-weight: bold; }
 .status-note { background: #fff3e0; border-left: 5px solid #ff9800; color: #e65100; }
 
-/* ============================================================================
-   拡大オーバーレイ（横向き固定設定）
-   ============================================================================ */
+/* 拡大オーバーレイ */
 .overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: #000;
-  z-index: 10000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  touch-action: none;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #000; z-index: 10000; display: none; align-items: center; justify-content: center; touch-action: none;
 }
-
 .overlay.active { display: flex; }
-
-.overlay-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  transition: transform 0.1s ease-out;
-}
-
+.overlay-image { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
 .close-btn {
-  position: fixed;
-  top: 15px; right: 15px;
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  border: none;
-  font-weight: bold;
-  z-index: 10001;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: fixed; top: 15px; right: 15px; width: 65px; height: 65px;
+  border-radius: 50%; background: rgba(255,255,255,0.9); border: none; font-weight: bold; z-index: 10001;
 }
 </style>
 </head>
@@ -171,13 +80,29 @@ body {
 <main class="main-content" id="content"></main>
 
 <script>
+// --- 工程データ（img2を追加しました） ---
 const steps = [
-  { nav: "① でんち", title: "① でんち（BOX）", img: "images/battery_box.jpg", ok: "電池の向きOK！", note: "＋と－を確認します。" },
-  { nav: "② せん", title: "② 電池につける電線", img: "images/wire_magnet.jpg", ok: "線がつながった！", note: "磁石がしっかり付いているか確認。" },
-  { nav: "③ スイッチ", title: "③ 切り替えスイッチ", img: "images/switch_complete.jpg", ok: "前後が切り替わる！", note: "左右のボタンを押してみます。" },
-  { nav: "④ まわる", title: "④ モーターは回る？", img: "images/motor_test.jpg", ok: "回れば OK！", note: "指を近づけないよう注意。" },
-  { nav: "⑤ みため", title: "⑤ 見た目完成", img: "images/car_complete.jpg", ok: "つなぎ方をためそう！", note: "前後が逆なら入れ替えよう。" },
-  { nav: "⑥ かんせい", title: "⑥ ほんとうの完成！", img: "images/complete.jpg", ok: "前後に動いたら大成功！", note: "安全に走らせよう。" }
+  { 
+    nav: "① でんち", 
+    title: "① でんちをいれる", 
+    img1: "images/battery_box.jpg", 
+    img2: "images/battery_zoom.jpg", // 2枚目がある場合
+    ok: "電池の向きOK！", 
+    note: "＋と－をよく見ていれよう。" 
+  },
+  { 
+    nav: "② せん", 
+    title: "② せんをつなぐ", 
+    img1: "images/wire_1.jpg", 
+    img2: "", // 2枚目がない場合は空にする
+    ok: "線がつながった！", 
+    note: "磁石がしっかり付いているか確認。" 
+  },
+  // 以下、必要に応じて img2 を追加してください
+  { nav: "③ スイッチ", title: "③ スイッチ", img1: "images/switch.jpg", img2: "", ok: "切り替わる！", note: "左右のボタンを押してね。" },
+  { nav: "④ まわる", title: "④ モーター", img1: "images/motor.jpg", img2: "", ok: "回れば OK！", note: "注意して見てね。" },
+  { nav: "⑤ みため", title: "⑤ 完成イメージ", img1: "images/car_1.jpg", img2: "images/car_2.jpg", ok: "いいかんじ！", note: "向きをかくにん。" },
+  { nav: "⑥ かんせい", title: "⑥ やったね！", img1: "images/complete.jpg", img2: "", ok: "大成功！", note: "さあ走らせよう。" }
 ];
 
 let currentStep = 0;
@@ -195,12 +120,26 @@ function render() {
   });
 
   const s = steps[currentStep];
+  
+  // 写真を表示する部分のHTMLを作成
+  let photoHtml = `<div class="photo-container" onclick="openOverlay('${s.img1}')">
+                     <img src="${s.img1}" class="step-image">
+                     <div class="photo-label">大きくする</div>
+                   </div>`;
+  
+  // 2枚目の写真がある場合のみ追加
+  if (s.img2) {
+    photoHtml += `<div class="photo-container" onclick="openOverlay('${s.img2}')">
+                     <img src="${s.img2}" class="step-image">
+                     <div class="photo-label">大きくする</div>
+                   </div>`;
+  }
+
   content.innerHTML = `
     <div class="step-card">
       <div class="step-title">${s.title}</div>
-      <div class="photo-container" onclick="openOverlay('${s.img}')">
-        <img src="${s.img}" class="step-image">
-        <div class="photo-label">大きくする</div>
+      <div class="photo-list">
+        ${photoHtml}
       </div>
       <div class="status-box status-ok">${s.ok}</div>
       <div class="status-box status-note">${s.note}</div>
@@ -208,17 +147,15 @@ function render() {
   `;
 }
 
-// 拡大処理の変数
+// --- 拡大・回転制御 ---
 let scale = 1, posX = 0, posY = 0, pointers = {}, startDist = 0, lastScale = 1;
 
 async function openOverlay(src) {
-  // --- Android/Fire向け: 横向きに固定を試みる ---
   try {
     if (document.documentElement.requestFullscreen) {
       await document.documentElement.requestFullscreen();
       if (screen.orientation && screen.orientation.lock) {
-        // 横向き(landscape)に固定
-        await screen.orientation.lock('landscape').catch(e => console.log("Lock failed"));
+        await screen.orientation.lock('landscape').catch(() => {});
       }
     }
   } catch (err) {}
@@ -244,7 +181,7 @@ async function openOverlay(src) {
   document.body.style.overflow = 'hidden';
 
   // ズーム・移動イベント
-  img.addEventListener('pointerdown', e => {
+  img.onpointerdown = e => {
     pointers[e.pointerId] = {x: e.clientX, y: e.clientY};
     if (Object.keys(pointers).length === 2) {
       const p = Object.values(pointers);
@@ -253,9 +190,9 @@ async function openOverlay(src) {
     } else {
       startX = e.clientX - posX; startY = e.clientY - posY;
     }
-  });
+  };
 
-  img.addEventListener('pointermove', e => {
+  img.onpointermove = e => {
     if (!pointers[e.pointerId]) return;
     pointers[e.pointerId] = {x: e.clientX, y: e.clientY};
     const p = Object.values(pointers);
@@ -266,24 +203,16 @@ async function openOverlay(src) {
       posX = e.clientX - startX; posY = e.clientY - startY;
     }
     img.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-  });
+  };
 
-  const end = e => { delete pointers[e.pointerId]; };
-  img.addEventListener('pointerup', end);
-  img.addEventListener('pointercancel', end);
+  img.onpointerup = img.onpointercancel = e => { delete pointers[e.pointerId]; };
 }
 
 function closeOverlay() {
   const ov = document.getElementById('imgOverlay');
   if (!ov) return;
-
-  // 固定を解除
-  if (screen.orientation && screen.orientation.unlock) {
-    screen.orientation.unlock();
-  }
-  if (document.exitFullscreen && document.fullscreenElement) {
-    document.exitFullscreen().catch(()=>{});
-  }
+  if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+  if (document.exitFullscreen && document.fullscreenElement) document.exitFullscreen().catch(()=>{});
 
   ov.classList.remove('active');
   setTimeout(() => {
