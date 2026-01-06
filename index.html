@@ -805,11 +805,13 @@ let undoEnabled = false;
 let undoTimeout = null;
 let buttonLongPressTimer = null;
 let currentUndoStepIndex = null;
+let currentKidButton = null;
 
 // 指導員用隠し機能の状態管理
 let teacherLongPressTimer = null;
 let teacherTapCount = 0;
 let teacherDoubleTapTimer = null;
+let teacherFirstTapTime = 0;
 
 // 拡大写真の状態管理
 let currentOverlay = null;
@@ -825,9 +827,8 @@ const progressBar = document.getElementById('progressBar');
 const progressBarContainer = document.getElementById('progressBarContainer');
 const teacherPanel = document.getElementById('teacherPanel');
 
-// ================= アルバム機能（究極シンプル） =================
+// ================= アルバム機能 =================
 
-// 1. 写真を撮る
 async function takePhoto() {
   if (isTakingPhoto) return;
   
@@ -836,11 +837,9 @@ async function takePhoto() {
   const originalText = cameraBtn.innerHTML;
   
   try {
-    // ボタンを一時的に「撮影中」に
     cameraBtn.innerHTML = '📸 カメラを開いています...';
     cameraBtn.disabled = true;
     
-    // カメラ起動
     const file = await openCamera();
     if (!file) {
       cameraBtn.innerHTML = originalText;
@@ -849,7 +848,6 @@ async function takePhoto() {
       return;
     }
     
-    // 名前入力（超シンプル）
     cameraBtn.innerHTML = '💬 なまえを考えてね...';
     const name = prompt("なまえをつけてね", `作品${getAlbumCount() + 1}`);
     
@@ -860,7 +858,6 @@ async function takePhoto() {
       return;
     }
     
-    // 画像を読み込んで保存
     cameraBtn.innerHTML = '💾 保存しています...';
     const reader = new FileReader();
     
@@ -872,7 +869,6 @@ async function takePhoto() {
       reader.readAsDataURL(file);
     });
     
-    // 成功フィードバック
     cameraBtn.innerHTML = '✅ 保存しました！';
     setTimeout(() => {
       cameraBtn.innerHTML = originalText;
@@ -880,7 +876,6 @@ async function takePhoto() {
       isTakingPhoto = false;
     }, 1000);
     
-    // アルバムを再表示
     renderAlbum();
     
   } catch (error) {
@@ -892,7 +887,6 @@ async function takePhoto() {
   }
 }
 
-// カメラを開く
 function openCamera() {
   return new Promise((resolve) => {
     const input = document.createElement('input');
@@ -924,7 +918,6 @@ function openCamera() {
   });
 }
 
-// アルバムに保存
 function saveToAlbum(imageData, name) {
   const album = getAlbum();
   
@@ -940,7 +933,6 @@ function saveToAlbum(imageData, name) {
     })
   });
   
-  // 最新30件だけ保存
   if (album.length > 30) {
     album.length = 30;
   }
@@ -949,17 +941,14 @@ function saveToAlbum(imageData, name) {
   return album;
 }
 
-// アルバムを取得
 function getAlbum() {
   return JSON.parse(localStorage.getItem('simpleAlbum') || '[]');
 }
 
-// アルバムの作品数を取得
 function getAlbumCount() {
   return getAlbum().length;
 }
 
-// 作品を削除
 function deletePhoto(id) {
   if (!confirm('この作品を削除してもいいですか？')) return;
   
@@ -970,7 +959,6 @@ function deletePhoto(id) {
   renderAlbum();
 }
 
-// アルバム写真を拡大表示
 function openAlbumOverlay(id) {
   const album = getAlbum();
   const item = album.find(p => p.id === id);
@@ -979,7 +967,6 @@ function openAlbumOverlay(id) {
   }
 }
 
-// アルバムを表示
 function renderAlbum() {
   const album = getAlbum();
   
@@ -1012,9 +999,8 @@ function renderAlbum() {
   `;
 }
 
-// ================= 拡大写真機能（完全修正版） =================
+// ================= 拡大写真機能 =================
 
-// 作業参考写真用クリックハンドラ
 function handlePhotoClick(event, imgSrc) {
   event.preventDefault();
   event.stopPropagation();
@@ -1022,13 +1008,11 @@ function handlePhotoClick(event, imgSrc) {
   return false;
 }
 
-// 写真要素作成（エスケープ処理付き）
 function createPhotoElement(imgSrc, altText) {
   if (!imgSrc || !isValidImagePath(imgSrc)) {
-    return ''; // 無効なパスは空を返す
+    return '';
   }
   
-  // シングルクォートをエスケープ
   const safeSrc = imgSrc.replace(/'/g, "\\'");
   
   return `
@@ -1040,7 +1024,6 @@ function createPhotoElement(imgSrc, altText) {
   `;
 }
 
-// 拡大表示を開く（共通関数）
 function openOverlay(src) {
   closeOverlay();
   
@@ -1069,14 +1052,12 @@ function openOverlay(src) {
     if (closeBtn) closeBtn.focus();
   }, 10);
   
-  // 背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
     if (e.target === this || e.target.classList.contains('overlay-content')) {
       closeOverlay();
     }
   });
   
-  // ESCキーで閉じる
   overlayKeydownHandler = function(e) {
     if (e.key === 'Escape') {
       closeOverlay();
@@ -1084,7 +1065,6 @@ function openOverlay(src) {
   };
   document.addEventListener('keydown', overlayKeydownHandler);
   
-  // タッチデバイスでピンチズーム防止
   currentOverlay.addEventListener('touchmove', function(e) {
     if (e.touches.length > 1) {
       e.preventDefault();
@@ -1133,7 +1113,7 @@ function loadProgress() {
   }
 }
 
-// ================= 子ども用完了機能（修正版） =================
+// ================= 子ども用完了機能（完全動作版） =================
 function kidComplete(stepIndex) {
   if (completedCounts[stepIndex] < 4) {
     completedCounts[stepIndex]++;
@@ -1142,13 +1122,16 @@ function kidComplete(stepIndex) {
     
     saveProgress();
     updateProgressDisplay();
-    renderStepView(steps[currentStep]);
     
-    enableUndoMode(stepIndex);
+    // 取り消しモードを有効化
+    setTimeout(() => enableUndoMode(stepIndex), 50);
     
     if (completedCounts[stepIndex] === 4) {
       celebrateAllComplete(stepIndex);
     }
+    
+    // すぐに再描画
+    setTimeout(() => renderStepView(steps[currentStep]), 100);
   }
 }
 
@@ -1158,23 +1141,29 @@ function enableUndoMode(stepIndex) {
   
   const kidButton = document.querySelector('.big-kids-button');
   if (kidButton) {
-    // 既存のイベントをクリア
-    kidButton.replaceWith(kidButton.cloneNode(true));
-    const newButton = document.querySelector('.big-kids-button');
-    
-    newButton.classList.add('undo-enabled');
-    newButton.innerHTML = `
+    // ボタンの状態を更新
+    kidButton.classList.add('undo-enabled');
+    kidButton.innerHTML = `
       <span class="big-emoji">↩️</span>
       <span class="big-text">取り消す（長押し）</span>
     `;
     
+    // 現在のボタンを保存
+    currentKidButton = kidButton;
+    
+    // 新しいボタンを作成して置き換え（イベントリスナーをリセット）
+    const newButton = kidButton.cloneNode(true);
+    kidButton.parentNode.replaceChild(newButton, kidButton);
+    currentKidButton = newButton;
+    
+    // 新しいイベントリスナーを設定
     setupUndoLongPress(newButton, stepIndex);
     
+    // 5秒後に自動的に取り消しモードを終了
     undoTimeout = setTimeout(() => {
       if (undoEnabled) {
         undoEnabled = false;
         currentUndoStepIndex = null;
-        newButton.classList.remove('undo-enabled');
         renderStepView(steps[currentStep]);
       }
     }, 5000);
@@ -1182,36 +1171,50 @@ function enableUndoMode(stepIndex) {
 }
 
 function setupUndoLongPress(button, stepIndex) {
-  // イベントリスナーを完全にクリアして再設定
-  const startHandler = (e) => {
+  // すべての既存イベントをクリア
+  const newButton = button.cloneNode(true);
+  button.parentNode.replaceChild(newButton, button);
+  
+  const startUndoTimer = (e) => {
     if (e.cancelable) e.preventDefault();
+    
+    // 既存のタイマーをクリア
+    if (buttonLongPressTimer) {
+      clearTimeout(buttonLongPressTimer);
+    }
+    
     buttonLongPressTimer = setTimeout(() => {
       undoKidCompletion(stepIndex);
-    }, 800);
+    }, 800); // 0.8秒長押し
   };
   
-  const clearHandler = () => {
+  const clearUndoTimer = () => {
     if (buttonLongPressTimer) {
       clearTimeout(buttonLongPressTimer);
       buttonLongPressTimer = null;
     }
   };
   
-  // 既存のイベントを削除
-  button.removeEventListener('mousedown', startHandler);
-  button.removeEventListener('touchstart', startHandler);
-  button.removeEventListener('mouseup', clearHandler);
-  button.removeEventListener('mouseleave', clearHandler);
-  button.removeEventListener('touchend', clearHandler);
-  button.removeEventListener('touchmove', clearHandler);
+  // マウスイベント
+  newButton.addEventListener('mousedown', startUndoTimer);
+  newButton.addEventListener('mouseup', clearUndoTimer);
+  newButton.addEventListener('mouseleave', clearUndoTimer);
   
-  // 新しいイベントを追加
-  button.addEventListener('mousedown', startHandler);
-  button.addEventListener('touchstart', startHandler);
-  button.addEventListener('mouseup', clearHandler);
-  button.addEventListener('mouseleave', clearHandler);
-  button.addEventListener('touchend', clearHandler);
-  button.addEventListener('touchmove', clearHandler);
+  // タッチイベント
+  newButton.addEventListener('touchstart', (e) => {
+    startUndoTimer(e);
+  }, { passive: false });
+  
+  newButton.addEventListener('touchend', clearUndoTimer);
+  newButton.addEventListener('touchmove', clearUndoTimer);
+  
+  // クリックイベントを防止
+  newButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  
+  currentKidButton = newButton;
 }
 
 function undoKidCompletion(stepIndex) {
@@ -1220,16 +1223,41 @@ function undoKidCompletion(stepIndex) {
     undoEnabled = false;
     currentUndoStepIndex = null;
     
+    // タイマーをクリア
     if (undoTimeout) {
       clearTimeout(undoTimeout);
       undoTimeout = null;
     }
     
+    if (buttonLongPressTimer) {
+      clearTimeout(buttonLongPressTimer);
+      buttonLongPressTimer = null;
+    }
+    
+    // 保存と表示更新
     saveProgress();
     updateProgressDisplay();
-    renderStepView(steps[currentStep]);
     
+    // 触覚フィードバック
     if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
+    
+    // すぐに再描画
+    setTimeout(() => {
+      renderStepView(steps[currentStep]);
+      
+      // 成功メッセージ
+      const button = document.querySelector('.big-kids-button');
+      if (button) {
+        const originalHTML = button.innerHTML;
+        button.innerHTML = `
+          <span class="big-emoji">✅</span>
+          <span class="big-text">取り消しました</span>
+        `;
+        setTimeout(() => {
+          button.innerHTML = originalHTML;
+        }, 1000);
+      }
+    }, 100);
   }
 }
 
@@ -1268,27 +1296,46 @@ function updateProgressDisplay() {
   });
 }
 
-// ================= 指導員用隠し機能 =================
+// ================= 指導員用隠し機能（完全動作版） =================
 function initTeacherHiddenFeature() {
+  // 長押し開始
   progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
-  progressBarContainer.addEventListener('touchstart', startTeacherLongPress);
+  progressBarContainer.addEventListener('touchstart', (e) => {
+    startTeacherLongPress(e);
+  });
   
+  // 長押しキャンセル
   progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
   progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
   progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
   progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
   
+  // ダブルタップ検出
   progressBarContainer.addEventListener('click', handleTeacherTap);
 }
 
 function startTeacherLongPress(e) {
   if (e.cancelable) e.preventDefault();
+  
+  // 既存のタイマーをクリア
+  if (teacherLongPressTimer) {
+    clearTimeout(teacherLongPressTimer);
+  }
+  
   teacherLongPressTimer = setTimeout(() => {
+    // 3秒長押し成功
     progressBarContainer.classList.add('teacher-mode-active');
     
+    // ダブルタップ待機タイマーを開始
+    if (teacherDoubleTapTimer) {
+      clearTimeout(teacherDoubleTapTimer);
+    }
+    
     teacherDoubleTapTimer = setTimeout(() => {
+      // 2秒以内にダブルタップされなかったらリセット
       progressBarContainer.classList.remove('teacher-mode-active');
       teacherTapCount = 0;
+      teacherFirstTapTime = 0;
     }, 2000);
   }, 3000);
 }
@@ -1300,16 +1347,45 @@ function clearTeacherLongPress() {
   }
 }
 
-function handleTeacherTap() {
+function handleTeacherTap(e) {
+  // 長押しモードが有効な場合のみ処理
   if (progressBarContainer.classList.contains('teacher-mode-active')) {
-    teacherTapCount++;
+    e.preventDefault();
+    e.stopPropagation();
     
-    if (teacherTapCount === 2) {
-      clearTimeout(teacherDoubleTapTimer);
+    const now = Date.now();
+    
+    if (teacherTapCount === 0) {
+      // 最初のタップ
+      teacherFirstTapTime = now;
+      teacherTapCount = 1;
+      
+      // 500ms以内に2回目のタップが必要
+      setTimeout(() => {
+        if (teacherTapCount === 1) {
+          // シングルタップのみだったのでリセット
+          teacherTapCount = 0;
+          teacherFirstTapTime = 0;
+        }
+      }, 500);
+    } else if (teacherTapCount === 1 && now - teacherFirstTapTime <= 500) {
+      // 2回目のタップ（500ms以内）
+      teacherTapCount = 2;
+      
+      // ダブルタップ成功！
+      if (teacherDoubleTapTimer) {
+        clearTimeout(teacherDoubleTapTimer);
+        teacherDoubleTapTimer = null;
+      }
+      
       progressBarContainer.classList.remove('teacher-mode-active');
       teacherTapCount = 0;
+      teacherFirstTapTime = 0;
+      
+      // 指導員パネルを表示
       showTeacherPanel();
       
+      // 触覚フィードバック
       if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
     }
   }
@@ -1468,9 +1544,19 @@ function renderKidsCompleteArea(stepIndex) {
   const isAllComplete = count === 4;
   
   let buttonHtml = '';
-  if (!undoEnabled || currentUndoStepIndex !== stepIndex) {
+  if (undoEnabled && currentUndoStepIndex === stepIndex) {
+    // 取り消しモード中
     buttonHtml = `
-      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
+      <button class="big-kids-button undo-enabled" id="undoButton">
+        <span class="big-emoji">↩️</span>
+        <span class="big-text">取り消す（長押し）</span>
+      </button>
+    `;
+  } else {
+    // 通常モード
+    buttonHtml = `
+      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" 
+              ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
         <span class="big-emoji">✅</span>
         <span class="big-text">できました！</span>
       </button>
@@ -1684,6 +1770,10 @@ window.addEventListener('DOMContentLoaded', () => {
   initTeacherHiddenFeature();
   loadProgress();
   render();
+  
+  console.log('✅ アプリケーション初期化完了');
+  console.log('✅ 指導員機能: 進捗バーを3秒長押し→500ms以内にダブルタップ');
+  console.log('✅ 取り消し機能: 「できました！」ボタン押下後5秒間有効（0.8秒長押しで取り消し）');
 });
 
 // キーボード操作サポート
@@ -1695,18 +1785,6 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
-
-console.log(`
-👨‍🏫 工作指導アプリ 完全修正版！
-
-拡大写真機能の修正：
-1. ✅ 作業参考写真：handlePhotoClick関数でイベント制御
-2. ✅ 文字列エスケープ：シングルクォートをエスケープ処理
-3. ✅ アルバム写真：openAlbumOverlay関数でID経由アクセス
-4. ✅ 取り消し機能：ボタンクローンでイベントリスナーリセット
-
-全ての拡大写真機能が確実に動作します！
-`);
 </script>
 </body>
 </html>
