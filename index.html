@@ -248,126 +248,90 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 .teacher-note strong { color: #E65100; }
 
-/* アルバムセクション（シンプル版） */
+/* アルバム */
 .album-section { 
   background: #f8f9fa; 
   border-radius: 12px; 
-  padding: 20px; 
-  margin: 20px 0; 
-  text-align: center;
+  padding: 12px; 
+  margin-top: 15px; 
+  border: 2px dashed #bbdefb; 
 }
 
-.camera-btn {
-  background: linear-gradient(135deg, #2196F3, #0D47A1);
-  color: white;
-  border: none;
-  padding: 20px;
-  border-radius: 15px;
-  font-size: 1.8rem;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
+.album-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
+  gap: 12px; 
+  margin-top: 15px; 
+}
+.album-item { 
+  position: relative; 
+  border-radius: 8px; 
+  overflow: hidden; 
+  background: white; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
+  display: flex; 
+  flex-direction: column; 
+  cursor: pointer; 
+  border: 1px solid #e0e0e0; 
+}
+.album-img-wrapper { 
+  position: relative; 
+  aspect-ratio: 1; 
+  overflow: hidden; 
+  background: #f5f5f5; 
+}
+.album-item img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+.album-info { padding: 8px; }
+.album-name { 
+  font-weight: bold; 
+  font-size: 1rem; 
+  display: block; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  margin-bottom: 2px; 
+  color: #333; 
+}
+.album-date { font-size: 0.8rem; color: #757575; }
+
+.add-photo-btn { 
+  background: linear-gradient(135deg, #4caf50, #2e7d32); 
+  color: white; 
+  border: none; 
+  padding: 14px; 
+  border-radius: 12px; 
+  width: 100%; 
+  font-size: 1.2rem; 
+  font-weight: bold; 
+  cursor: pointer; 
+  margin-bottom: 12px; 
+  min-height: 60px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 8px; 
 }
 
-.camera-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+.del-btn { 
+  position: absolute; 
+  top: 6px; 
+  right: 6px; 
+  background: rgba(0,0,0,0.7); 
+  color: white; 
+  border: none; 
+  border-radius: 50%; 
+  width: 30px; 
+  height: 30px; 
+  font-size: 18px; 
+  z-index: 10; 
+  cursor: pointer; 
 }
 
-.camera-btn:active {
-  transform: translateY(0);
-}
-
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-top: 20px;
-}
-
-@media (min-width: 768px) {
-  .album-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.photo-item {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 2px solid #e3f2fd;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  position: relative;
-}
-
-.photo-item:hover {
-  transform: translateY(-3px);
-}
-
-.photo-item img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  display: block;
-}
-
-.photo-name {
-  padding: 10px;
-  font-weight: bold;
-  font-size: 1rem;
-  text-align: center;
-  color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.photo-date {
-  padding: 5px 10px 10px;
-  font-size: 0.8rem;
-  color: #757575;
-  text-align: center;
-}
-
-.delete-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.photo-item:hover .delete-btn {
-  display: flex;
-}
-
-.no-photos {
-  grid-column: 1 / -1;
-  padding: 40px;
-  text-align: center;
-  color: #78909c;
-  font-size: 1.1rem;
-}
-
-/* 拡大オーバーレイ */
+/* 拡大オーバーレイ（修正版） */
 .overlay { 
   position: fixed; 
   top: 0; 
@@ -623,12 +587,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   .big-kids-button .big-text { font-size: 2rem; }
   
   .teacher-content { max-width: 600px; }
-  
-  .camera-btn {
-    font-size: 2rem;
-    padding: 25px;
-    max-width: 350px;
-  }
 }
 </style>
 </head>
@@ -804,7 +762,6 @@ let currentStep = 0;
 let undoEnabled = false;
 let undoTimeout = null;
 let buttonLongPressTimer = null;
-let currentUndoStepIndex = null;
 
 // 指導員用隠し機能の状態管理
 let teacherLongPressTimer = null;
@@ -815,9 +772,6 @@ let teacherDoubleTapTimer = null;
 let currentOverlay = null;
 let overlayKeydownHandler = null;
 
-// アルバムの状態管理
-let isTakingPhoto = false;
-
 const navButtons = document.getElementById('navButtons');
 const content = document.getElementById('content');
 const rotationWarning = document.getElementById('rotationWarning');
@@ -825,225 +779,12 @@ const progressBar = document.getElementById('progressBar');
 const progressBarContainer = document.getElementById('progressBarContainer');
 const teacherPanel = document.getElementById('teacherPanel');
 
-// ================= アルバム機能（究極シンプル） =================
-
-// 1. 写真を撮る
-async function takePhoto() {
-  if (isTakingPhoto) return;
-  
-  isTakingPhoto = true;
-  const cameraBtn = document.querySelector('.camera-btn');
-  const originalText = cameraBtn.innerHTML;
-  
-  try {
-    // ボタンを一時的に「撮影中」に
-    cameraBtn.innerHTML = '📸 カメラを開いています...';
-    cameraBtn.disabled = true;
-    
-    // カメラ起動
-    const file = await openCamera();
-    if (!file) {
-      cameraBtn.innerHTML = originalText;
-      cameraBtn.disabled = false;
-      isTakingPhoto = false;
-      return;
-    }
-    
-    // 名前入力（超シンプル）
-    cameraBtn.innerHTML = '💬 なまえを考えてね...';
-    const name = prompt("なまえをつけてね", `作品${getAlbumCount() + 1}`);
-    
-    if (!name) {
-      cameraBtn.innerHTML = originalText;
-      cameraBtn.disabled = false;
-      isTakingPhoto = false;
-      return;
-    }
-    
-    // 画像を読み込んで保存
-    cameraBtn.innerHTML = '💾 保存しています...';
-    const reader = new FileReader();
-    
-    await new Promise((resolve) => {
-      reader.onload = (e) => {
-        saveToAlbum(e.target.result, name);
-        resolve();
-      };
-      reader.readAsDataURL(file);
-    });
-    
-    // 成功フィードバック
-    cameraBtn.innerHTML = '✅ 保存しました！';
-    setTimeout(() => {
-      cameraBtn.innerHTML = originalText;
-      cameraBtn.disabled = false;
-      isTakingPhoto = false;
-    }, 1000);
-    
-    // アルバムを再表示
-    renderAlbum();
-    
-  } catch (error) {
-    console.error('写真撮影エラー:', error);
-    cameraBtn.innerHTML = originalText;
-    cameraBtn.disabled = false;
-    isTakingPhoto = false;
-    alert('写真が撮れませんでした。もう一度お試しください。');
-  }
-}
-
-// カメラを開く
-function openCamera() {
-  return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.capture = 'environment';
-    
-    let resolved = false;
-    
-    const cleanup = () => {
-      if (!resolved) {
-        resolved = true;
-        resolve(null);
-      }
-    };
-    
-    input.onchange = (e) => {
-      if (!resolved) {
-        resolved = true;
-        resolve(e.target.files[0]);
-      }
-    };
-    
-    input.oncancel = cleanup;
-    
-    setTimeout(cleanup, 30000);
-    
-    input.click();
-  });
-}
-
-// アルバムに保存
-function saveToAlbum(imageData, name) {
-  const album = getAlbum();
-  
-  album.unshift({
-    id: Date.now(),
-    name: name || `作品${album.length + 1}`,
-    image: imageData,
-    date: new Date().toLocaleDateString('ja-JP', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  });
-  
-  // 最新30件だけ保存
-  if (album.length > 30) {
-    album.length = 30;
-  }
-  
-  localStorage.setItem('simpleAlbum', JSON.stringify(album));
-  return album;
-}
-
-// アルバムを取得
-function getAlbum() {
-  return JSON.parse(localStorage.getItem('simpleAlbum') || '[]');
-}
-
-// アルバムの作品数を取得
-function getAlbumCount() {
-  return getAlbum().length;
-}
-
-// 作品を削除
-function deletePhoto(id) {
-  if (!confirm('この作品を削除してもいいですか？')) return;
-  
-  let album = getAlbum();
-  album = album.filter(item => item.id !== id);
-  localStorage.setItem('simpleAlbum', JSON.stringify(album));
-  
-  renderAlbum();
-}
-
-// アルバム写真を拡大表示
-function openAlbumOverlay(id) {
-  const album = getAlbum();
-  const item = album.find(p => p.id === id);
-  if (item) {
-    openOverlay(item.image);
-  }
-}
-
-// アルバムを表示
-function renderAlbum() {
-  const album = getAlbum();
-  
-  const gridHtml = album.length > 0 
-    ? album.map(item => `
-        <div class="photo-item">
-          <button class="delete-btn" onclick="deletePhoto(${item.id})" aria-label="削除">×</button>
-          <img src="${item.image}" onclick="openAlbumOverlay(${item.id})" alt="${item.name}" loading="lazy">
-          <div class="photo-name">${item.name}</div>
-          <div class="photo-date">${item.date}</div>
-        </div>
-      `).join('')
-    : '<div class="no-photos">📭 まだ作品がありません<br>写真を撮って追加しよう！</div>';
-  
-  return `
-    <div class="album-section">
-      <button class="camera-btn" onclick="takePhoto()">
-        <span style="font-size: 3rem;">📸</span>
-        <span>写真をとる</span>
-      </button>
-      
-      <div style="margin-bottom: 15px; color: #546e7a;">
-        ${album.length}作品が保存されています
-      </div>
-      
-      <div class="album-grid">
-        ${gridHtml}
-      </div>
-    </div>
-  `;
-}
-
-// ================= 拡大写真機能（完全修正版） =================
-
-// 作業参考写真用クリックハンドラ
-function handlePhotoClick(event, imgSrc) {
-  event.preventDefault();
-  event.stopPropagation();
-  openOverlay(imgSrc);
-  return false;
-}
-
-// 写真要素作成（エスケープ処理付き）
-function createPhotoElement(imgSrc, altText) {
-  if (!imgSrc || !isValidImagePath(imgSrc)) {
-    return ''; // 無効なパスは空を返す
-  }
-  
-  // シングルクォートをエスケープ
-  const safeSrc = imgSrc.replace(/'/g, "\\'");
-  
-  return `
-    <div class="photo-container" onclick="handlePhotoClick(event, '${safeSrc}')">
-      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
-           onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.tap-label').style.display='none';">
-      <div class="tap-label">タップで拡大</div>
-    </div>
-  `;
-}
-
-// 拡大表示を開く（共通関数）
+// ================= 拡大写真機能（修正版） =================
 function openOverlay(src) {
+  // 既存のオーバーレイがあれば閉じる
   closeOverlay();
   
+  // 新しいオーバーレイを作成
   currentOverlay = document.createElement('div');
   currentOverlay.className = 'overlay';
   currentOverlay.setAttribute('role', 'dialog');
@@ -1052,24 +793,29 @@ function openOverlay(src) {
   
   currentOverlay.innerHTML = `
     <div class="overlay-content">
-      <img src="${src}" class="overlay-image" alt="拡大表示">
+      <img src="${src}" class="overlay-image" alt="作業の参考写真（拡大表示）">
     </div>
     <button class="close-overlay-btn" onclick="closeOverlay()" aria-label="閉じる">
       ×<br><small>とじる</small>
     </button>
   `;
 
+  // bodyに追加
   document.body.appendChild(currentOverlay);
+  
+  // スクロールを無効化
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
   
+  // アニメーションを開始
   setTimeout(() => {
     currentOverlay.classList.add('active');
+    // 閉じるボタンにフォーカスを移動
     const closeBtn = currentOverlay.querySelector('.close-overlay-btn');
     if (closeBtn) closeBtn.focus();
   }, 10);
   
-  // 背景クリックで閉じる
+  // オーバーレイ背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
     if (e.target === this || e.target.classList.contains('overlay-content')) {
       closeOverlay();
@@ -1084,7 +830,7 @@ function openOverlay(src) {
   };
   document.addEventListener('keydown', overlayKeydownHandler);
   
-  // タッチデバイスでピンチズーム防止
+  // タッチデバイスでピンチズームを防止
   currentOverlay.addEventListener('touchmove', function(e) {
     if (e.touches.length > 1) {
       e.preventDefault();
@@ -1097,22 +843,36 @@ function openOverlay(src) {
 function closeOverlay() {
   if (!currentOverlay) return;
   
+  // アニメーションのためにactiveクラスを削除
   currentOverlay.classList.remove('active');
   
+  // アニメーション終了後に完全に削除
   setTimeout(() => {
     if (currentOverlay && currentOverlay.parentNode) {
       currentOverlay.parentNode.removeChild(currentOverlay);
     }
     currentOverlay = null;
     
+    // スクロールを有効化
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     
+    // イベントリスナーを削除
     if (overlayKeydownHandler) {
       document.removeEventListener('keydown', overlayKeydownHandler);
       overlayKeydownHandler = null;
     }
   }, 300);
+}
+
+function createPhotoElement(imgSrc, altText) {
+  return `
+    <div class="photo-container" onclick="openOverlay('${imgSrc}'); return false;">
+      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
+           onerror="this.style.display='none'">
+      <div class="tap-label">タップで拡大</div>
+    </div>
+  `;
 }
 
 // ================= 進捗管理 =================
@@ -1133,19 +893,23 @@ function loadProgress() {
   }
 }
 
-// ================= 子ども用完了機能（修正版） =================
+// ================= 子ども用完了機能 =================
 function kidComplete(stepIndex) {
   if (completedCounts[stepIndex] < 4) {
     completedCounts[stepIndex]++;
     
+    // 視覚的・触覚的フィードバック
     if ('vibrate' in navigator) navigator.vibrate(100);
     
+    // 保存して表示を更新
     saveProgress();
     updateProgressDisplay();
     renderStepView(steps[currentStep]);
     
+    // 5秒間取消可能状態に
     enableUndoMode(stepIndex);
     
+    // 全員完了の祝い
     if (completedCounts[stepIndex] === 4) {
       celebrateAllComplete(stepIndex);
     }
@@ -1154,27 +918,24 @@ function kidComplete(stepIndex) {
 
 function enableUndoMode(stepIndex) {
   undoEnabled = true;
-  currentUndoStepIndex = stepIndex;
   
+  // ボタンを取消可能状態に
   const kidButton = document.querySelector('.big-kids-button');
   if (kidButton) {
-    // 既存のイベントをクリア
-    kidButton.replaceWith(kidButton.cloneNode(true));
-    const newButton = document.querySelector('.big-kids-button');
-    
-    newButton.classList.add('undo-enabled');
-    newButton.innerHTML = `
+    kidButton.classList.add('undo-enabled');
+    kidButton.innerHTML = `
       <span class="big-emoji">↩️</span>
       <span class="big-text">取り消す（長押し）</span>
     `;
     
-    setupUndoLongPress(newButton, stepIndex);
+    // 長押しイベントを設定
+    setupUndoLongPress(kidButton, stepIndex);
     
+    // 5秒後に自動確定
     undoTimeout = setTimeout(() => {
       if (undoEnabled) {
         undoEnabled = false;
-        currentUndoStepIndex = null;
-        newButton.classList.remove('undo-enabled');
+        kidButton.classList.remove('undo-enabled');
         renderStepView(steps[currentStep]);
       }
     }, 5000);
@@ -1182,43 +943,38 @@ function enableUndoMode(stepIndex) {
 }
 
 function setupUndoLongPress(button, stepIndex) {
-  // イベントリスナーを完全にクリアして再設定
-  const startHandler = (e) => {
+  // 既存のイベントをクリア
+  button.onmousedown = button.ontouchstart = null;
+  button.onmouseup = button.ontouchend = null;
+  button.onmouseleave = button.ontouchmove = null;
+  
+  button.addEventListener('mousedown', startUndoTimer);
+  button.addEventListener('touchstart', startUndoTimer);
+  
+  function startUndoTimer(e) {
     if (e.cancelable) e.preventDefault();
     buttonLongPressTimer = setTimeout(() => {
       undoKidCompletion(stepIndex);
-    }, 800);
-  };
+    }, 800); // 0.8秒長押し
+  }
   
-  const clearHandler = () => {
+  button.addEventListener('mouseup', clearUndoTimer);
+  button.addEventListener('touchend', clearUndoTimer);
+  button.addEventListener('mouseleave', clearUndoTimer);
+  button.addEventListener('touchmove', clearUndoTimer);
+  
+  function clearUndoTimer() {
     if (buttonLongPressTimer) {
       clearTimeout(buttonLongPressTimer);
       buttonLongPressTimer = null;
     }
-  };
-  
-  // 既存のイベントを削除
-  button.removeEventListener('mousedown', startHandler);
-  button.removeEventListener('touchstart', startHandler);
-  button.removeEventListener('mouseup', clearHandler);
-  button.removeEventListener('mouseleave', clearHandler);
-  button.removeEventListener('touchend', clearHandler);
-  button.removeEventListener('touchmove', clearHandler);
-  
-  // 新しいイベントを追加
-  button.addEventListener('mousedown', startHandler);
-  button.addEventListener('touchstart', startHandler);
-  button.addEventListener('mouseup', clearHandler);
-  button.addEventListener('mouseleave', clearHandler);
-  button.addEventListener('touchend', clearHandler);
-  button.addEventListener('touchmove', clearHandler);
+  }
 }
 
 function undoKidCompletion(stepIndex) {
-  if (undoEnabled && completedCounts[stepIndex] > 0 && stepIndex === currentUndoStepIndex) {
+  if (undoEnabled && completedCounts[stepIndex] > 0) {
     completedCounts[stepIndex]--;
     undoEnabled = false;
-    currentUndoStepIndex = null;
     
     if (undoTimeout) {
       clearTimeout(undoTimeout);
@@ -1229,6 +985,7 @@ function undoKidCompletion(stepIndex) {
     updateProgressDisplay();
     renderStepView(steps[currentStep]);
     
+    // 触覚フィードバック
     if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
   }
 }
@@ -1259,6 +1016,7 @@ function updateProgressDisplay() {
   const percentage = Math.round((totalCompleted / totalSteps) * 100) || 0;
   progressBar.style.width = percentage + '%';
   
+  // ナビゲーションボタンの更新
   const navBtns = document.querySelectorAll('.nav-btn');
   navBtns.forEach((btn, index) => {
     const isCompleted = completedCounts[index] === 4;
@@ -1270,6 +1028,7 @@ function updateProgressDisplay() {
 
 // ================= 指導員用隠し機能 =================
 function initTeacherHiddenFeature() {
+  // 進捗バーの長押し検出
   progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
   progressBarContainer.addEventListener('touchstart', startTeacherLongPress);
   
@@ -1278,19 +1037,22 @@ function initTeacherHiddenFeature() {
   progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
   progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
   
+  // ダブルタップ検出
   progressBarContainer.addEventListener('click', handleTeacherTap);
 }
 
 function startTeacherLongPress(e) {
   if (e.cancelable) e.preventDefault();
   teacherLongPressTimer = setTimeout(() => {
+    // 3秒長押し成功 → ダブルタップ待機モード
     progressBarContainer.classList.add('teacher-mode-active');
     
+    // 2秒以内にダブルタップを要求
     teacherDoubleTapTimer = setTimeout(() => {
       progressBarContainer.classList.remove('teacher-mode-active');
       teacherTapCount = 0;
     }, 2000);
-  }, 3000);
+  }, 3000); // 3秒長押し
 }
 
 function clearTeacherLongPress() {
@@ -1305,11 +1067,13 @@ function handleTeacherTap() {
     teacherTapCount++;
     
     if (teacherTapCount === 2) {
+      // ダブルタップ成功！
       clearTimeout(teacherDoubleTapTimer);
       progressBarContainer.classList.remove('teacher-mode-active');
       teacherTapCount = 0;
       showTeacherPanel();
       
+      // 触覚フィードバック
       if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
     }
   }
@@ -1328,12 +1092,14 @@ function hideTeacherPanel() {
 }
 
 function updateTeacherPanel() {
+  // 現在の工程情報
   document.getElementById('currentStepInfo').textContent = 
     `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
   
   document.getElementById('currentCountDisplay').textContent = 
     `${completedCounts[currentStep]}/4人`;
   
+  // 全工程テーブルを更新
   const table = document.getElementById('allStepsTable');
   table.innerHTML = steps.map((step, i) => {
     if (step.isAlbum) return '';
@@ -1468,7 +1234,7 @@ function renderKidsCompleteArea(stepIndex) {
   const isAllComplete = count === 4;
   
   let buttonHtml = '';
-  if (!undoEnabled || currentUndoStepIndex !== stepIndex) {
+  if (!undoEnabled) {
     buttonHtml = `
       <button class="big-kids-button" onclick="kidComplete(${stepIndex})" ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
         <span class="big-emoji">✅</span>
@@ -1557,9 +1323,13 @@ function checkOrientation() {
 
 // ================= メイン描画関数 =================
 function render() {
+  // 進捗表示を更新
   updateProgressDisplay();
+  
+  // ナビゲーションボタンの描画
   renderNavButtons();
   
+  // コンテンツの描画
   const s = steps[currentStep];
   if (s.isAlbum) {
     renderAlbumView(s);
@@ -1591,6 +1361,7 @@ function renderNavButtons() {
 function renderStepView(s) {
   const stepIndex = currentStep;
   
+  // 写真HTML生成
   let photoHtml = '';
   let photoCount = 0;
   
@@ -1632,6 +1403,7 @@ function renderStepView(s) {
         ` : ''}
       </div>
       
+      <!-- 📸 写真セクションを先に表示 -->
       <div class="photo-section">
         <div class="photo-title">
           <span class="icon">📸</span>
@@ -1643,11 +1415,41 @@ function renderStepView(s) {
           '<p style="text-align:center; color:#546e7a; font-size:0.9rem; margin-top:8px;">写真を見て確認してから作業しましょう</p>' : ''}
       </div>
       
+      <!-- ✅ 完了ボタンは写真の後に -->
       ${renderKidsCompleteArea(stepIndex)}
     </div>`;
 }
 
 function renderAlbumView(s) {
+  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
+  savedPhotos.sort((a, b) => b.timestamp - a.timestamp);
+
+  let albumHtml = savedPhotos.map((item, index) => {
+    const dateStr = new Date(item.timestamp).toLocaleString('ja-JP', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    return `
+    <div class="album-item">
+      <button class="del-btn" onclick="deletePhoto(${item.timestamp})" aria-label="削除">×</button>
+      <div class="album-img-wrapper">
+        <img src="${item.dataUrl}" onclick="openOverlay('${item.dataUrl}')" alt="${item.name}の写真" loading="lazy">
+      </div>
+      <div class="album-info">
+        <span class="album-name">${item.name || 'なまえなし'}</span>
+        <span class="album-date">${dateStr}</span>
+      </div>
+    </div>
+  `}).join('');
+
+  const albumCount = savedPhotos.length;
+  const albumMessage = albumCount > 0 
+    ? `これまでに${albumCount}作品が保存されています`
+    : 'まだ作品が保存されていません。写真を追加しましょう！';
+
   content.innerHTML = `
     <div class="step-card">
       <div class="step-title">${s.title}</div>
@@ -1666,16 +1468,61 @@ function renderAlbumView(s) {
         <details class="hint-details">
           <summary>💡 アルバムの使い方</summary>
           <div class="hint-content">
-            1. 「写真をとる」ボタンをタップ<br>
-            2. カメラで作品を撮影<br>
-            3. 「なまえ」を入力<br>
-            4. 自動でアルバムに保存されます
+            1. 「写真をとる・えらぶ」をタップ<br>
+            2. 工作の「なまえ」を入力<br>
+            3. 写真を撮影または選択<br>
+            4. アルバムに自動保存されます
           </div>
         </details>
       </div>
       
-      ${renderAlbum()}
+      <div class="album-section">
+        <p style="text-align: center; margin-bottom: 15px; color: #546e7a; font-size: 1.1rem;">
+          ${albumMessage}
+        </p>
+        
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="savePhoto(event)">
+        <button class="add-photo-btn" onclick="document.getElementById('cameraInput').click()">
+          <span>📷</span>
+          <span>写真をとる・えらぶ</span>
+        </button>
+        
+        ${albumCount > 0 ? `<div class="album-grid">${albumHtml}</div>` : ''}
+      </div>
     </div>`;
+}
+
+// ================= アルバム機能 =================
+function savePhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
+  if (workName === null) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
+    const newItem = {
+      dataUrl: e.target.result,
+      name: workName,
+      timestamp: Date.now()
+    };
+    savedPhotos.push(newItem);
+    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
+    render();
+    
+    alert(`🎉 「${workName}」をアルバムに保存しました！`);
+  };
+  reader.readAsDataURL(file);
+}
+
+function deletePhoto(timestamp) {
+  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
+  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
+  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
+  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
+  render();
 }
 
 // ================= 初期化 =================
@@ -1697,15 +1544,22 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log(`
-👨‍🏫 工作指導アプリ 完全修正版！
+👨‍🏫 工作指導アプリ 完成版！
+特徴：
+1. 📸✅ 写真→完了ボタンの自然な流れ
+2. 🔧 拡大写真機能のバグ修正完了
+3. ⏰ 子ども用長押し取消機能（0.8秒）
+4. 🔒 指導員用隠し機能（進捗バー3秒長押し→ダブルタップ）
+5. 👨‍🏫 指導員用管理パネル
+6. 🎯 ワンチーム方式（4人全員完了で次へ）
+7. ⏱️ 時間目安表示
 
-拡大写真機能の修正：
-1. ✅ 作業参考写真：handlePhotoClick関数でイベント制御
-2. ✅ 文字列エスケープ：シングルクォートをエスケープ処理
-3. ✅ アルバム写真：openAlbumOverlay関数でID経由アクセス
-4. ✅ 取り消し機能：ボタンクローンでイベントリスナーリセット
-
-全ての拡大写真機能が確実に動作します！
+拡大写真の修正内容：
+・オーバーレイ閉じた後のスクロール問題を解決
+・ESCキーでの閉じる機能を追加
+・背景クリックでの閉じる機能を追加
+・適切な状態管理とクリーンアップ
+・アニメーションの改善
 `);
 </script>
 </body>
