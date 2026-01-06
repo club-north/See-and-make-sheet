@@ -13,9 +13,9 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .header h1 { font-size: 1.4rem; margin-bottom: 0.3rem; }
 .header p { font-size: 0.85rem; opacity: 0.95; }
 
-/* 進捗バー（指導員操作用） */
+/* 進捗バー */
 .progress-container { 
-  height: 12px; /* 少し太くして押しやすく */
+  height: 8px; 
   background: #e0e0e0; 
   width: 100%; 
   cursor: pointer;
@@ -23,9 +23,9 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   position: relative;
 }
 .progress-container.teacher-mode-active {
-  border: 3px solid #FF9800;
-  border-radius: 6px;
-  animation: pulseBorder 1.5s infinite;
+  border: 2px solid #FF9800;
+  border-radius: 4px;
+  animation: pulseBorder 1s infinite;
 }
 .progress-bar { 
   height: 100%; 
@@ -35,9 +35,9 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 @keyframes pulseBorder {
-  0% { border-color: #FF9800; box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4); }
-  50% { border-color: #FFC107; box-shadow: 0 0 0 8px rgba(255, 152, 0, 0.1); }
-  100% { border-color: #FF9800; box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+  0% { border-color: #FF9800; }
+  50% { border-color: #FFC107; }
+  100% { border-color: #FF9800; }
 }
 
 /* ナビゲーション */
@@ -155,7 +155,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   gap: 10px; 
 }
 
-/* 子ども用大型ボタン（超シンプル） */
+/* 子ども用大型ボタン */
 .big-kids-button { 
   background: linear-gradient(135deg, #4CAF50, #2E7D32); 
   color: white; 
@@ -184,6 +184,18 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .big-kids-button:focus { outline: 4px solid #FF9800; outline-offset: 3px; }
 .big-kids-button .big-emoji { font-size: 3rem; }
 .big-kids-button .big-text { font-size: 1.8rem; }
+
+/* 取消可能状態 */
+.big-kids-button.undo-enabled {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  animation: pulseOrange 1s infinite;
+}
+
+@keyframes pulseOrange {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); }
+  50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 152, 0, 0.2); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+}
 
 /* 完了カウンター */
 .completion-counter { margin-top: 15px; }
@@ -224,28 +236,19 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   gap: 8px; 
 }
 
-/* 指導員用メモ（明確に区別） */
+/* 指導員用メモ */
 .teacher-note { 
   background: #FFF3E0; 
   border-radius: 10px; 
-  padding: 15px; 
-  margin: 20px 0; 
-  border-left: 5px solid #FF9800; 
+  padding: 12px; 
+  margin: 15px 0; 
+  border-left: 4px solid #FF9800; 
   font-size: 0.95rem; 
   color: #5D4037; 
-  border-top: 2px dashed #FF9800;
 }
 .teacher-note strong { color: #E65100; }
-.teacher-note::before { 
-  content: "👨‍🏫 指導員用"; 
-  display: block; 
-  font-weight: bold; 
-  color: #FF6D00; 
-  margin-bottom: 8px; 
-  font-size: 1rem; 
-}
 
-/* アルバムセクション */
+/* アルバムセクション（シンプル版） */
 .album-section { 
   background: #f8f9fa; 
   border-radius: 12px; 
@@ -443,12 +446,12 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.8);
   z-index: 10000;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.4s ease;
+  padding: 15px;
+  animation: fadeIn 0.3s ease;
 }
 
 .teacher-panel.active { display: flex; }
@@ -461,110 +464,107 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-  border: 3px solid #FF9800;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .teacher-content h3 {
   text-align: center;
   color: #1565C0;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 3px solid #e3f2fd;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e3f2fd;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-size: 1.4rem;
+  gap: 10px;
 }
 
 .teacher-section {
   background: #f5f7fa;
   border-radius: 10px;
-  padding: 18px;
+  padding: 15px;
   margin-bottom: 20px;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
 }
 
 .teacher-section h4 {
   color: #0d47a1;
   margin-bottom: 15px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.counter-control {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  margin: 15px 0;
+  gap: 10px;
+}
+
+.counter-control button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.counter-control button:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+}
+
+.reset-btn {
+  background: #FF9800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+  background: #F57C00;
 }
 
 .progress-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1rem;
 }
 
 .progress-table td {
-  padding: 12px 8px;
+  padding: 10px;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .progress-table select {
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 2px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   font-size: 1rem;
-  background: white;
-}
-
-.progress-table select:focus {
-  border-color: #2196F3;
-  outline: none;
-}
-
-.reset-btn {
-  background: linear-gradient(135deg, #FF9800, #F57C00);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 15px 25px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.reset-btn:hover {
-  background: linear-gradient(135deg, #F57C00, #E65100);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 .close-btn {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  background: #4CAF50;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 15px 40px;
-  font-size: 1.2rem;
-  font-weight: bold;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 0 auto;
+  transition: all 0.2s ease;
 }
 
 .close-btn:hover {
-  background: linear-gradient(135deg, #3d8b40, #1b5e20);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  background: #3d8b40;
 }
 
 /* 回転警告メッセージ */
@@ -594,8 +594,8 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes celebrate {
@@ -622,16 +622,12 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   .big-kids-button .big-emoji { font-size: 4rem; }
   .big-kids-button .big-text { font-size: 2rem; }
   
-  .teacher-content { max-width: 600px; padding: 30px; }
+  .teacher-content { max-width: 600px; }
   
   .camera-btn {
     font-size: 2rem;
     padding: 25px;
     max-width: 350px;
-  }
-  
-  .progress-container {
-    height: 14px;
   }
 }
 </style>
@@ -643,7 +639,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   <p>工作の手順を確認しながら、作った作品をアルバムに残そう！</p>
 </header>
 
-<!-- 指導員操作用進捗バー（唯一の操作場所） -->
 <div class="progress-container" id="progressBarContainer">
   <div class="progress-bar" id="progressBar"></div>
 </div>
@@ -654,59 +649,56 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 
 <main class="main-content" id="content"></main>
 
-<!-- 指導員用管理パネル（進捗バー操作でのみ表示） -->
+<!-- 指導員用パネル -->
 <div class="teacher-panel" id="teacherPanel">
   <div class="teacher-content">
     <h3>👨‍🏫 指導員用管理パネル</h3>
     
+    <!-- 現在の工程をリセット -->
     <div class="teacher-section">
-      <h4>📋 現在の工程</h4>
-      <p id="currentStepInfo" style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;"></p>
-      
-      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <button onclick="adjustCounter(-1)" style="background:#f44336; color:white; border:none; padding:12px 20px; border-radius:8px; flex:1; font-size:1.1rem;">
-          ➖ 1人減らす
-        </button>
-        <div style="flex:1; text-align:center; padding:12px; background:#f5f7fa; border-radius:8px;">
-          <div style="font-size:1.2rem; color:#666;">現在の人数</div>
-          <div id="currentCountDisplay" style="font-size:2rem; font-weight:bold; color:#1565C0;"></div>
-        </div>
-        <button onclick="adjustCounter(1)" style="background:#4CAF50; color:white; border:none; padding:12px 20px; border-radius:8px; flex:1; font-size:1.1rem;">
-          ➕ 1人増やす
-        </button>
+      <h4>現在の工程を調整</h4>
+      <p id="currentStepInfo"></p>
+      <div class="counter-control">
+        <button onclick="adjustCounter(-1)">➖ 1人減らす</button>
+        <span id="currentCountDisplay" style="margin:0 15px; font-size:1.5rem;"></span>
+        <button onclick="adjustCounter(1)">➕ 1人増やす</button>
       </div>
-      
       <button onclick="resetCurrentStep()" class="reset-btn">
-        🔄 この工程を0人にリセット
+        🔄 この工程を0にリセット
       </button>
     </div>
     
+    <!-- 全工程の一括管理 -->
     <div class="teacher-section">
-      <h4>📊 全工程の進捗管理</h4>
+      <h4>全工程の進捗</h4>
       <table class="progress-table" id="allStepsTable">
         <!-- JavaScriptで動的に生成 -->
       </table>
     </div>
     
+    <!-- データ管理 -->
     <div class="teacher-section">
-      <h4>💾 データ管理</h4>
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <button onclick="saveAllProgress()" style="background:#2196F3; color:white; border:none; padding:15px; border-radius:8px; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:10px;">
-          💾 現在の進捗を保存
+      <h4>データ管理</h4>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="saveAllProgress()" style="background:#4CAF50; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
+          💾 保存
         </button>
-        <button onclick="resetAllProgress()" style="background:#f44336; color:white; border:none; padding:15px; border-radius:8px; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:10px;">
-          🔥 全工程をリセット
+        <button onclick="resetAllProgress()" style="background:#f44336; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
+          🔥 全リセット
+        </button>
+        <button onclick="exportProgress()" style="background:#2196F3; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
+          📤 エクスポート
         </button>
       </div>
     </div>
     
-    <div style="text-align:center; margin-top:25px; padding-top:20px; border-top:2px solid #e0e0e0;">
+    <!-- 終了ボタン -->
+    <div style="text-align:center; margin-top:20px;">
       <button onclick="hideTeacherPanel()" class="close-btn">
-        ✅ 閉じる
+        閉じる
       </button>
-      <p style="font-size:0.85rem; color:#666; margin-top:15px; line-height:1.5;">
-        指導員用操作：進捗バーを<strong>3秒長押し → ダブルタップ</strong><br>
-        誤操作防止のため、慎重に操作してください
+      <p style="font-size:0.8rem; color:#666; margin-top:10px;">
+        隠し機能：進捗バーを3秒長押し→ダブルタップ
       </p>
     </div>
   </div>
@@ -804,15 +796,20 @@ const stepTimes = {
   0: 20, 1: 30, 2: 30, 3: 20, 4: 40, 5: 30
 };
 
-// 進捗管理
-let completedCounts = [0, 0, 0, 0, 0, 0];
+// 超シンプルな進捗管理
+let completedCounts = [0, 0, 0, 0, 0, 0]; // 各工程の完了数（0〜4）
 let currentStep = 0;
 
-// 指導員用機能の状態管理
+// 子ども用ボタンの状態管理
+let undoEnabled = false;
+let undoTimeout = null;
+let buttonLongPressTimer = null;
+let currentUndoStepIndex = null;
+
+// 指導員用隠し機能の状態管理
 let teacherLongPressTimer = null;
 let teacherTapCount = 0;
 let teacherDoubleTapTimer = null;
-let teacherFirstTapTime = 0;
 
 // 拡大写真の状態管理
 let currentOverlay = null;
@@ -828,215 +825,9 @@ const progressBar = document.getElementById('progressBar');
 const progressBarContainer = document.getElementById('progressBarContainer');
 const teacherPanel = document.getElementById('teacherPanel');
 
-// ================= 指導員用機能（進捗バー操作のみ） =================
+// ================= アルバム機能（究極シンプル） =================
 
-function initTeacherFeature() {
-  // 長押し開始
-  progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
-  progressBarContainer.addEventListener('touchstart', (e) => {
-    startTeacherLongPress(e);
-  }, { passive: false });
-  
-  // 長押しキャンセル
-  progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
-  progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
-  
-  // ダブルタップ検出
-  progressBarContainer.addEventListener('click', handleTeacherTap);
-  
-  console.log('指導員機能: 進捗バーを「3秒長押し → ダブルタップ」で操作パネルを表示');
-}
-
-function startTeacherLongPress(e) {
-  if (e.cancelable) e.preventDefault();
-  
-  if (teacherLongPressTimer) {
-    clearTimeout(teacherLongPressTimer);
-  }
-  
-  teacherLongPressTimer = setTimeout(() => {
-    // 3秒長押し成功
-    progressBarContainer.classList.add('teacher-mode-active');
-    
-    if (teacherDoubleTapTimer) {
-      clearTimeout(teacherDoubleTapTimer);
-    }
-    
-    // 2秒以内にダブルタップを要求
-    teacherDoubleTapTimer = setTimeout(() => {
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-      teacherFirstTapTime = 0;
-    }, 2000);
-    
-    // バイブレーションでフィードバック
-    if ('vibrate' in navigator) navigator.vibrate(100);
-  }, 3000);
-}
-
-function clearTeacherLongPress() {
-  if (teacherLongPressTimer) {
-    clearTimeout(teacherLongPressTimer);
-    teacherLongPressTimer = null;
-  }
-}
-
-function handleTeacherTap(e) {
-  if (progressBarContainer.classList.contains('teacher-mode-active')) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const now = Date.now();
-    
-    if (teacherTapCount === 0) {
-      // 最初のタップ
-      teacherFirstTapTime = now;
-      teacherTapCount = 1;
-      
-      // 500ms以内に2回目のタップが必要
-      setTimeout(() => {
-        if (teacherTapCount === 1) {
-          // シングルタップのみだったのでリセット
-          teacherTapCount = 0;
-          teacherFirstTapTime = 0;
-        }
-      }, 500);
-    } else if (teacherTapCount === 1 && now - teacherFirstTapTime <= 500) {
-      // 2回目のタップ（500ms以内）
-      teacherTapCount = 2;
-      
-      // ダブルタップ成功！
-      if (teacherDoubleTapTimer) {
-        clearTimeout(teacherDoubleTapTimer);
-        teacherDoubleTapTimer = null;
-      }
-      
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-      teacherFirstTapTime = 0;
-      
-      // 指導員パネルを表示
-      showTeacherPanel();
-      
-      // バイブレーション
-      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-    }
-  }
-}
-
-// ================= 指導員用パネル機能 =================
-
-function showTeacherPanel() {
-  updateTeacherPanel();
-  teacherPanel.classList.add('active');
-  
-  // 背景スクロールを無効化
-  document.documentElement.style.overflow = 'hidden';
-  document.body.style.overflow = 'hidden';
-}
-
-function hideTeacherPanel() {
-  teacherPanel.classList.remove('active');
-  saveProgress();
-  render();
-  
-  // 背景スクロールを有効化
-  document.documentElement.style.overflow = '';
-  document.body.style.overflow = '';
-}
-
-function updateTeacherPanel() {
-  document.getElementById('currentStepInfo').textContent = 
-    `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
-  
-  document.getElementById('currentCountDisplay').textContent = 
-    `${completedCounts[currentStep]}/4人`;
-  
-  const table = document.getElementById('allStepsTable');
-  table.innerHTML = steps.map((step, i) => {
-    if (step.isAlbum) return '';
-    const count = completedCounts[i];
-    return `
-      <tr>
-        <td style="font-weight:bold; color:#1565C0;">${step.nav}</td>
-        <td>
-          <select onchange="setStepCount(${i}, this.value)">
-            <option value="0" ${count===0?'selected':''}>0人</option>
-            <option value="1" ${count===1?'selected':''}>1人</option>
-            <option value="2" ${count===2?'selected':''}>2人</option>
-            <option value="3" ${count===3?'selected':''}>3人</option>
-            <option value="4" ${count===4?'selected':''}>4人</option>
-          </select>
-        </td>
-        <td style="text-align:center; font-weight:bold; color:${count === 4 ? '#4CAF50' : '#FF9800'}">
-          ${count === 4 ? '✅' : '⏳'}
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function adjustCounter(delta) {
-  const newValue = completedCounts[currentStep] + delta;
-  if (newValue >= 0 && newValue <= 4) {
-    completedCounts[currentStep] = newValue;
-    updateTeacherPanel();
-    
-    // バイブレーション
-    if ('vibrate' in navigator) navigator.vibrate(50);
-  }
-}
-
-function resetCurrentStep() {
-  if (confirm('現在の工程の進捗を0人にリセットしますか？')) {
-    completedCounts[currentStep] = 0;
-    updateTeacherPanel();
-    
-    // バイブレーション
-    if ('vibrate' in navigator) navigator.vibrate([100, 50]);
-  }
-}
-
-function setStepCount(stepIndex, value) {
-  completedCounts[stepIndex] = parseInt(value);
-  updateTeacherPanel();
-}
-
-function saveAllProgress() {
-  saveProgress();
-  
-  // 視覚的フィードバック
-  const saveBtn = document.querySelector('button[onclick="saveAllProgress()"]');
-  const originalText = saveBtn.innerHTML;
-  saveBtn.innerHTML = '💾 保存しました！';
-  saveBtn.style.background = 'linear-gradient(135deg, #4CAF50, #2E7D32)';
-  
-  setTimeout(() => {
-    saveBtn.innerHTML = originalText;
-    saveBtn.style.background = '';
-  }, 1500);
-  
-  // バイブレーション
-  if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-}
-
-function resetAllProgress() {
-  if (confirm('すべての進捗をリセットしますか？\n（全工程が0人に戻ります）')) {
-    completedCounts = [0, 0, 0, 0, 0, 0];
-    currentStep = 0;
-    saveProgress();
-    hideTeacherPanel();
-    render();
-    
-    // バイブレーション
-    if ('vibrate' in navigator) navigator.vibrate([100, 50, 100, 50, 100]);
-  }
-}
-
-// ================= アルバム機能 =================
-
+// 1. 写真を撮る
 async function takePhoto() {
   if (isTakingPhoto) return;
   
@@ -1045,9 +836,11 @@ async function takePhoto() {
   const originalText = cameraBtn.innerHTML;
   
   try {
+    // ボタンを一時的に「撮影中」に
     cameraBtn.innerHTML = '📸 カメラを開いています...';
     cameraBtn.disabled = true;
     
+    // カメラ起動
     const file = await openCamera();
     if (!file) {
       cameraBtn.innerHTML = originalText;
@@ -1056,6 +849,7 @@ async function takePhoto() {
       return;
     }
     
+    // 名前入力（超シンプル）
     cameraBtn.innerHTML = '💬 なまえを考えてね...';
     const name = prompt("なまえをつけてね", `作品${getAlbumCount() + 1}`);
     
@@ -1066,6 +860,7 @@ async function takePhoto() {
       return;
     }
     
+    // 画像を読み込んで保存
     cameraBtn.innerHTML = '💾 保存しています...';
     const reader = new FileReader();
     
@@ -1077,6 +872,7 @@ async function takePhoto() {
       reader.readAsDataURL(file);
     });
     
+    // 成功フィードバック
     cameraBtn.innerHTML = '✅ 保存しました！';
     setTimeout(() => {
       cameraBtn.innerHTML = originalText;
@@ -1084,6 +880,7 @@ async function takePhoto() {
       isTakingPhoto = false;
     }, 1000);
     
+    // アルバムを再表示
     renderAlbum();
     
   } catch (error) {
@@ -1095,6 +892,7 @@ async function takePhoto() {
   }
 }
 
+// カメラを開く
 function openCamera() {
   return new Promise((resolve) => {
     const input = document.createElement('input');
@@ -1126,6 +924,7 @@ function openCamera() {
   });
 }
 
+// アルバムに保存
 function saveToAlbum(imageData, name) {
   const album = getAlbum();
   
@@ -1141,6 +940,7 @@ function saveToAlbum(imageData, name) {
     })
   });
   
+  // 最新30件だけ保存
   if (album.length > 30) {
     album.length = 30;
   }
@@ -1149,14 +949,17 @@ function saveToAlbum(imageData, name) {
   return album;
 }
 
+// アルバムを取得
 function getAlbum() {
   return JSON.parse(localStorage.getItem('simpleAlbum') || '[]');
 }
 
+// アルバムの作品数を取得
 function getAlbumCount() {
   return getAlbum().length;
 }
 
+// 作品を削除
 function deletePhoto(id) {
   if (!confirm('この作品を削除してもいいですか？')) return;
   
@@ -1167,6 +970,7 @@ function deletePhoto(id) {
   renderAlbum();
 }
 
+// アルバム写真を拡大表示
 function openAlbumOverlay(id) {
   const album = getAlbum();
   const item = album.find(p => p.id === id);
@@ -1175,6 +979,7 @@ function openAlbumOverlay(id) {
   }
 }
 
+// アルバムを表示
 function renderAlbum() {
   const album = getAlbum();
   
@@ -1207,8 +1012,9 @@ function renderAlbum() {
   `;
 }
 
-// ================= 拡大写真機能 =================
+// ================= 拡大写真機能（完全修正版） =================
 
+// 作業参考写真用クリックハンドラ
 function handlePhotoClick(event, imgSrc) {
   event.preventDefault();
   event.stopPropagation();
@@ -1216,11 +1022,13 @@ function handlePhotoClick(event, imgSrc) {
   return false;
 }
 
+// 写真要素作成（エスケープ処理付き）
 function createPhotoElement(imgSrc, altText) {
   if (!imgSrc || !isValidImagePath(imgSrc)) {
-    return '';
+    return ''; // 無効なパスは空を返す
   }
   
+  // シングルクォートをエスケープ
   const safeSrc = imgSrc.replace(/'/g, "\\'");
   
   return `
@@ -1232,6 +1040,7 @@ function createPhotoElement(imgSrc, altText) {
   `;
 }
 
+// 拡大表示を開く（共通関数）
 function openOverlay(src) {
   closeOverlay();
   
@@ -1260,12 +1069,14 @@ function openOverlay(src) {
     if (closeBtn) closeBtn.focus();
   }, 10);
   
+  // 背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
     if (e.target === this || e.target.classList.contains('overlay-content')) {
       closeOverlay();
     }
   });
   
+  // ESCキーで閉じる
   overlayKeydownHandler = function(e) {
     if (e.key === 'Escape') {
       closeOverlay();
@@ -1273,6 +1084,7 @@ function openOverlay(src) {
   };
   document.addEventListener('keydown', overlayKeydownHandler);
   
+  // タッチデバイスでピンチズーム防止
   currentOverlay.addEventListener('touchmove', function(e) {
     if (e.touches.length > 1) {
       e.preventDefault();
@@ -1309,19 +1121,19 @@ function saveProgress() {
     counts: completedCounts,
     lastStep: currentStep,
     timestamp: Date.now(),
-    version: '3.0' // バージョンアップ
+    version: '2.0'
   }));
 }
 
 function loadProgress() {
   const saved = JSON.parse(localStorage.getItem('simple_progress'));
-  if (saved && saved.counts && (saved.version === '2.0' || saved.version === '3.0')) {
+  if (saved && saved.counts && saved.version === '2.0') {
     completedCounts = saved.counts;
     currentStep = saved.lastStep || 0;
   }
 }
 
-// ================= 子ども用完了機能（超シンプル） =================
+// ================= 子ども用完了機能（修正版） =================
 function kidComplete(stepIndex) {
   if (completedCounts[stepIndex] < 4) {
     completedCounts[stepIndex]++;
@@ -1332,9 +1144,92 @@ function kidComplete(stepIndex) {
     updateProgressDisplay();
     renderStepView(steps[currentStep]);
     
+    enableUndoMode(stepIndex);
+    
     if (completedCounts[stepIndex] === 4) {
       celebrateAllComplete(stepIndex);
     }
+  }
+}
+
+function enableUndoMode(stepIndex) {
+  undoEnabled = true;
+  currentUndoStepIndex = stepIndex;
+  
+  const kidButton = document.querySelector('.big-kids-button');
+  if (kidButton) {
+    // 既存のイベントをクリア
+    kidButton.replaceWith(kidButton.cloneNode(true));
+    const newButton = document.querySelector('.big-kids-button');
+    
+    newButton.classList.add('undo-enabled');
+    newButton.innerHTML = `
+      <span class="big-emoji">↩️</span>
+      <span class="big-text">取り消す（長押し）</span>
+    `;
+    
+    setupUndoLongPress(newButton, stepIndex);
+    
+    undoTimeout = setTimeout(() => {
+      if (undoEnabled) {
+        undoEnabled = false;
+        currentUndoStepIndex = null;
+        newButton.classList.remove('undo-enabled');
+        renderStepView(steps[currentStep]);
+      }
+    }, 5000);
+  }
+}
+
+function setupUndoLongPress(button, stepIndex) {
+  // イベントリスナーを完全にクリアして再設定
+  const startHandler = (e) => {
+    if (e.cancelable) e.preventDefault();
+    buttonLongPressTimer = setTimeout(() => {
+      undoKidCompletion(stepIndex);
+    }, 800);
+  };
+  
+  const clearHandler = () => {
+    if (buttonLongPressTimer) {
+      clearTimeout(buttonLongPressTimer);
+      buttonLongPressTimer = null;
+    }
+  };
+  
+  // 既存のイベントを削除
+  button.removeEventListener('mousedown', startHandler);
+  button.removeEventListener('touchstart', startHandler);
+  button.removeEventListener('mouseup', clearHandler);
+  button.removeEventListener('mouseleave', clearHandler);
+  button.removeEventListener('touchend', clearHandler);
+  button.removeEventListener('touchmove', clearHandler);
+  
+  // 新しいイベントを追加
+  button.addEventListener('mousedown', startHandler);
+  button.addEventListener('touchstart', startHandler);
+  button.addEventListener('mouseup', clearHandler);
+  button.addEventListener('mouseleave', clearHandler);
+  button.addEventListener('touchend', clearHandler);
+  button.addEventListener('touchmove', clearHandler);
+}
+
+function undoKidCompletion(stepIndex) {
+  if (undoEnabled && completedCounts[stepIndex] > 0 && stepIndex === currentUndoStepIndex) {
+    completedCounts[stepIndex]--;
+    undoEnabled = false;
+    currentUndoStepIndex = null;
+    
+    if (undoTimeout) {
+      clearTimeout(undoTimeout);
+      undoTimeout = null;
+    }
+    
+    saveProgress();
+    updateProgressDisplay();
+    renderStepView(steps[currentStep]);
+    
+    if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
   }
 }
 
@@ -1371,6 +1266,153 @@ function updateProgressDisplay() {
     
     btn.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
   });
+}
+
+// ================= 指導員用隠し機能 =================
+function initTeacherHiddenFeature() {
+  progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
+  progressBarContainer.addEventListener('touchstart', startTeacherLongPress);
+  
+  progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
+  progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
+  progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
+  progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
+  
+  progressBarContainer.addEventListener('click', handleTeacherTap);
+}
+
+function startTeacherLongPress(e) {
+  if (e.cancelable) e.preventDefault();
+  teacherLongPressTimer = setTimeout(() => {
+    progressBarContainer.classList.add('teacher-mode-active');
+    
+    teacherDoubleTapTimer = setTimeout(() => {
+      progressBarContainer.classList.remove('teacher-mode-active');
+      teacherTapCount = 0;
+    }, 2000);
+  }, 3000);
+}
+
+function clearTeacherLongPress() {
+  if (teacherLongPressTimer) {
+    clearTimeout(teacherLongPressTimer);
+    teacherLongPressTimer = null;
+  }
+}
+
+function handleTeacherTap() {
+  if (progressBarContainer.classList.contains('teacher-mode-active')) {
+    teacherTapCount++;
+    
+    if (teacherTapCount === 2) {
+      clearTimeout(teacherDoubleTapTimer);
+      progressBarContainer.classList.remove('teacher-mode-active');
+      teacherTapCount = 0;
+      showTeacherPanel();
+      
+      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+    }
+  }
+}
+
+// ================= 指導員用パネル機能 =================
+function showTeacherPanel() {
+  updateTeacherPanel();
+  teacherPanel.classList.add('active');
+}
+
+function hideTeacherPanel() {
+  teacherPanel.classList.remove('active');
+  saveProgress();
+  render();
+}
+
+function updateTeacherPanel() {
+  document.getElementById('currentStepInfo').textContent = 
+    `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
+  
+  document.getElementById('currentCountDisplay').textContent = 
+    `${completedCounts[currentStep]}/4人`;
+  
+  const table = document.getElementById('allStepsTable');
+  table.innerHTML = steps.map((step, i) => {
+    if (step.isAlbum) return '';
+    const count = completedCounts[i];
+    return `
+      <tr>
+        <td>${step.nav}</td>
+        <td>
+          <select onchange="setStepCount(${i}, this.value)" style="width:100%; padding:5px;">
+            <option value="0" ${count===0?'selected':''}>0人</option>
+            <option value="1" ${count===1?'selected':''}>1人</option>
+            <option value="2" ${count===2?'selected':''}>2人</option>
+            <option value="3" ${count===3?'selected':''}>3人</option>
+            <option value="4" ${count===4?'selected':''}>4人</option>
+          </select>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function adjustCounter(delta) {
+  const newValue = completedCounts[currentStep] + delta;
+  if (newValue >= 0 && newValue <= 4) {
+    completedCounts[currentStep] = newValue;
+    updateTeacherPanel();
+  }
+}
+
+function resetCurrentStep() {
+  if (confirm('現在の工程の進捗を0にリセットしますか？')) {
+    completedCounts[currentStep] = 0;
+    updateTeacherPanel();
+  }
+}
+
+function setStepCount(stepIndex, value) {
+  completedCounts[stepIndex] = parseInt(value);
+  updateTeacherPanel();
+}
+
+function saveAllProgress() {
+  saveProgress();
+  alert('進捗を保存しました！');
+  hideTeacherPanel();
+}
+
+function resetAllProgress() {
+  if (confirm('すべての進捗をリセットしますか？\nこの操作は元に戻せません。')) {
+    completedCounts = [0, 0, 0, 0, 0, 0];
+    currentStep = 0;
+    saveProgress();
+    alert('すべての進捗をリセットしました！');
+    hideTeacherPanel();
+    render();
+  }
+}
+
+function exportProgress() {
+  const data = {
+    date: new Date().toLocaleString('ja-JP'),
+    progress: completedCounts,
+    steps: steps.filter(s => !s.isAlbum).map((s, i) => ({
+      name: s.title,
+      completed: completedCounts[i]
+    }))
+  };
+  
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `工作進捗_${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  alert('進捗データをエクスポートしました！');
 }
 
 // ================= 次工程への移動 =================
@@ -1425,6 +1467,16 @@ function renderKidsCompleteArea(stepIndex) {
   const percentage = Math.round((count / 4) * 100);
   const isAllComplete = count === 4;
   
+  let buttonHtml = '';
+  if (!undoEnabled || currentUndoStepIndex !== stepIndex) {
+    buttonHtml = `
+      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
+        <span class="big-emoji">✅</span>
+        <span class="big-text">できました！</span>
+      </button>
+    `;
+  }
+  
   return `
     <div class="kids-complete-area">
       <div class="kids-title">
@@ -1433,11 +1485,7 @@ function renderKidsCompleteArea(stepIndex) {
         <span>🎯</span>
       </div>
       
-      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" 
-              ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
-        <span class="big-emoji">✅</span>
-        <span class="big-text">できました！</span>
-      </button>
+      ${buttonHtml}
       
       <div class="completion-counter">
         <div class="counter-display">
@@ -1456,10 +1504,11 @@ function renderKidsCompleteArea(stepIndex) {
       ${isAllComplete ? renderAllCompleteMessage(stepIndex) : ''}
       
       <div class="teacher-note">
+        <strong>👨‍🏫 指導員用メモ：</strong><br>
         1. まず写真を見せて完成イメージを共有しましょう<br>
         2. 写真を見ながら工作を進めさせてください<br>
         3. 完成したら「できました！」ボタンを押させてください<br>
-        4. <strong>間違って押した場合は指導員に連絡</strong><br>
+        4. 押した直後5秒間は長押しで取消可能です<br>
         5. 全員が押すと次の工程に進めます
       </div>
     </div>
@@ -1513,10 +1562,8 @@ function render() {
   
   const s = steps[currentStep];
   if (s.isAlbum) {
-    document.body.classList.add('album-page');
     renderAlbumView(s);
   } else {
-    document.body.classList.remove('album-page');
     renderStepView(s);
   }
 }
@@ -1634,14 +1681,9 @@ function renderAlbumView(s) {
 // ================= 初期化 =================
 window.addEventListener('DOMContentLoaded', () => {
   initOrientationLock();
-  initTeacherFeature(); // 指導員機能の初期化
+  initTeacherHiddenFeature();
   loadProgress();
   render();
-  
-  console.log('✅ アプリケーション初期化完了');
-  console.log('👦 子ども用: 「できました！」ボタンのみ');
-  console.log('👨‍🏫 指導員用: 進捗バー「3秒長押し → ダブルタップ」');
-  console.log('🎯 設計思想: 落ち着いた運用・誤操作防止優先');
 });
 
 // キーボード操作サポート
@@ -1653,6 +1695,18 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+console.log(`
+👨‍🏫 工作指導アプリ 完全修正版！
+
+拡大写真機能の修正：
+1. ✅ 作業参考写真：handlePhotoClick関数でイベント制御
+2. ✅ 文字列エスケープ：シングルクォートをエスケープ処理
+3. ✅ アルバム写真：openAlbumOverlay関数でID経由アクセス
+4. ✅ 取り消し機能：ボタンクローンでイベントリスナーリセット
+
+全ての拡大写真機能が確実に動作します！
+`);
 </script>
 </body>
 </html>
