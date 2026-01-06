@@ -8,24 +8,9 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシック", sans-serif; background: #f5f7fa; color: #333; max-width: 960px; margin: 0 auto; min-height: 100vh; font-size: 16px; line-height: 1.6; }
 
-/* ヘッダー - 変更: 長押しフィードバック用スタイル追加 */
-.header { 
-  background: linear-gradient(135deg, #4CAF50, #2E7D32); 
-  color: white; 
-  text-align: center; 
-  padding: 0.8rem; 
-  position: sticky; 
-  top: 0; 
-  z-index: 100; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-  user-select: none; /* 追加: 文字選択防止 */
-  cursor: default; /* 追加: 通常のカーソル */
-}
-.header h1 { 
-  font-size: 1.4rem; 
-  margin-bottom: 0.3rem; 
-  transition: opacity 0.2s ease; /* 追加: 長押しフィードバック用 */
-}
+/* ヘッダー */
+.header { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; text-align: center; padding: 0.8rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.header h1 { font-size: 1.4rem; margin-bottom: 0.3rem; }
 .header p { font-size: 0.85rem; opacity: 0.95; }
 
 /* 進捗バー */
@@ -359,7 +344,40 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   font-size: 1.1rem;
 }
 
-/* 削除: 指導員用固定ボタン（削除しました） */
+/* 修正：指導員用固定ボタン（スマホ最適化） */
+.teacher-fixed-btn {
+  position: fixed;
+  bottom: 40px; /* ブラウザツールバーを避ける高さ */
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #E65100;
+  color: white;
+  border: 3px solid white;
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  z-index: 9999;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.teacher-fixed-btn span {
+  font-size: 0.6rem;
+  font-weight: normal;
+  margin-top: 3px;
+}
+
+.teacher-fixed-btn:active {
+  transform: scale(0.9);
+  background: #BF360C;
+}
 
 /* 拡大オーバーレイ */
 .overlay { 
@@ -512,7 +530,10 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 
 <main class="main-content" id="content"><div class="step-card"><div class="step-title">📸 おもいでアルバム</div><div class="album-section"><button class="camera-btn" onclick="takePhoto()"><span style="font-size: 3rem;">📸</span><span>写真をとる</span></button><div style="margin-bottom: 15px; color: #546e7a;">0作品保存中</div><div class="album-grid"><div class="no-photos">📭 まだ作品がありません</div></div></div></div></main>
 
-<!-- 削除: 指導員用固定ボタン（削除しました） -->
+<button class="teacher-fixed-btn" id="teacherFixedBtn" title="指導員用：現在の工程から−1（ダブルタップで全リセット）">
+  −1
+  <span>指導員用</span>
+</button>
 
 <div class="rotation-warning" id="rotationWarning">
   <div>
@@ -531,10 +552,10 @@ const steps = [
     img1: "./images/battery_box.jpg", 
     img2: "", 
     mainAction: "✅ 電池の向きOK！", 
-    detailAction: "💡 プラス（＋）とマイナス（－）的向きを確認しましょう",
+    detailAction: "💡 プラス（＋）とマイナス（－）の向きを確認しましょう",
     emoji: "🔋",
     tips: "ピタッと電池がくっついてかみてね",
-    keyPoint: "電池的向き（＋と－）"
+    keyPoint: "電池の向き（＋と－）"
   },
   { 
     nav: "② せん", 
@@ -542,10 +563,10 @@ const steps = [
     img1: "./images/wire_magnet.jpg", 
     img2: "./images/wire_zoom.jpg", 
     mainAction: "✅ 線がつながった！", 
-    detailAction: "🔍 電線的长度150mm・25㎜（両端を5mmむく）<br>💡 磁石が電池にしっかり付いているか確認",
+    detailAction: "🔍 電線の長さ150mm・25㎜（両端を5mmむく）<br>💡 磁石が電池にしっかり付いているか確認",
     emoji: "🧲",
-    tips: "磁石がビタッとつくのが気持ちいいね！ワンチームで協力して、各自的作品を作りましょう",
-    keyPoint: "磁石的接着力"
+    tips: "磁石がビタッとつくのが気持ちいいね！ワンチームで協力して、各自の作品を作りましょう",
+    keyPoint: "磁石の接着力"
   },
   { 
     nav: "③ スイッチ", 
@@ -555,8 +576,8 @@ const steps = [
     mainAction: "✅ 前後が切り替わる！", 
     detailAction: "💡 左右SWを押して切り替わるか確認してください",
     emoji: "🔘",
-    tips: "接点的接触をよくみてね",
-    keyPoint: "スイッチ的接触確認"
+    tips: "接点の接触をよくみてね",
+    keyPoint: "スイッチの接触確認"
   },
   { 
     nav: "④ まわる", 
@@ -566,8 +587,8 @@ const steps = [
     mainAction: "✅ 回れば OK（又は、LEDチェッカーで調べる）", 
     detailAction: "💡 指を近づけないよう注意<br>💡 回らない（つかない）場合は配線を確認",
     emoji: "⚙️",
-    tips: "モーター的軸が動いているか（又は、LEDチェッカーが点灯するか）よく見てね",
-    keyPoint: "モーター軸的回転",
+    tips: "モーターの軸が動いているか（又は、LEDチェッカーが点灯するか）よく見てね",
+    keyPoint: "モーター軸の回転",
     danger: true
   },
   { 
@@ -579,7 +600,7 @@ const steps = [
     detailAction: "💡 前後が逆なら入れ替えてみよう",
     emoji: "🚗",
     tips: "三つ編みが難しい時は、みんなで協力してね",
-    keyPoint: "配線的三つ編み"
+    keyPoint: "配線の三つ編み"
   },
   { 
     nav: "⑥ かんせい", 
@@ -597,11 +618,11 @@ const steps = [
     nav: "📸アルバム", 
     title: "📸 おもいでアルバム",
     isAlbum: true,
-    albumMessage: "作った作品に「なまえ」をつけて、みんな的思い出を残しましょう！"
+    albumMessage: "作った作品に「なまえ」をつけて、みんなの思い出を残しましょう！"
   }
 ];
 
-// 各工程的目安時間（分）
+// 各工程の目安時間（分）
 const stepTimes = {
   0: 20, 1: 30, 2: 30, 3: 20, 4: 40, 5: 30
 };
@@ -610,72 +631,63 @@ const stepTimes = {
 let completedCounts = [0, 0, 0, 0, 0, 0];
 let currentStep = 0;
 
-// 拡大写真的状态管理
+// 拡大写真の状態管理
 let currentOverlay = null;
+let overlayKeydownHandler = null;
 
-// アルバム的状态管理
+// アルバムの状態管理
 let isTakingPhoto = false;
 
-// 追加: 長押しタイマー用変数
-let titleHoldTimer = null;
+// 指導員ボタンの状態管理
+let teacherTapCount = 0;
+let teacherTapTimer = null;
 
 const navButtons = document.getElementById('navButtons');
 const content = document.getElementById('content');
 const rotationWarning = document.getElementById('rotationWarning');
 const progressBar = document.getElementById('progressBar');
+const teacherFixedBtn = document.getElementById('teacherFixedBtn');
 
-// 追加: 指導員用隠し機能（タイトルの👀長押し）
-function initSecretTeacherFunction() {
-  const header = document.querySelector('.header');
-  
-  // マウス/タッチ開始
-  header.addEventListener('mousedown', checkAndStartTimer);
-  header.addEventListener('touchstart', checkAndStartTimer);
-  
-  // マウス/タッチ終了
-  header.addEventListener('mouseup', clearTimer);
-  header.addEventListener('touchend', clearTimer);
-  header.addEventListener('mouseleave', clearTimer);
-  header.addEventListener('touchcancel', clearTimer);
+// 指導員用固定ボタン機能
+function initTeacherFixedButton() {
+  teacherFixedBtn.addEventListener('click', handleTeacherButtonClick);
 }
 
-function checkAndStartTimer(e) {
-  // 👀を含む要素を押したかチェック（ヘッダー内ならOK）
-  if (e.target.closest('.header')) {
-    // 長押しタイマー開始（1秒）
-    titleHoldTimer = setTimeout(() => {
-      executeTeacherFunction();
-    }, 1000);
+function handleTeacherButtonClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  teacherTapCount++;
+  
+  if (teacherTapCount === 1) {
+    teacherTapTimer = setTimeout(() => {
+      subtractFromCurrentStep();
+      teacherTapCount = 0;
+    }, 500);
+  } else if (teacherTapCount === 2) {
+    clearTimeout(teacherTapTimer);
+    teacherTapCount = 0;
+    handleDoubleTapReset();
   }
 }
 
-function clearTimer() {
-  if (titleHoldTimer) {
-    clearTimeout(titleHoldTimer);
-    titleHoldTimer = null;
-  }
-}
-
-function executeTeacherFunction() {
+function subtractFromCurrentStep() {
   if (completedCounts[currentStep] > 0) {
     completedCounts[currentStep]--;
     saveProgress();
     updateProgressDisplay();
     renderStepView(steps[currentStep]);
-    
-    // 触覚フィードバック
-    if ('vibrate' in navigator) {
-      navigator.vibrate([30, 50, 30]); // 短いパターン
-    }
-    
-    // 視覚的フィードバック（控えめ）
-    const title = document.querySelector('.header h1');
-    title.style.opacity = '0.7';
-    setTimeout(() => {
-      title.style.opacity = '1';
-    }, 200);
-    
-    console.log('指導員機能: 完了人数を1人減らしました'); // デバッグ用
+    if ('vibrate' in navigator) navigator.vibrate(50);
+  }
+}
+
+function handleDoubleTapReset() {
+  if (confirm('すべての進捗をリセットしますか？\n（全工程が0に戻ります）')) {
+    completedCounts = [0, 0, 0, 0, 0, 0];
+    currentStep = 0;
+    saveProgress();
+    render();
+    if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
   }
 }
 
@@ -838,12 +850,7 @@ function render() {
   if (steps[currentStep].isAlbum) { content.innerHTML = `<div class="step-card"><div class="step-title">${steps[currentStep].title}</div>${renderAlbum()}</div>`; } else { renderStepView(steps[currentStep]); }
 }
 
-// 追加: 初期化時に隠し機能も初期化
-window.addEventListener('DOMContentLoaded', () => { 
-  loadProgress(); 
-  render(); 
-  initSecretTeacherFunction(); // 追加: 隠し機能を初期化
-});
+window.addEventListener('DOMContentLoaded', () => { loadProgress(); render(); initTeacherFixedButton(); });
 </script>
 
 
