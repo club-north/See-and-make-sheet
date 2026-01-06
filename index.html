@@ -2,20 +2,20 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>👀みてつくるシート🚗</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシック", sans-serif; background: #f5f7fa; color: #333; max-width: 100%; margin: 0; min-height: 100vh; font-size: 16px; line-height: 1.6; }
+body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシック", sans-serif; background: #f5f7fa; color: #333; max-width: 960px; margin: 0 auto; min-height: 100vh; font-size: 16px; line-height: 1.6; }
 
 /* ヘッダー */
 .header { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; text-align: center; padding: 0.8rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 .header h1 { font-size: 1.4rem; margin-bottom: 0.3rem; }
 .header p { font-size: 0.85rem; opacity: 0.95; }
 
-/* 進捗バー */
+/* 進捗バー（指導員操作用） */
 .progress-container { 
-  height: 8px; 
+  height: 12px; /* 少し太くして押しやすく */
   background: #e0e0e0; 
   width: 100%; 
   cursor: pointer;
@@ -23,9 +23,9 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   position: relative;
 }
 .progress-container.teacher-mode-active {
-  border: 2px solid #FF9800;
-  border-radius: 4px;
-  animation: pulseBorder 1s infinite;
+  border: 3px solid #FF9800;
+  border-radius: 6px;
+  animation: pulseBorder 1.5s infinite;
 }
 .progress-bar { 
   height: 100%; 
@@ -35,159 +35,44 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 @keyframes pulseBorder {
-  0% { border-color: #FF9800; }
-  50% { border-color: #FFC107; }
-  100% { border-color: #FF9800; }
+  0% { border-color: #FF9800; box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4); }
+  50% { border-color: #FFC107; box-shadow: 0 0 0 8px rgba(255, 152, 0, 0.1); }
+  100% { border-color: #FF9800; box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
 }
 
 /* ナビゲーション */
-.nav-container { 
-  width: 100%; 
-  overflow-x: auto; 
-  background: white; 
-  padding: 8px 5px; 
-  border-bottom: 2px solid #e0e0e0; 
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.nav-container::-webkit-scrollbar { display: none; }
-.nav-scroll { 
-  display: inline-flex; 
-  gap: 5px; 
-  min-width: 100%;
-  justify-content: center;
-  padding: 0 5px;
-}
-.nav-btn { 
-  flex: 1 0 auto;
-  max-width: 120px;
-  padding: 10px 8px; 
-  font-size: 0.95rem; 
-  font-weight: bold; 
-  border: none; 
-  border-radius: 10px; 
-  background: #e8f5e9; 
-  color: #2E7D32; 
-  min-height: 50px; 
-  cursor: pointer; 
-  transition: all 0.2s ease; 
-  white-space: nowrap; 
-  text-align: center;
-}
+.nav-container { width: 100%; overflow-x: auto; background: white; padding: 8px 5px; border-bottom: 2px solid #e0e0e0; -webkit-overflow-scrolling: touch; }
+.nav-scroll { display: inline-flex; gap: 5px; min-width: max-content; }
+.nav-btn { flex-shrink: 0; padding: 10px 12px; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; background: #e8f5e9; color: #2E7D32; min-width: 80px; min-height: 50px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
 .nav-btn:hover, .nav-btn:focus { background: #c8e6c9; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
 .nav-btn.active { background: #FF9800; color: white; box-shadow: 0 0 0 2px white, 0 0 0 4px #FF9800; }
 .nav-btn:focus { outline: 3px solid #4CAF50; outline-offset: 1px; }
 .nav-btn.completed::before { content: "✅ "; }
 
 /* メインコンテンツ */
-.main-content { 
-  padding: 12px 8px; 
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-}
-.step-card { 
-  background: white; 
-  border-radius: 14px; 
-  padding: 16px; 
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
-  margin-bottom: 12px; 
-  border: 1px solid #e0e0e0; 
-  width: 100%;
-}
+.main-content { padding: 12px 8px; }
+.step-card { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 12px; border: 1px solid #e0e0e0; }
 
 /* ステップタイトル */
-.step-title { 
-  font-size: clamp(1.2rem, 4vw, 1.7rem); 
-  color: #1565C0; 
-  margin-bottom: 15px; 
-  font-weight: bold; 
-  padding-bottom: 8px; 
-  border-bottom: 3px solid #e3f2fd; 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  word-break: break-word;
-}
+.step-title { font-size: 1.3rem; color: #1565C0; margin-bottom: 15px; font-weight: bold; padding-bottom: 8px; border-bottom: 3px solid #e3f2fd; display: flex; align-items: center; gap: 10px; }
 .step-title::before { content: "📋"; font-size: 1.2rem; }
 
 /* 時間ガイド */
-.time-guide { 
-  background: #fff3e0; 
-  padding: 6px 10px; 
-  border-radius: 8px; 
-  margin-bottom: 10px; 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 5px; 
-  font-size: clamp(0.8rem, 3vw, 0.95rem); 
-  color: #ef6c00; 
-  border-left: 3px solid #ff9800; 
-}
+.time-guide { background: #fff3e0; padding: 6px 10px; border-radius: 8px; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #ef6c00; border-left: 3px solid #ff9800; }
 
 /* 最重要ポイント */
-.key-point { 
-  background: #fff8e1; 
-  border: 2px solid #ffd54f; 
-  border-radius: 10px; 
-  padding: 10px; 
-  margin: 10px 0; 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  font-size: clamp(0.95rem, 3vw, 1.1rem); 
-}
+.key-point { background: #fff8e1; border: 2px solid #ffd54f; border-radius: 10px; padding: 10px; margin: 10px 0; display: flex; align-items: center; gap: 8px; font-size: 1rem; }
 .key-point .key-icon { font-size: 1.3rem; }
 
 /* 行動指示セクション */
-.action-section { 
-  background: linear-gradient(135deg, #e8f5e9, #c8e6c9); 
-  border-radius: 12px; 
-  padding: 16px; 
-  margin-bottom: 16px; 
-  border: 3px solid #4CAF50; 
-  position: relative; 
-}
-.action-section::before { 
-  content: "やること"; 
-  position: absolute; 
-  top: -12px; 
-  left: 20px; 
-  background: #4CAF50; 
-  color: white; 
-  padding: 4px 15px; 
-  border-radius: 20px; 
-  font-size: clamp(0.8rem, 2.5vw, 0.95rem); 
-  font-weight: bold; 
-}
+.action-section { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 3px solid #4CAF50; position: relative; }
+.action-section::before { content: "やること"; position: absolute; top: -12px; left: 20px; background: #4CAF50; color: white; padding: 4px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
 
-.main-action { 
-  font-size: clamp(1.1rem, 4vw, 1.6rem); 
-  font-weight: bold; 
-  color: #1B5E20; 
-  margin-bottom: 12px; 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  line-height: 1.4; 
-}
-.main-action .emoji { font-size: clamp(1.3rem, 4vw, 1.8rem); }
+.main-action { font-size: 1.3rem; font-weight: bold; color: #1B5E20; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; line-height: 1.4; }
+.main-action .emoji { font-size: 1.5rem; }
 
-.detail-action { 
-  font-size: clamp(0.95rem, 3vw, 1.1rem); 
-  color: #333; 
-  padding: 12px; 
-  background: rgba(255, 255, 255, 0.9); 
-  border-radius: 10px; 
-  border-left: 5px solid #FF9800; 
-  margin-top: 10px; 
-}
-.detail-line { 
-  display: flex; 
-  align-items: flex-start; 
-  gap: 8px; 
-  margin-bottom: 6px; 
-}
+.detail-action { font-size: 1.1rem; color: #333; padding: 12px; background: rgba(255, 255, 255, 0.9); border-radius: 10px; border-left: 5px solid #FF9800; margin-top: 10px; }
+.detail-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
 .detail-line:last-child { margin-bottom: 0; }
 .detail-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
 .detail-text { flex: 1; line-height: 1.4; }
@@ -196,18 +81,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .danger-action::before { content: "注意"; background: #ff5252; }
 
 /* ヒントボックス */
-.tips-box { 
-  background: #e3f2fd; 
-  border-radius: 8px; 
-  padding: 10px 12px; 
-  margin-top: 10px; 
-  border-left: 4px solid #2196F3; 
-  font-size: clamp(0.9rem, 3vw, 1rem); 
-  color: #1565C0; 
-  display: flex; 
-  align-items: flex-start; 
-  gap: 8px; 
-}
+.tips-box { background: #e3f2fd; border-radius: 8px; padding: 10px 12px; margin-top: 10px; border-left: 4px solid #2196F3; font-size: 1rem; color: #1565C0; display: flex; align-items: flex-start; gap: 8px; }
 .tips-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
 .tips-text { flex: 1; line-height: 1.4; }
 
@@ -220,7 +94,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   border: 1px solid #e0e0e0; 
 }
 .photo-title { 
-  font-size: clamp(1rem, 3.5vw, 1.3rem); 
+  font-size: 1.1rem; 
   color: #1565C0; 
   margin-bottom: 15px; 
   display: flex; 
@@ -229,11 +103,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   font-weight: 600; 
 }
 
-.photo-list { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 15px; 
-}
+.photo-list { display: flex; flex-direction: column; gap: 15px; }
 .photo-container { 
   background: white; 
   border-radius: 10px; 
@@ -253,7 +123,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   max-height: 50vh; 
   object-fit: contain; 
   display: block; 
-  background: #f5f5f5;
 }
 .tap-label { 
   position: absolute; 
@@ -263,7 +132,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   color: white; 
   padding: 6px 10px; 
   border-radius: 15px; 
-  font-size: clamp(0.75rem, 2.5vw, 0.85rem); 
+  font-size: 0.85rem; 
   pointer-events: none; 
 }
 
@@ -271,40 +140,39 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .kids-complete-area { 
   background: linear-gradient(135deg, #e3f2fd, #bbdefb); 
   border-radius: 15px; 
-  padding: clamp(15px, 4vw, 25px); 
+  padding: 20px; 
   margin: 10px 0 20px 0; 
   text-align: center; 
   border: 3px dashed #2196F3; 
 }
 .kids-title { 
-  font-size: clamp(1.2rem, 4vw, 1.6rem); 
+  font-size: 1.4rem; 
   color: #0d47a1; 
   margin-bottom: 15px; 
   display: flex; 
   align-items: center; 
   justify-content: center; 
   gap: 10px; 
-  flex-wrap: wrap;
 }
 
-/* 子ども用大型ボタン */
+/* 子ども用大型ボタン（超シンプル） */
 .big-kids-button { 
   background: linear-gradient(135deg, #4CAF50, #2E7D32); 
   color: white; 
   border: none; 
-  padding: clamp(20px, 5vw, 35px); 
+  padding: 25px; 
   border-radius: 20px; 
-  font-size: clamp(1.4rem, 5vw, 2rem); 
+  font-size: 1.8rem; 
   font-weight: bold; 
   cursor: pointer; 
   width: 100%; 
-  max-width: min(400px, 90vw); 
+  max-width: 400px; 
   transition: all 0.3s ease; 
   display: flex; 
   flex-direction: column; 
   align-items: center; 
   justify-content: center; 
-  gap: clamp(10px, 3vw, 15px); 
+  gap: 15px; 
   margin: 0 auto; 
 }
 .big-kids-button:hover, .big-kids-button:focus { 
@@ -314,43 +182,14 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 .big-kids-button:active { transform: translateY(-1px) scale(0.98); }
 .big-kids-button:focus { outline: 4px solid #FF9800; outline-offset: 3px; }
-.big-kids-button .big-emoji { font-size: clamp(2.5rem, 8vw, 4rem); }
-.big-kids-button .big-text { font-size: clamp(1.4rem, 5vw, 2rem); }
-
-/* 取消可能状態 */
-.big-kids-button.undo-enabled {
-  background: linear-gradient(135deg, #FF9800, #F57C00);
-  animation: pulseOrange 1s infinite;
-}
-
-@keyframes pulseOrange {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); }
-  50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 152, 0, 0.2); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
-}
+.big-kids-button .big-emoji { font-size: 3rem; }
+.big-kids-button .big-text { font-size: 1.8rem; }
 
 /* 完了カウンター */
 .completion-counter { margin-top: 15px; }
-.counter-display { 
-  font-size: clamp(1.2rem, 4vw, 1.8rem); 
-  font-weight: bold; 
-  color: #0d47a1; 
-  margin-bottom: 5px; 
-}
-.counter-bar { 
-  height: 12px; 
-  background: #e0e0e0; 
-  border-radius: 6px; 
-  overflow: hidden; 
-  margin: 10px auto; 
-  max-width: min(300px, 80vw); 
-}
-.counter-fill { 
-  height: 100%; 
-  background: linear-gradient(90deg, #4CAF50, #8BC34A); 
-  transition: width 0.5s ease; 
-  border-radius: 6px; 
-}
+.counter-display { font-size: 1.5rem; font-weight: bold; color: #0d47a1; margin-bottom: 5px; }
+.counter-bar { height: 12px; background: #e0e0e0; border-radius: 6px; overflow: hidden; margin: 10px auto; max-width: 300px; }
+.counter-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); transition: width 0.5s ease; border-radius: 6px; }
 
 /* 全員完了メッセージ */
 .all-complete-message { 
@@ -369,15 +208,14 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   align-items: center; 
   justify-content: center; 
   gap: 10px; 
-  flex-wrap: wrap;
 }
 .next-step-btn { 
   background: linear-gradient(135deg, #FF9800, #F57C00); 
   color: white; 
   border: none; 
-  padding: clamp(10px, 3vw, 14px) clamp(15px, 4vw, 24px); 
+  padding: 12px 24px; 
   border-radius: 25px; 
-  font-size: clamp(1rem, 3.5vw, 1.3rem); 
+  font-size: 1.2rem; 
   font-weight: bold; 
   cursor: pointer; 
   margin-top: 10px; 
@@ -386,109 +224,154 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   gap: 8px; 
 }
 
-/* 指導員用メモ */
+/* 指導員用メモ（明確に区別） */
 .teacher-note { 
   background: #FFF3E0; 
   border-radius: 10px; 
-  padding: 12px; 
-  margin: 15px 0; 
-  border-left: 4px solid #FF9800; 
-  font-size: clamp(0.85rem, 3vw, 0.95rem); 
+  padding: 15px; 
+  margin: 20px 0; 
+  border-left: 5px solid #FF9800; 
+  font-size: 0.95rem; 
   color: #5D4037; 
+  border-top: 2px dashed #FF9800;
 }
 .teacher-note strong { color: #E65100; }
+.teacher-note::before { 
+  content: "👨‍🏫 指導員用"; 
+  display: block; 
+  font-weight: bold; 
+  color: #FF6D00; 
+  margin-bottom: 8px; 
+  font-size: 1rem; 
+}
 
-/* アルバム */
+/* アルバムセクション */
 .album-section { 
   background: #f8f9fa; 
   border-radius: 12px; 
-  padding: 12px; 
-  margin-top: 15px; 
-  border: 2px dashed #bbdefb; 
+  padding: 20px; 
+  margin: 20px 0; 
+  text-align: center;
 }
 
-.album-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(min(130px, 40vw), 1fr)); 
-  gap: 12px; 
-  margin-top: 15px; 
-}
-.album-item { 
-  position: relative; 
-  border-radius: 8px; 
-  overflow: hidden; 
-  background: white; 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
-  display: flex; 
-  flex-direction: column; 
-  cursor: pointer; 
-  border: 1px solid #e0e0e0; 
-}
-.album-img-wrapper { 
-  position: relative; 
-  aspect-ratio: 1; 
-  overflow: hidden; 
-  background: #f5f5f5; 
-}
-.album-item img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
-.album-info { padding: 8px; }
-.album-name { 
-  font-weight: bold; 
-  font-size: clamp(0.85rem, 3vw, 1rem); 
-  display: block; 
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  margin-bottom: 2px; 
-  color: #333; 
-}
-.album-date { font-size: clamp(0.7rem, 2.5vw, 0.8rem); color: #757575; }
-
-.add-photo-btn { 
-  background: linear-gradient(135deg, #4caf50, #2e7d32); 
-  color: white; 
-  border: none; 
-  padding: clamp(12px, 3vw, 16px); 
-  border-radius: 12px; 
-  width: 100%; 
-  font-size: clamp(1rem, 3.5vw, 1.3rem); 
-  font-weight: bold; 
-  cursor: pointer; 
-  margin-bottom: 12px; 
-  min-height: clamp(50px, 10vw, 70px); 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 8px; 
+.camera-btn {
+  background: linear-gradient(135deg, #2196F3, #0D47A1);
+  color: white;
+  border: none;
+  padding: 20px;
+  border-radius: 15px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
 }
 
-.del-btn { 
-  position: absolute; 
-  top: 6px; 
-  right: 6px; 
-  background: rgba(0,0,0,0.7); 
-  color: white; 
-  border: none; 
-  border-radius: 50%; 
-  width: clamp(25px, 8vw, 35px); 
-  height: clamp(25px, 8vw, 35px); 
-  font-size: clamp(16px, 5vw, 20px); 
-  z-index: 10; 
-  cursor: pointer; 
+.camera-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
 }
 
-/* ============ 拡大オーバーレイ（レスポンシブ版） ============ */
+.camera-btn:active {
+  transform: translateY(0);
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .album-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.photo-item {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #e3f2fd;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+
+.photo-item:hover {
+  transform: translateY(-3px);
+}
+
+.photo-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-name {
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: center;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.photo-date {
+  padding: 5px 10px 10px;
+  font-size: 0.8rem;
+  color: #757575;
+  text-align: center;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.photo-item:hover .delete-btn {
+  display: flex;
+}
+
+.no-photos {
+  grid-column: 1 / -1;
+  padding: 40px;
+  text-align: center;
+  color: #78909c;
+  font-size: 1.1rem;
+}
+
+/* 拡大オーバーレイ */
 .overlay { 
   position: fixed; 
   top: 0; 
   left: 0; 
   width: 100vw; 
   height: 100vh; 
-  background: rgba(0,0,0,0.98); 
+  background: rgba(0,0,0,0.95); 
   z-index: 10000; 
   display: flex;
   align-items: center;
@@ -496,8 +379,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  padding: 10px;
-  touch-action: pinch-zoom pan-x pan-y;
 }
 
 .overlay.active { 
@@ -506,89 +387,34 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 .overlay-content {
-  width: 100%;
-  height: 100%;
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  transform-origin: center center;
-}
-
-.overlay-image-container {
-  position: relative;
-  max-width: 100%;
-  max-height: 100%;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
-  transition: transform 0.2s ease;
-}
-
-.overlay-image-container:active {
-  cursor: grabbing;
 }
 
 .overlay-image {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 90vh;
   object-fit: contain;
+  border: 2px solid white;
   border-radius: 5px;
   box-shadow: 0 5px 30px rgba(0,0,0,0.5);
-  display: block;
-  transform-origin: center center;
-  transition: transform 0.2s ease;
 }
 
-/* 操作ヒント表示 */
-.overlay-hint {
-  position: fixed;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px 15px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: clamp(0.8rem, 3vw, 1rem);
-  z-index: 10002;
-  margin: 0 20px;
-  animation: fadeInUp 0.3s ease;
-  backdrop-filter: blur(5px);
-}
-
-.overlay-hint.hidden {
-  opacity: 0;
-  transform: translateY(20px);
-  pointer-events: none;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 閉じるボタン */
 .close-overlay-btn { 
   position: fixed; 
-  top: clamp(15px, 4vw, 25px); 
-  right: clamp(15px, 4vw, 25px); 
-  width: clamp(50px, 12vw, 70px); 
-  height: clamp(50px, 12vw, 70px); 
+  top: 20px; 
+  right: 20px; 
+  width: 60px; 
+  height: 60px; 
   border-radius: 50%; 
   background: rgba(255,255,255,0.95); 
   border: none; 
   font-weight: bold; 
-  font-size: clamp(1.8rem, 6vw, 2.5rem); 
+  font-size: 2rem; 
   z-index: 10001; 
   cursor: pointer; 
   display: flex;
@@ -596,7 +422,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   align-items: center;
   justify-content: center;
   box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease;
 }
 .close-overlay-btn:hover {
   transform: scale(1.1);
@@ -605,55 +431,8 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   transform: scale(0.95);
 }
 .close-overlay-btn small { 
-  font-size: clamp(0.6rem, 2vw, 0.8rem); 
+  font-size: 0.7rem; 
   margin-top: 2px; 
-  font-weight: normal;
-}
-
-/* リセットボタン */
-.reset-zoom-btn {
-  position: fixed;
-  top: clamp(15px, 4vw, 25px);
-  left: clamp(15px, 4vw, 25px);
-  width: clamp(50px, 12vw, 70px);
-  height: clamp(50px, 12vw, 70px);
-  border-radius: 50%;
-  background: rgba(255,152,0,0.95);
-  border: none;
-  font-weight: bold;
-  font-size: clamp(1.4rem, 5vw, 2rem);
-  z-index: 10001;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  transition: all 0.2s ease;
-  color: white;
-}
-.reset-zoom-btn:hover {
-  transform: scale(1.1);
-  background: rgba(245,124,0,0.95);
-}
-
-/* ズームインジケーター */
-.zoom-indicator {
-  position: fixed;
-  bottom: clamp(70px, 20vw, 100px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: clamp(0.8rem, 3vw, 1rem);
-  z-index: 10002;
-  backdrop-filter: blur(5px);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.zoom-indicator.show {
-  opacity: 1;
 }
 
 /* 指導員用パネル */
@@ -664,12 +443,12 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   z-index: 10000;
   align-items: center;
   justify-content: center;
-  padding: 15px;
-  animation: fadeIn 0.3s ease;
+  padding: 20px;
+  animation: fadeIn 0.4s ease;
 }
 
 .teacher-panel.active { display: flex; }
@@ -677,115 +456,115 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .teacher-content {
   background: white;
   border-radius: 15px;
-  padding: clamp(20px, 5vw, 30px);
-  max-width: min(500px, 90vw);
+  padding: 25px;
+  max-width: 500px;
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  border: 3px solid #FF9800;
 }
 
 .teacher-content h3 {
   text-align: center;
   color: #1565C0;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e3f2fd;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #e3f2fd;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  gap: 12px;
+  font-size: 1.4rem;
 }
 
 .teacher-section {
   background: #f5f7fa;
   border-radius: 10px;
-  padding: 15px;
+  padding: 18px;
   margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
+  border: 2px solid #e0e0e0;
 }
 
 .teacher-section h4 {
   color: #0d47a1;
   margin-bottom: 15px;
-  font-size: clamp(1rem, 3.5vw, 1.2rem);
-}
-
-.counter-control {
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 15px 0;
-  gap: clamp(8px, 2vw, 12px);
-  flex-wrap: wrap;
-}
-
-.counter-control button {
-  background: #2196F3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px);
-  font-size: clamp(0.95rem, 3vw, 1.1rem);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 120px;
-}
-
-.counter-control button:hover {
-  background: #1976D2;
-  transform: translateY(-2px);
-}
-
-.reset-btn {
-  background: #FF9800;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: clamp(10px, 3vw, 14px) clamp(15px, 4vw, 22px);
-  font-size: clamp(0.9rem, 3vw, 1.1rem);
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: all 0.2s ease;
-}
-
-.reset-btn:hover {
-  background: #F57C00;
+  gap: 8px;
 }
 
 .progress-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 1rem;
 }
 
 .progress-table td {
-  padding: 10px;
+  padding: 12px 8px;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .progress-table select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: clamp(0.9rem, 3vw, 1rem);
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  font-size: 1rem;
+  background: white;
+}
+
+.progress-table select:focus {
+  border-color: #2196F3;
+  outline: none;
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.reset-btn:hover {
+  background: linear-gradient(135deg, #F57C00, #E65100);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 .close-btn {
-  background: #4CAF50;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: clamp(10px, 3vw, 14px) clamp(20px, 5vw, 35px);
-  font-size: clamp(1rem, 3.5vw, 1.2rem);
+  border-radius: 10px;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
 }
 
 .close-btn:hover {
-  background: #3d8b40;
+  background: linear-gradient(135deg, #3d8b40, #1b5e20);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
 /* 回転警告メッセージ */
@@ -803,7 +582,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   justify-content: center;
   text-align: center;
   padding: 15px;
-  font-size: clamp(1rem, 4vw, 1.3rem);
+  font-size: 1.2rem;
 }
 .rotation-warning.active { display: flex; }
 
@@ -815,8 +594,8 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes celebrate {
@@ -824,198 +603,35 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ============ レスポンシブ調整 ============ */
-
-/* スマホ向け（縦向き） */
-@media (max-width: 480px) and (orientation: portrait) {
-  .main-content {
-    padding: 10px 5px;
+/* タブレット・PC向け */
+@media (min-width: 768px) {
+  .header { padding: 1.2rem; }
+  .header h1 { font-size: 1.8rem; }
+  .header p { font-size: 1.1rem; }
+  
+  .step-title { font-size: 1.7rem; }
+  
+  .main-action { font-size: 1.6rem; }
+  
+  .photo-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  .photo-container { max-height: 300px; }
+  
+  .nav-btn { min-width: 90px; min-height: 60px; font-size: 1.1rem; }
+  
+  .big-kids-button { padding: 30px; }
+  .big-kids-button .big-emoji { font-size: 4rem; }
+  .big-kids-button .big-text { font-size: 2rem; }
+  
+  .teacher-content { max-width: 600px; padding: 30px; }
+  
+  .camera-btn {
+    font-size: 2rem;
+    padding: 25px;
+    max-width: 350px;
   }
   
-  .step-card {
-    padding: 12px;
-    border-radius: 12px;
-  }
-  
-  .photo-list {
-    gap: 10px;
-  }
-  
-  .nav-btn {
-    min-height: 45px;
-    font-size: 0.9rem;
-    padding: 8px 6px;
-  }
-  
-  .album-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 8px;
-  }
-}
-
-/* タブレット向け */
-@media (min-width: 481px) and (max-width: 768px) {
-  .photo-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  .nav-scroll {
-    justify-content: flex-start;
-  }
-  
-  .album-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  }
-}
-
-/* PC向け */
-@media (min-width: 769px) {
-  .main-content {
-    padding: 20px;
-  }
-  
-  .header {
-    padding: 1.2rem;
-  }
-  
-  .header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .header p {
-    font-size: 1.1rem;
-  }
-  
-  .nav-scroll {
-    justify-content: center;
-  }
-  
-  .nav-btn {
-    min-width: 100px;
-    font-size: 1.1rem;
-    padding: 12px 10px;
-  }
-  
-  .photo-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-  
-  .album-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
-  
-  /* PC用の拡大写真調整 */
-  .overlay-image {
-    cursor: zoom-in;
-  }
-  
-  .overlay-image.zoomed {
-    cursor: grab;
-  }
-}
-
-/* 特大画面向け */
-@media (min-width: 1200px) {
-  .main-content {
-    max-width: 1100px;
-  }
-  
-  .photo-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* 横向きデバイス向け */
-@media (orientation: landscape) and (max-height: 600px) {
-  .header {
-    padding: 0.5rem;
-  }
-  
-  .header h1 {
-    font-size: 1.2rem;
-    margin-bottom: 0.2rem;
-  }
-  
-  .main-content {
-    padding: 8px;
-  }
-  
-  .step-card {
-    padding: 12px;
-  }
-  
-  .big-kids-button {
-    padding: 15px;
-    max-width: 300px;
-  }
-  
-  .kids-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-  }
-  
-  .photo-list {
-    max-height: 40vh;
-    overflow-y: auto;
-  }
-}
-
-/* 高解像度デバイス向け */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .header {
-    background: linear-gradient(135deg, #4CAF50, #2E7D32);
-    backdrop-filter: blur(10px);
-  }
-  
-  .step-card {
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  }
-  
-  .overlay-image {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-  }
-}
-
-/* ダークモード対応 */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #121212;
-    color: #e0e0e0;
-  }
-  
-  .step-card {
-    background: #1e1e1e;
-    border-color: #333;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
-  }
-  
-  .nav-container {
-    background: #1e1e1e;
-    border-color: #333;
-  }
-  
-  .nav-btn {
-    background: #2c2c2c;
-    color: #4CAF50;
-  }
-  
-  .photo-section {
-    background: #2c2c2c;
-    border-color: #333;
-  }
-  
-  .photo-container {
-    background: #1e1e1e;
-    border-color: #444;
-  }
-  
-  .step-image {
-    background: #2c2c2c;
+  .progress-container {
+    height: 14px;
   }
 }
 </style>
@@ -1027,6 +643,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   <p>工作の手順を確認しながら、作った作品をアルバムに残そう！</p>
 </header>
 
+<!-- 指導員操作用進捗バー（唯一の操作場所） -->
 <div class="progress-container" id="progressBarContainer">
   <div class="progress-bar" id="progressBar"></div>
 </div>
@@ -1037,52 +654,59 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 
 <main class="main-content" id="content"></main>
 
-<!-- 指導員用パネル -->
+<!-- 指導員用管理パネル（進捗バー操作でのみ表示） -->
 <div class="teacher-panel" id="teacherPanel">
   <div class="teacher-content">
     <h3>👨‍🏫 指導員用管理パネル</h3>
     
     <div class="teacher-section">
-      <h4>現在の工程を調整</h4>
-      <p id="currentStepInfo"></p>
-      <div class="counter-control">
-        <button onclick="adjustCounter(-1)">➖ 1人減らす</button>
-        <span id="currentCountDisplay" style="margin:0 15px; font-size:1.5rem;"></span>
-        <button onclick="adjustCounter(1)">➕ 1人増やす</button>
+      <h4>📋 現在の工程</h4>
+      <p id="currentStepInfo" style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;"></p>
+      
+      <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <button onclick="adjustCounter(-1)" style="background:#f44336; color:white; border:none; padding:12px 20px; border-radius:8px; flex:1; font-size:1.1rem;">
+          ➖ 1人減らす
+        </button>
+        <div style="flex:1; text-align:center; padding:12px; background:#f5f7fa; border-radius:8px;">
+          <div style="font-size:1.2rem; color:#666;">現在の人数</div>
+          <div id="currentCountDisplay" style="font-size:2rem; font-weight:bold; color:#1565C0;"></div>
+        </div>
+        <button onclick="adjustCounter(1)" style="background:#4CAF50; color:white; border:none; padding:12px 20px; border-radius:8px; flex:1; font-size:1.1rem;">
+          ➕ 1人増やす
+        </button>
       </div>
+      
       <button onclick="resetCurrentStep()" class="reset-btn">
-        🔄 この工程を0にリセット
+        🔄 この工程を0人にリセット
       </button>
     </div>
     
     <div class="teacher-section">
-      <h4>全工程の進捗</h4>
+      <h4>📊 全工程の進捗管理</h4>
       <table class="progress-table" id="allStepsTable">
         <!-- JavaScriptで動的に生成 -->
       </table>
     </div>
     
     <div class="teacher-section">
-      <h4>データ管理</h4>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button onclick="saveAllProgress()" style="background:#4CAF50; color:white; border:none; padding:10px; border-radius:6px; flex:1; min-width:120px;">
-          💾 保存
+      <h4>💾 データ管理</h4>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button onclick="saveAllProgress()" style="background:#2196F3; color:white; border:none; padding:15px; border-radius:8px; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:10px;">
+          💾 現在の進捗を保存
         </button>
-        <button onclick="resetAllProgress()" style="background:#f44336; color:white; border:none; padding:10px; border-radius:6px; flex:1; min-width:120px;">
-          🔥 全リセット
-        </button>
-        <button onclick="exportProgress()" style="background:#2196F3; color:white; border:none; padding:10px; border-radius:6px; flex:1; min-width:120px;">
-          📤 エクスポート
+        <button onclick="resetAllProgress()" style="background:#f44336; color:white; border:none; padding:15px; border-radius:8px; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:10px;">
+          🔥 全工程をリセット
         </button>
       </div>
     </div>
     
-    <div style="text-align:center; margin-top:20px;">
+    <div style="text-align:center; margin-top:25px; padding-top:20px; border-top:2px solid #e0e0e0;">
       <button onclick="hideTeacherPanel()" class="close-btn">
-        閉じる
+        ✅ 閉じる
       </button>
-      <p style="font-size:0.8rem; color:#666; margin-top:10px;">
-        隠し機能：進捗バーを3秒長押し→ダブルタップ
+      <p style="font-size:0.85rem; color:#666; margin-top:15px; line-height:1.5;">
+        指導員用操作：進捗バーを<strong>3秒長押し → ダブルタップ</strong><br>
+        誤操作防止のため、慎重に操作してください
       </p>
     </div>
   </div>
@@ -1180,33 +804,22 @@ const stepTimes = {
   0: 20, 1: 30, 2: 30, 3: 20, 4: 40, 5: 30
 };
 
-// 超シンプルな進捗管理
-let completedCounts = [0, 0, 0, 0, 0, 0]; // 各工程の完了数（0〜4）
+// 進捗管理
+let completedCounts = [0, 0, 0, 0, 0, 0];
 let currentStep = 0;
 
-// 子ども用ボタンの状態管理
-let undoEnabled = false;
-let undoTimeout = null;
-let buttonLongPressTimer = null;
-
-// 指導員用隠し機能の状態管理
+// 指導員用機能の状態管理
 let teacherLongPressTimer = null;
 let teacherTapCount = 0;
 let teacherDoubleTapTimer = null;
+let teacherFirstTapTime = 0;
 
 // 拡大写真の状態管理
 let currentOverlay = null;
 let overlayKeydownHandler = null;
-let zoomState = {
-  scale: 1,
-  x: 0,
-  y: 0,
-  isDragging: false,
-  startX: 0,
-  startY: 0,
-  lastTouchDistance: 0
-};
-let hintTimeout = null;
+
+// アルバムの状態管理
+let isTakingPhoto = false;
 
 const navButtons = document.getElementById('navButtons');
 const content = document.getElementById('content');
@@ -1215,7 +828,410 @@ const progressBar = document.getElementById('progressBar');
 const progressBarContainer = document.getElementById('progressBarContainer');
 const teacherPanel = document.getElementById('teacherPanel');
 
-// ================= 拡大写真機能（レスポンシブ版） =================
+// ================= 指導員用機能（進捗バー操作のみ） =================
+
+function initTeacherFeature() {
+  // 長押し開始
+  progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
+  progressBarContainer.addEventListener('touchstart', (e) => {
+    startTeacherLongPress(e);
+  }, { passive: false });
+  
+  // 長押しキャンセル
+  progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
+  progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
+  progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
+  progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
+  
+  // ダブルタップ検出
+  progressBarContainer.addEventListener('click', handleTeacherTap);
+  
+  console.log('指導員機能: 進捗バーを「3秒長押し → ダブルタップ」で操作パネルを表示');
+}
+
+function startTeacherLongPress(e) {
+  if (e.cancelable) e.preventDefault();
+  
+  if (teacherLongPressTimer) {
+    clearTimeout(teacherLongPressTimer);
+  }
+  
+  teacherLongPressTimer = setTimeout(() => {
+    // 3秒長押し成功
+    progressBarContainer.classList.add('teacher-mode-active');
+    
+    if (teacherDoubleTapTimer) {
+      clearTimeout(teacherDoubleTapTimer);
+    }
+    
+    // 2秒以内にダブルタップを要求
+    teacherDoubleTapTimer = setTimeout(() => {
+      progressBarContainer.classList.remove('teacher-mode-active');
+      teacherTapCount = 0;
+      teacherFirstTapTime = 0;
+    }, 2000);
+    
+    // バイブレーションでフィードバック
+    if ('vibrate' in navigator) navigator.vibrate(100);
+  }, 3000);
+}
+
+function clearTeacherLongPress() {
+  if (teacherLongPressTimer) {
+    clearTimeout(teacherLongPressTimer);
+    teacherLongPressTimer = null;
+  }
+}
+
+function handleTeacherTap(e) {
+  if (progressBarContainer.classList.contains('teacher-mode-active')) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const now = Date.now();
+    
+    if (teacherTapCount === 0) {
+      // 最初のタップ
+      teacherFirstTapTime = now;
+      teacherTapCount = 1;
+      
+      // 500ms以内に2回目のタップが必要
+      setTimeout(() => {
+        if (teacherTapCount === 1) {
+          // シングルタップのみだったのでリセット
+          teacherTapCount = 0;
+          teacherFirstTapTime = 0;
+        }
+      }, 500);
+    } else if (teacherTapCount === 1 && now - teacherFirstTapTime <= 500) {
+      // 2回目のタップ（500ms以内）
+      teacherTapCount = 2;
+      
+      // ダブルタップ成功！
+      if (teacherDoubleTapTimer) {
+        clearTimeout(teacherDoubleTapTimer);
+        teacherDoubleTapTimer = null;
+      }
+      
+      progressBarContainer.classList.remove('teacher-mode-active');
+      teacherTapCount = 0;
+      teacherFirstTapTime = 0;
+      
+      // 指導員パネルを表示
+      showTeacherPanel();
+      
+      // バイブレーション
+      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+    }
+  }
+}
+
+// ================= 指導員用パネル機能 =================
+
+function showTeacherPanel() {
+  updateTeacherPanel();
+  teacherPanel.classList.add('active');
+  
+  // 背景スクロールを無効化
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+}
+
+function hideTeacherPanel() {
+  teacherPanel.classList.remove('active');
+  saveProgress();
+  render();
+  
+  // 背景スクロールを有効化
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+}
+
+function updateTeacherPanel() {
+  document.getElementById('currentStepInfo').textContent = 
+    `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
+  
+  document.getElementById('currentCountDisplay').textContent = 
+    `${completedCounts[currentStep]}/4人`;
+  
+  const table = document.getElementById('allStepsTable');
+  table.innerHTML = steps.map((step, i) => {
+    if (step.isAlbum) return '';
+    const count = completedCounts[i];
+    return `
+      <tr>
+        <td style="font-weight:bold; color:#1565C0;">${step.nav}</td>
+        <td>
+          <select onchange="setStepCount(${i}, this.value)">
+            <option value="0" ${count===0?'selected':''}>0人</option>
+            <option value="1" ${count===1?'selected':''}>1人</option>
+            <option value="2" ${count===2?'selected':''}>2人</option>
+            <option value="3" ${count===3?'selected':''}>3人</option>
+            <option value="4" ${count===4?'selected':''}>4人</option>
+          </select>
+        </td>
+        <td style="text-align:center; font-weight:bold; color:${count === 4 ? '#4CAF50' : '#FF9800'}">
+          ${count === 4 ? '✅' : '⏳'}
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function adjustCounter(delta) {
+  const newValue = completedCounts[currentStep] + delta;
+  if (newValue >= 0 && newValue <= 4) {
+    completedCounts[currentStep] = newValue;
+    updateTeacherPanel();
+    
+    // バイブレーション
+    if ('vibrate' in navigator) navigator.vibrate(50);
+  }
+}
+
+function resetCurrentStep() {
+  if (confirm('現在の工程の進捗を0人にリセットしますか？')) {
+    completedCounts[currentStep] = 0;
+    updateTeacherPanel();
+    
+    // バイブレーション
+    if ('vibrate' in navigator) navigator.vibrate([100, 50]);
+  }
+}
+
+function setStepCount(stepIndex, value) {
+  completedCounts[stepIndex] = parseInt(value);
+  updateTeacherPanel();
+}
+
+function saveAllProgress() {
+  saveProgress();
+  
+  // 視覚的フィードバック
+  const saveBtn = document.querySelector('button[onclick="saveAllProgress()"]');
+  const originalText = saveBtn.innerHTML;
+  saveBtn.innerHTML = '💾 保存しました！';
+  saveBtn.style.background = 'linear-gradient(135deg, #4CAF50, #2E7D32)';
+  
+  setTimeout(() => {
+    saveBtn.innerHTML = originalText;
+    saveBtn.style.background = '';
+  }, 1500);
+  
+  // バイブレーション
+  if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+}
+
+function resetAllProgress() {
+  if (confirm('すべての進捗をリセットしますか？\n（全工程が0人に戻ります）')) {
+    completedCounts = [0, 0, 0, 0, 0, 0];
+    currentStep = 0;
+    saveProgress();
+    hideTeacherPanel();
+    render();
+    
+    // バイブレーション
+    if ('vibrate' in navigator) navigator.vibrate([100, 50, 100, 50, 100]);
+  }
+}
+
+// ================= アルバム機能 =================
+
+async function takePhoto() {
+  if (isTakingPhoto) return;
+  
+  isTakingPhoto = true;
+  const cameraBtn = document.querySelector('.camera-btn');
+  const originalText = cameraBtn.innerHTML;
+  
+  try {
+    cameraBtn.innerHTML = '📸 カメラを開いています...';
+    cameraBtn.disabled = true;
+    
+    const file = await openCamera();
+    if (!file) {
+      cameraBtn.innerHTML = originalText;
+      cameraBtn.disabled = false;
+      isTakingPhoto = false;
+      return;
+    }
+    
+    cameraBtn.innerHTML = '💬 なまえを考えてね...';
+    const name = prompt("なまえをつけてね", `作品${getAlbumCount() + 1}`);
+    
+    if (!name) {
+      cameraBtn.innerHTML = originalText;
+      cameraBtn.disabled = false;
+      isTakingPhoto = false;
+      return;
+    }
+    
+    cameraBtn.innerHTML = '💾 保存しています...';
+    const reader = new FileReader();
+    
+    await new Promise((resolve) => {
+      reader.onload = (e) => {
+        saveToAlbum(e.target.result, name);
+        resolve();
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    cameraBtn.innerHTML = '✅ 保存しました！';
+    setTimeout(() => {
+      cameraBtn.innerHTML = originalText;
+      cameraBtn.disabled = false;
+      isTakingPhoto = false;
+    }, 1000);
+    
+    renderAlbum();
+    
+  } catch (error) {
+    console.error('写真撮影エラー:', error);
+    cameraBtn.innerHTML = originalText;
+    cameraBtn.disabled = false;
+    isTakingPhoto = false;
+    alert('写真が撮れませんでした。もう一度お試しください。');
+  }
+}
+
+function openCamera() {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    
+    let resolved = false;
+    
+    const cleanup = () => {
+      if (!resolved) {
+        resolved = true;
+        resolve(null);
+      }
+    };
+    
+    input.onchange = (e) => {
+      if (!resolved) {
+        resolved = true;
+        resolve(e.target.files[0]);
+      }
+    };
+    
+    input.oncancel = cleanup;
+    
+    setTimeout(cleanup, 30000);
+    
+    input.click();
+  });
+}
+
+function saveToAlbum(imageData, name) {
+  const album = getAlbum();
+  
+  album.unshift({
+    id: Date.now(),
+    name: name || `作品${album.length + 1}`,
+    image: imageData,
+    date: new Date().toLocaleDateString('ja-JP', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  });
+  
+  if (album.length > 30) {
+    album.length = 30;
+  }
+  
+  localStorage.setItem('simpleAlbum', JSON.stringify(album));
+  return album;
+}
+
+function getAlbum() {
+  return JSON.parse(localStorage.getItem('simpleAlbum') || '[]');
+}
+
+function getAlbumCount() {
+  return getAlbum().length;
+}
+
+function deletePhoto(id) {
+  if (!confirm('この作品を削除してもいいですか？')) return;
+  
+  let album = getAlbum();
+  album = album.filter(item => item.id !== id);
+  localStorage.setItem('simpleAlbum', JSON.stringify(album));
+  
+  renderAlbum();
+}
+
+function openAlbumOverlay(id) {
+  const album = getAlbum();
+  const item = album.find(p => p.id === id);
+  if (item) {
+    openOverlay(item.image);
+  }
+}
+
+function renderAlbum() {
+  const album = getAlbum();
+  
+  const gridHtml = album.length > 0 
+    ? album.map(item => `
+        <div class="photo-item">
+          <button class="delete-btn" onclick="deletePhoto(${item.id})" aria-label="削除">×</button>
+          <img src="${item.image}" onclick="openAlbumOverlay(${item.id})" alt="${item.name}" loading="lazy">
+          <div class="photo-name">${item.name}</div>
+          <div class="photo-date">${item.date}</div>
+        </div>
+      `).join('')
+    : '<div class="no-photos">📭 まだ作品がありません<br>写真を撮って追加しよう！</div>';
+  
+  return `
+    <div class="album-section">
+      <button class="camera-btn" onclick="takePhoto()">
+        <span style="font-size: 3rem;">📸</span>
+        <span>写真をとる</span>
+      </button>
+      
+      <div style="margin-bottom: 15px; color: #546e7a;">
+        ${album.length}作品が保存されています
+      </div>
+      
+      <div class="album-grid">
+        ${gridHtml}
+      </div>
+    </div>
+  `;
+}
+
+// ================= 拡大写真機能 =================
+
+function handlePhotoClick(event, imgSrc) {
+  event.preventDefault();
+  event.stopPropagation();
+  openOverlay(imgSrc);
+  return false;
+}
+
+function createPhotoElement(imgSrc, altText) {
+  if (!imgSrc || !isValidImagePath(imgSrc)) {
+    return '';
+  }
+  
+  const safeSrc = imgSrc.replace(/'/g, "\\'");
+  
+  return `
+    <div class="photo-container" onclick="handlePhotoClick(event, '${safeSrc}')">
+      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
+           onerror="this.onerror=null; this.style.display='none'; this.parentElement.querySelector('.tap-label').style.display='none';">
+      <div class="tap-label">タップで拡大</div>
+    </div>
+  `;
+}
+
 function openOverlay(src) {
   closeOverlay();
   
@@ -1227,20 +1243,11 @@ function openOverlay(src) {
   
   currentOverlay.innerHTML = `
     <div class="overlay-content">
-      <div class="overlay-image-container">
-        <img src="${src}" class="overlay-image" alt="作業の参考写真（拡大表示）">
-      </div>
+      <img src="${src}" class="overlay-image" alt="拡大表示">
     </div>
     <button class="close-overlay-btn" onclick="closeOverlay()" aria-label="閉じる">
       ×<br><small>とじる</small>
     </button>
-    <button class="reset-zoom-btn" onclick="resetZoom()" aria-label="ズームリセット">
-      ↺
-    </button>
-    <div class="overlay-hint">
-      ピンチで拡大・縮小 ╱ ダブルタップでズーム ╱ ドラッグで移動
-    </div>
-    <div class="zoom-indicator"></div>
   `;
 
   document.body.appendChild(currentOverlay);
@@ -1253,321 +1260,26 @@ function openOverlay(src) {
     if (closeBtn) closeBtn.focus();
   }, 10);
   
-  // ズーム状態をリセット
-  resetZoom();
+  currentOverlay.addEventListener('click', function(e) {
+    if (e.target === this || e.target.classList.contains('overlay-content')) {
+      closeOverlay();
+    }
+  });
   
-  // ヒントを5秒後に非表示
-  hintTimeout = setTimeout(() => {
-    const hint = currentOverlay.querySelector('.overlay-hint');
-    if (hint) hint.classList.add('hidden');
-  }, 5000);
+  overlayKeydownHandler = function(e) {
+    if (e.key === 'Escape') {
+      closeOverlay();
+    }
+  };
+  document.addEventListener('keydown', overlayKeydownHandler);
   
-  // イベントリスナーを設定
-  setupZoomEvents();
+  currentOverlay.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
   
   return false;
-}
-
-function setupZoomEvents() {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  const zoomIndicator = currentOverlay.querySelector('.zoom-indicator');
-  
-  if (!container || !image) return;
-  
-  // マウスホイールズーム
-  container.addEventListener('wheel', handleWheel, { passive: false });
-  
-  // タッチイベント
-  container.addEventListener('touchstart', handleTouchStart, { passive: false });
-  container.addEventListener('touchmove', handleTouchMove, { passive: false });
-  container.addEventListener('touchend', handleTouchEnd);
-  
-  // マウスドラッグ
-  container.addEventListener('mousedown', handleMouseDown);
-  container.addEventListener('mousemove', handleMouseMove);
-  container.addEventListener('mouseup', handleMouseUp);
-  container.addEventListener('mouseleave', handleMouseUp);
-  
-  // ダブルクリック/タップ
-  container.addEventListener('dblclick', handleDoubleClick);
-  container.addEventListener('touchend', handleTouchEnd);
-  
-  // 画像ロード完了後
-  image.onload = function() {
-    console.log('📸 画像サイズ:', {
-      元のサイズ: `${this.naturalWidth} × ${this.naturalHeight}`,
-      表示サイズ: `${this.width} × ${this.height}`,
-      デバイスピクセル比: window.devicePixelRatio
-    });
-  };
-}
-
-function handleWheel(e) {
-  if (!currentOverlay) return;
-  e.preventDefault();
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  const zoomIndicator = currentOverlay.querySelector('.zoom-indicator');
-  
-  if (!container || !image) return;
-  
-  // Ctrl+ホイールでズーム（PC用）
-  const delta = e.deltaY > 0 ? 0.9 : 1.1;
-  const rect = container.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-  
-  zoomTo(mouseX, mouseY, delta);
-  
-  // ズームインジケーターを表示
-  if (zoomIndicator) {
-    zoomIndicator.textContent = `${Math.round(zoomState.scale * 100)}%`;
-    zoomIndicator.classList.add('show');
-    clearTimeout(zoomIndicator.timeout);
-    zoomIndicator.timeout = setTimeout(() => {
-      zoomIndicator.classList.remove('show');
-    }, 1000);
-  }
-}
-
-function handleTouchStart(e) {
-  if (!currentOverlay || e.touches.length === 0) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (!container) return;
-  
-  e.preventDefault();
-  
-  if (e.touches.length === 1) {
-    // シングルタッチ（ドラッグ開始）
-    zoomState.isDragging = true;
-    zoomState.startX = e.touches[0].clientX - zoomState.x;
-    zoomState.startY = e.touches[0].clientY - zoomState.y;
-    container.style.cursor = 'grabbing';
-  } else if (e.touches.length === 2) {
-    // ピンチ開始
-    const touch1 = e.touches[0];
-    const touch2 = e.touches[1];
-    zoomState.lastTouchDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
-  }
-  
-  // ヒントを再表示
-  const hint = currentOverlay.querySelector('.overlay-hint');
-  if (hint) {
-    hint.classList.remove('hidden');
-    clearTimeout(hintTimeout);
-    hintTimeout = setTimeout(() => {
-      if (hint) hint.classList.add('hidden');
-    }, 3000);
-  }
-}
-
-function handleTouchMove(e) {
-  if (!currentOverlay || !e.touches.length) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  const zoomIndicator = currentOverlay.querySelector('.zoom-indicator');
-  
-  if (!container || !image) return;
-  
-  e.preventDefault();
-  
-  if (e.touches.length === 1 && zoomState.isDragging) {
-    // ドラッグ移動
-    zoomState.x = e.touches[0].clientX - zoomState.startX;
-    zoomState.y = e.touches[0].clientY - zoomState.startY;
-    applyTransform();
-  } else if (e.touches.length === 2) {
-    // ピンチズーム
-    const touch1 = e.touches[0];
-    const touch2 = e.touches[1];
-    const currentDistance = Math.hypot(
-      touch2.clientX - touch1.clientX,
-      touch2.clientY - touch1.clientY
-    );
-    
-    if (zoomState.lastTouchDistance > 0) {
-      const delta = currentDistance / zoomState.lastTouchDistance;
-      const rect = container.getBoundingClientRect();
-      const centerX = (touch1.clientX + touch2.clientX) / 2 - rect.left;
-      const centerY = (touch1.clientY + touch2.clientY) / 2 - rect.top;
-      
-      zoomTo(centerX, centerY, delta);
-    }
-    
-    zoomState.lastTouchDistance = currentDistance;
-    
-    // ズームインジケーター
-    if (zoomIndicator) {
-      zoomIndicator.textContent = `${Math.round(zoomState.scale * 100)}%`;
-      zoomIndicator.classList.add('show');
-      clearTimeout(zoomIndicator.timeout);
-      zoomIndicator.timeout = setTimeout(() => {
-        zoomIndicator.classList.remove('show');
-      }, 1000);
-    }
-  }
-}
-
-function handleTouchEnd(e) {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (!container) return;
-  
-  if (e.touches.length === 0) {
-    zoomState.isDragging = false;
-    container.style.cursor = 'grab';
-  }
-  
-  // ダブルタップ検出
-  if (e.changedTouches.length === 1) {
-    const touch = e.changedTouches[0];
-    const now = Date.now();
-    const lastTap = container.lastTap || 0;
-    
-    if (now - lastTap < 300) {
-      // ダブルタップ
-      handleDoubleTap(touch.clientX, touch.clientY);
-    }
-    
-    container.lastTap = now;
-  }
-}
-
-function handleDoubleTap(clientX, clientY) {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const rect = container.getBoundingClientRect();
-  const x = clientX - rect.left;
-  const y = clientY - rect.top;
-  
-  if (zoomState.scale === 1) {
-    // 2倍にズーム
-    zoomTo(x, y, 2);
-  } else {
-    // リセット
-    resetZoom();
-  }
-}
-
-function handleMouseDown(e) {
-  if (!currentOverlay || e.button !== 0) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (!container) return;
-  
-  e.preventDefault();
-  zoomState.isDragging = true;
-  zoomState.startX = e.clientX - zoomState.x;
-  zoomState.startY = e.clientY - zoomState.y;
-  container.style.cursor = 'grabbing';
-}
-
-function handleMouseMove(e) {
-  if (!currentOverlay || !zoomState.isDragging) return;
-  
-  e.preventDefault();
-  zoomState.x = e.clientX - zoomState.startX;
-  zoomState.y = e.clientY - zoomState.startY;
-  applyTransform();
-}
-
-function handleMouseUp() {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (!container) return;
-  
-  zoomState.isDragging = false;
-  container.style.cursor = zoomState.scale > 1 ? 'grab' : 'zoom-in';
-}
-
-function handleDoubleClick(e) {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const rect = container.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  
-  if (zoomState.scale === 1) {
-    zoomTo(x, y, 2);
-  } else {
-    resetZoom();
-  }
-}
-
-function zoomTo(originX, originY, delta) {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  
-  if (!container || !image) return;
-  
-  const newScale = Math.max(1, Math.min(5, zoomState.scale * delta));
-  
-  // ズームの中心点を計算
-  const scaleChange = newScale / zoomState.scale;
-  zoomState.x = originX - (originX - zoomState.x) * scaleChange;
-  zoomState.y = originY - (originY - zoomState.y) * scaleChange;
-  zoomState.scale = newScale;
-  
-  applyTransform();
-}
-
-function applyTransform() {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  
-  if (!container || !image) return;
-  
-  const transform = `translate(${zoomState.x}px, ${zoomState.y}px) scale(${zoomState.scale})`;
-  image.style.transform = transform;
-  
-  // カーソルスタイルを更新
-  container.style.cursor = zoomState.scale > 1 ? 'grab' : 'zoom-in';
-  
-  // 画像にクラスを追加/削除
-  if (zoomState.scale > 1) {
-    image.classList.add('zoomed');
-  } else {
-    image.classList.remove('zoomed');
-  }
-}
-
-function resetZoom() {
-  zoomState = {
-    scale: 1,
-    x: 0,
-    y: 0,
-    isDragging: false,
-    startX: 0,
-    startY: 0,
-    lastTouchDistance: 0
-  };
-  
-  applyTransform();
-  
-  // ズームインジケーターを隠す
-  if (currentOverlay) {
-    const zoomIndicator = currentOverlay.querySelector('.zoom-indicator');
-    if (zoomIndicator) {
-      zoomIndicator.classList.remove('show');
-    }
-  }
 }
 
 function closeOverlay() {
@@ -1588,33 +1300,7 @@ function closeOverlay() {
       document.removeEventListener('keydown', overlayKeydownHandler);
       overlayKeydownHandler = null;
     }
-    
-    if (hintTimeout) {
-      clearTimeout(hintTimeout);
-      hintTimeout = null;
-    }
-    
-    // ズーム状態をリセット
-    zoomState = {
-      scale: 1,
-      x: 0,
-      y: 0,
-      isDragging: false,
-      startX: 0,
-      startY: 0,
-      lastTouchDistance: 0
-    };
   }, 300);
-}
-
-function createPhotoElement(imgSrc, altText) {
-  return `
-    <div class="photo-container" onclick="openOverlay('${imgSrc}'); return false;">
-      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
-           onerror="this.style.display='none'">
-      <div class="tap-label">タップで拡大</div>
-    </div>
-  `;
 }
 
 // ================= 進捗管理 =================
@@ -1623,19 +1309,19 @@ function saveProgress() {
     counts: completedCounts,
     lastStep: currentStep,
     timestamp: Date.now(),
-    version: '2.0'
+    version: '3.0' // バージョンアップ
   }));
 }
 
 function loadProgress() {
   const saved = JSON.parse(localStorage.getItem('simple_progress'));
-  if (saved && saved.counts && saved.version === '2.0') {
+  if (saved && saved.counts && (saved.version === '2.0' || saved.version === '3.0')) {
     completedCounts = saved.counts;
     currentStep = saved.lastStep || 0;
   }
 }
 
-// ================= 子ども用完了機能 =================
+// ================= 子ども用完了機能（超シンプル） =================
 function kidComplete(stepIndex) {
   if (completedCounts[stepIndex] < 4) {
     completedCounts[stepIndex]++;
@@ -1646,80 +1332,9 @@ function kidComplete(stepIndex) {
     updateProgressDisplay();
     renderStepView(steps[currentStep]);
     
-    enableUndoMode(stepIndex);
-    
     if (completedCounts[stepIndex] === 4) {
       celebrateAllComplete(stepIndex);
     }
-  }
-}
-
-function enableUndoMode(stepIndex) {
-  undoEnabled = true;
-  
-  const kidButton = document.querySelector('.big-kids-button');
-  if (kidButton) {
-    kidButton.classList.add('undo-enabled');
-    kidButton.innerHTML = `
-      <span class="big-emoji">↩️</span>
-      <span class="big-text">取り消す（長押し）</span>
-    `;
-    
-    setupUndoLongPress(kidButton, stepIndex);
-    
-    undoTimeout = setTimeout(() => {
-      if (undoEnabled) {
-        undoEnabled = false;
-        kidButton.classList.remove('undo-enabled');
-        renderStepView(steps[currentStep]);
-      }
-    }, 5000);
-  }
-}
-
-function setupUndoLongPress(button, stepIndex) {
-  button.onmousedown = button.ontouchstart = null;
-  button.onmouseup = button.ontouchend = null;
-  button.onmouseleave = button.ontouchmove = null;
-  
-  button.addEventListener('mousedown', startUndoTimer);
-  button.addEventListener('touchstart', startUndoTimer);
-  
-  function startUndoTimer(e) {
-    if (e.cancelable) e.preventDefault();
-    buttonLongPressTimer = setTimeout(() => {
-      undoKidCompletion(stepIndex);
-    }, 800);
-  }
-  
-  button.addEventListener('mouseup', clearUndoTimer);
-  button.addEventListener('touchend', clearUndoTimer);
-  button.addEventListener('mouseleave', clearUndoTimer);
-  button.addEventListener('touchmove', clearUndoTimer);
-  
-  function clearUndoTimer() {
-    if (buttonLongPressTimer) {
-      clearTimeout(buttonLongPressTimer);
-      buttonLongPressTimer = null;
-    }
-  }
-}
-
-function undoKidCompletion(stepIndex) {
-  if (undoEnabled && completedCounts[stepIndex] > 0) {
-    completedCounts[stepIndex]--;
-    undoEnabled = false;
-    
-    if (undoTimeout) {
-      clearTimeout(undoTimeout);
-      undoTimeout = null;
-    }
-    
-    saveProgress();
-    updateProgressDisplay();
-    renderStepView(steps[currentStep]);
-    
-    if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
   }
 }
 
@@ -1756,153 +1371,6 @@ function updateProgressDisplay() {
     
     btn.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
   });
-}
-
-// ================= 指導員用隠し機能 =================
-function initTeacherHiddenFeature() {
-  progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
-  progressBarContainer.addEventListener('touchstart', startTeacherLongPress);
-  
-  progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
-  progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
-  
-  progressBarContainer.addEventListener('click', handleTeacherTap);
-}
-
-function startTeacherLongPress(e) {
-  if (e.cancelable) e.preventDefault();
-  teacherLongPressTimer = setTimeout(() => {
-    progressBarContainer.classList.add('teacher-mode-active');
-    
-    teacherDoubleTapTimer = setTimeout(() => {
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-    }, 2000);
-  }, 3000);
-}
-
-function clearTeacherLongPress() {
-  if (teacherLongPressTimer) {
-    clearTimeout(teacherLongPressTimer);
-    teacherLongPressTimer = null;
-  }
-}
-
-function handleTeacherTap() {
-  if (progressBarContainer.classList.contains('teacher-mode-active')) {
-    teacherTapCount++;
-    
-    if (teacherTapCount === 2) {
-      clearTimeout(teacherDoubleTapTimer);
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-      showTeacherPanel();
-      
-      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-    }
-  }
-}
-
-// ================= 指導員用パネル機能 =================
-function showTeacherPanel() {
-  updateTeacherPanel();
-  teacherPanel.classList.add('active');
-}
-
-function hideTeacherPanel() {
-  teacherPanel.classList.remove('active');
-  saveProgress();
-  render();
-}
-
-function updateTeacherPanel() {
-  document.getElementById('currentStepInfo').textContent = 
-    `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
-  
-  document.getElementById('currentCountDisplay').textContent = 
-    `${completedCounts[currentStep]}/4人`;
-  
-  const table = document.getElementById('allStepsTable');
-  table.innerHTML = steps.map((step, i) => {
-    if (step.isAlbum) return '';
-    const count = completedCounts[i];
-    return `
-      <tr>
-        <td>${step.nav}</td>
-        <td>
-          <select onchange="setStepCount(${i}, this.value)" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
-            <option value="0" ${count===0?'selected':''}>0人</option>
-            <option value="1" ${count===1?'selected':''}>1人</option>
-            <option value="2" ${count===2?'selected':''}>2人</option>
-            <option value="3" ${count===3?'selected':''}>3人</option>
-            <option value="4" ${count===4?'selected':''}>4人</option>
-          </select>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function adjustCounter(delta) {
-  const newValue = completedCounts[currentStep] + delta;
-  if (newValue >= 0 && newValue <= 4) {
-    completedCounts[currentStep] = newValue;
-    updateTeacherPanel();
-  }
-}
-
-function resetCurrentStep() {
-  if (confirm('現在の工程の進捗を0にリセットしますか？')) {
-    completedCounts[currentStep] = 0;
-    updateTeacherPanel();
-  }
-}
-
-function setStepCount(stepIndex, value) {
-  completedCounts[stepIndex] = parseInt(value);
-  updateTeacherPanel();
-}
-
-function saveAllProgress() {
-  saveProgress();
-  alert('進捗を保存しました！');
-  hideTeacherPanel();
-}
-
-function resetAllProgress() {
-  if (confirm('すべての進捗をリセットしますか？\nこの操作は元に戻せません。')) {
-    completedCounts = [0, 0, 0, 0, 0, 0];
-    currentStep = 0;
-    saveProgress();
-    alert('すべての進捗をリセットしました！');
-    hideTeacherPanel();
-    render();
-  }
-}
-
-function exportProgress() {
-  const data = {
-    date: new Date().toLocaleString('ja-JP'),
-    progress: completedCounts,
-    steps: steps.filter(s => !s.isAlbum).map((s, i) => ({
-      name: s.title,
-      completed: completedCounts[i]
-    }))
-  };
-  
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `工作進捗_${new Date().toISOString().split('T')[0]}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  
-  alert('進捗データをエクスポートしました！');
 }
 
 // ================= 次工程への移動 =================
@@ -1957,16 +1425,6 @@ function renderKidsCompleteArea(stepIndex) {
   const percentage = Math.round((count / 4) * 100);
   const isAllComplete = count === 4;
   
-  let buttonHtml = '';
-  if (!undoEnabled) {
-    buttonHtml = `
-      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
-        <span class="big-emoji">✅</span>
-        <span class="big-text">できました！</span>
-      </button>
-    `;
-  }
-  
   return `
     <div class="kids-complete-area">
       <div class="kids-title">
@@ -1975,7 +1433,11 @@ function renderKidsCompleteArea(stepIndex) {
         <span>🎯</span>
       </div>
       
-      ${buttonHtml}
+      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" 
+              ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
+        <span class="big-emoji">✅</span>
+        <span class="big-text">できました！</span>
+      </button>
       
       <div class="completion-counter">
         <div class="counter-display">
@@ -1994,11 +1456,10 @@ function renderKidsCompleteArea(stepIndex) {
       ${isAllComplete ? renderAllCompleteMessage(stepIndex) : ''}
       
       <div class="teacher-note">
-        <strong>👨‍🏫 指導員用メモ：</strong><br>
         1. まず写真を見せて完成イメージを共有しましょう<br>
         2. 写真を見ながら工作を進めさせてください<br>
         3. 完成したら「できました！」ボタンを押させてください<br>
-        4. 押した直後5秒間は長押しで取消可能です<br>
+        4. <strong>間違って押した場合は指導員に連絡</strong><br>
         5. 全員が押すと次の工程に進めます
       </div>
     </div>
@@ -2052,8 +1513,10 @@ function render() {
   
   const s = steps[currentStep];
   if (s.isAlbum) {
+    document.body.classList.add('album-page');
     renderAlbumView(s);
   } else {
+    document.body.classList.remove('album-page');
     renderStepView(s);
   }
 }
@@ -2138,35 +1601,6 @@ function renderStepView(s) {
 }
 
 function renderAlbumView(s) {
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos.sort((a, b) => b.timestamp - a.timestamp);
-
-  let albumHtml = savedPhotos.map((item, index) => {
-    const dateStr = new Date(item.timestamp).toLocaleString('ja-JP', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    return `
-    <div class="album-item">
-      <button class="del-btn" onclick="deletePhoto(${item.timestamp})" aria-label="削除">×</button>
-      <div class="album-img-wrapper">
-        <img src="${item.dataUrl}" onclick="openOverlay('${item.dataUrl}')" alt="${item.name}の写真" loading="lazy">
-      </div>
-      <div class="album-info">
-        <span class="album-name">${item.name || 'なまえなし'}</span>
-        <span class="album-date">${dateStr}</span>
-      </div>
-    </div>
-  `}).join('');
-
-  const albumCount = savedPhotos.length;
-  const albumMessage = albumCount > 0 
-    ? `これまでに${albumCount}作品が保存されています`
-    : 'まだ作品が保存されていません。写真を追加しましょう！';
-
   content.innerHTML = `
     <div class="step-card">
       <div class="step-title">${s.title}</div>
@@ -2185,69 +1619,29 @@ function renderAlbumView(s) {
         <details class="hint-details">
           <summary>💡 アルバムの使い方</summary>
           <div class="hint-content">
-            1. 「写真をとる・えらぶ」をタップ<br>
-            2. 工作の「なまえ」を入力<br>
-            3. 写真を撮影または選択<br>
-            4. アルバムに自動保存されます
+            1. 「写真をとる」ボタンをタップ<br>
+            2. カメラで作品を撮影<br>
+            3. 「なまえ」を入力<br>
+            4. 自動でアルバムに保存されます
           </div>
         </details>
       </div>
       
-      <div class="album-section">
-        <p style="text-align: center; margin-bottom: 15px; color: #546e7a; font-size: 1.1rem;">
-          ${albumMessage}
-        </p>
-        
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="savePhoto(event)">
-        <button class="add-photo-btn" onclick="document.getElementById('cameraInput').click()">
-          <span>📷</span>
-          <span>写真をとる・えらぶ</span>
-        </button>
-        
-        ${albumCount > 0 ? `<div class="album-grid">${albumHtml}</div>` : ''}
-      </div>
+      ${renderAlbum()}
     </div>`;
-}
-
-// ================= アルバム機能 =================
-function savePhoto(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
-  if (workName === null) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-    const newItem = {
-      dataUrl: e.target.result,
-      name: workName,
-      timestamp: Date.now()
-    };
-    savedPhotos.push(newItem);
-    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-    render();
-    
-    alert(`🎉 「${workName}」をアルバムに保存しました！`);
-  };
-  reader.readAsDataURL(file);
-}
-
-function deletePhoto(timestamp) {
-  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
-  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-  render();
 }
 
 // ================= 初期化 =================
 window.addEventListener('DOMContentLoaded', () => {
   initOrientationLock();
-  initTeacherHiddenFeature();
+  initTeacherFeature(); // 指導員機能の初期化
   loadProgress();
   render();
+  
+  console.log('✅ アプリケーション初期化完了');
+  console.log('👦 子ども用: 「できました！」ボタンのみ');
+  console.log('👨‍🏫 指導員用: 進捗バー「3秒長押し → ダブルタップ」');
+  console.log('🎯 設計思想: 落ち着いた運用・誤操作防止優先');
 });
 
 // キーボード操作サポート
@@ -2259,43 +1653,6 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
-
-console.log(`
-🎯 工作指導アプリ - レスポンシブ完全版！
-
-📱 スマホ向け改善：
-• フルレスポンシブデザイン
-• ピンチズーム対応（2本指で拡大縮小）
-• ダブルタップでズーム切り替え
-• ドラッグ移動機能
-• 自動ヒント表示
-• 適切なカーソル表示
-
-🖥️ PC向け機能：
-• Ctrl+ホイールズーム
-• マウスドラッグ移動
-• ダブルクリックズーム
-
-📐 レスポンシブ対応：
-• clamp()関数で流動的な文字サイズ
-• メディアクエリで端末別最適化
-• 縦向き/横向き対応
-• 高解像度ディスプレイ対応
-• ダークモード対応
-
-✨ 拡張機能：
-• ズームインジケーター
-• リセットボタン
-• 操作ヒントの自動非表示
-• 触覚フィードバック
-• アクセシビリティ対応
-
-🎨 デザイン：
-• スムーズなアニメーション
-• タッチフレンドリーなUI
-• 視覚的フィードバック
-• 一貫したデザイン言語
-`);
 </script>
 </body>
 </html>
