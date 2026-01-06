@@ -5,1562 +5,681 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>👀みてつくるシート🚗</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシック", sans-serif; background: #f5f7fa; color: #333; max-width: 960px; margin: 0 auto; min-height: 100vh; font-size: 16px; line-height: 1.6; }
+/* ============================================================================
+   スマホ最適化レイアウト - 高齢者・初心者向け
+   ============================================================================ */
 
-/* ヘッダー */
-.header { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; text-align: center; padding: 0.8rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.header h1 { font-size: 1.4rem; margin-bottom: 0.3rem; }
-.header p { font-size: 0.85rem; opacity: 0.95; }
+/* ベース設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-/* 進捗バー */
-.progress-container { 
-  height: 8px; 
-  background: #e0e0e0; 
-  width: 100%; 
+body {
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'BIZ UDPGothic', sans-serif;
+  background: #f8f9fa;
+  color: #333;
+  line-height: 1.8;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ヘッダー設定 */
+.header {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  text-align: center;
+  padding: 1.8rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.header p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+/* ナビゲーション設定 */
+.nav-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: white;
+  padding: 0.8rem 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.nav-scroll {
+  display: inline-flex;
+  gap: 0.6rem;
+  padding: 0 0.5rem;
+  min-width: min-content;
+}
+
+.nav-btn {
+  flex-shrink: 0;
+  padding: 1.2rem 1.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 20px;
+  background: #2196F3;
+  color: white;
   cursor: pointer;
+  min-width: 130px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
   transition: all 0.3s ease;
-  position: relative;
-}
-.progress-container.teacher-mode-active {
-  border: 2px solid #FF9800;
-  border-radius: 4px;
-  animation: pulseBorder 1s infinite;
-}
-.progress-bar { 
-  height: 100%; 
-  background: linear-gradient(90deg, #4CAF50, #8BC34A); 
-  transition: width 0.5s ease; 
-  border-radius: 0 4px 4px 0; 
 }
 
-@keyframes pulseBorder {
-  0% { border-color: #FF9800; }
-  50% { border-color: #FFC107; }
-  100% { border-color: #FF9800; }
-}
-
-/* ナビゲーション */
-.nav-container { width: 100%; overflow-x: auto; background: white; padding: 8px 5px; border-bottom: 2px solid #e0e0e0; -webkit-overflow-scrolling: touch; }
-.nav-scroll { display: inline-flex; gap: 5px; min-width: max-content; }
-.nav-btn { flex-shrink: 0; padding: 10px 12px; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; background: #e8f5e9; color: #2E7D32; min-width: 80px; min-height: 50px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
-.nav-btn:hover, .nav-btn:focus { background: #c8e6c9; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
-.nav-btn.active { background: #FF9800; color: white; box-shadow: 0 0 0 2px white, 0 0 0 4px #FF9800; }
-.nav-btn:focus { outline: 3px solid #4CAF50; outline-offset: 1px; }
-.nav-btn.completed::before { content: "✅ "; }
-
-/* メインコンテンツ */
-.main-content { padding: 12px 8px; }
-.step-card { background: white; border-radius: 14px; padding: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 12px; border: 1px solid #e0e0e0; }
-
-/* ステップタイトル */
-.step-title { font-size: 1.3rem; color: #1565C0; margin-bottom: 15px; font-weight: bold; padding-bottom: 8px; border-bottom: 3px solid #e3f2fd; display: flex; align-items: center; gap: 10px; }
-.step-title::before { content: "📋"; font-size: 1.2rem; }
-
-/* 時間ガイド */
-.time-guide { background: #fff3e0; padding: 6px 10px; border-radius: 8px; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #ef6c00; border-left: 3px solid #ff9800; }
-
-/* 最重要ポイント */
-.key-point { background: #fff8e1; border: 2px solid #ffd54f; border-radius: 10px; padding: 10px; margin: 10px 0; display: flex; align-items: center; gap: 8px; font-size: 1rem; }
-.key-point .key-icon { font-size: 1.3rem; }
-
-/* 行動指示セクション */
-.action-section { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 3px solid #4CAF50; position: relative; }
-.action-section::before { content: "やること"; position: absolute; top: -12px; left: 20px; background: #4CAF50; color: white; padding: 4px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
-
-.main-action { font-size: 1.3rem; font-weight: bold; color: #1B5E20; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; line-height: 1.4; }
-.main-action .emoji { font-size: 1.5rem; }
-
-.detail-action { font-size: 1.1rem; color: #333; padding: 12px; background: rgba(255, 255, 255, 0.9); border-radius: 10px; border-left: 5px solid #FF9800; margin-top: 10px; }
-.detail-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-.detail-line:last-child { margin-bottom: 0; }
-.detail-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
-.detail-text { flex: 1; line-height: 1.4; }
-
-.danger-action { background: linear-gradient(135deg, #ffebee, #ffcdd2); border-color: #ff5252; }
-.danger-action::before { content: "注意"; background: #ff5252; }
-
-/* ヒントボックス */
-.tips-box { background: #e3f2fd; border-radius: 8px; padding: 10px 12px; margin-top: 10px; border-left: 4px solid #2196F3; font-size: 1rem; color: #1565C0; display: flex; align-items: flex-start; gap: 8px; }
-.tips-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
-.tips-text { flex: 1; line-height: 1.4; }
-
-/* 写真参考セクション */
-.photo-section { 
-  background: #f8f9fa; 
-  border-radius: 12px; 
-  padding: 16px; 
-  margin: 20px 0 25px 0; 
-  border: 1px solid #e0e0e0; 
-}
-.photo-title { 
-  font-size: 1.1rem; 
-  color: #1565C0; 
-  margin-bottom: 15px; 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  font-weight: 600; 
-}
-
-.photo-list { display: flex; flex-direction: column; gap: 15px; }
-.photo-container { 
-  background: white; 
-  border-radius: 10px; 
-  overflow: hidden; 
-  border: 2px solid #e3f2fd; 
-  position: relative; 
-  cursor: pointer; 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.photo-container:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-}
-.step-image { 
-  width: 100%; 
-  height: auto; 
-  max-height: 50vh; 
-  object-fit: contain; 
-  display: block; 
-}
-.tap-label { 
-  position: absolute; 
-  bottom: 10px; 
-  right: 10px; 
-  background: rgba(0,0,0,0.75); 
-  color: white; 
-  padding: 6px 10px; 
-  border-radius: 15px; 
-  font-size: 0.85rem; 
-  pointer-events: none; 
-}
-
-/* 子ども用完了エリア */
-.kids-complete-area { 
-  background: linear-gradient(135deg, #e3f2fd, #bbdefb); 
-  border-radius: 15px; 
-  padding: 20px; 
-  margin: 10px 0 20px 0; 
-  text-align: center; 
-  border: 3px dashed #2196F3; 
-}
-.kids-title { 
-  font-size: 1.4rem; 
-  color: #0d47a1; 
-  margin-bottom: 15px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 10px; 
-}
-
-/* 子ども用大型ボタン */
-.big-kids-button { 
-  background: linear-gradient(135deg, #4CAF50, #2E7D32); 
-  color: white; 
-  border: none; 
-  padding: 25px; 
-  border-radius: 20px; 
-  font-size: 1.8rem; 
-  font-weight: bold; 
-  cursor: pointer; 
-  width: 100%; 
-  max-width: 400px; 
-  transition: all 0.3s ease; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 15px; 
-  margin: 0 auto; 
-}
-.big-kids-button:hover, .big-kids-button:focus { 
-  background: linear-gradient(135deg, #3d8b40, #1b5e20); 
-  transform: translateY(-3px) scale(1.02); 
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4); 
-}
-.big-kids-button:active { transform: translateY(-1px) scale(0.98); }
-.big-kids-button:focus { outline: 4px solid #FF9800; outline-offset: 3px; }
-.big-kids-button .big-emoji { font-size: 3rem; }
-.big-kids-button .big-text { font-size: 1.8rem; }
-
-/* 取消可能状態 */
-.big-kids-button.undo-enabled {
+.nav-btn.active {
   background: linear-gradient(135deg, #FF9800, #F57C00);
-  animation: pulseOrange 1s infinite;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.3);
 }
 
-@keyframes pulseOrange {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7); }
-  50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 152, 0, 0.2); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+/* メインコンテンツ設定 */
+.main-content {
+  padding: 1rem;
 }
 
-/* 完了カウンター */
-.completion-counter { margin-top: 15px; }
-.counter-display { font-size: 1.5rem; font-weight: bold; color: #0d47a1; margin-bottom: 5px; }
-.counter-bar { height: 12px; background: #e0e0e0; border-radius: 6px; overflow: hidden; margin: 10px auto; max-width: 300px; }
-.counter-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #8BC34A); transition: width 0.5s ease; border-radius: 6px; }
-
-/* 全員完了メッセージ */
-.all-complete-message { 
-  background: linear-gradient(135deg, #FFF9C4, #FFECB3); 
-  border: 3px solid #FFD600; 
-  border-radius: 12px; 
-  padding: 15px; 
-  margin-top: 20px; 
-  text-align: center; 
-  animation: gentlePulse 2s infinite; 
-}
-.all-complete-message h3 { 
-  color: #FF6F00; 
-  margin-bottom: 10px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 10px; 
-}
-.next-step-btn { 
-  background: linear-gradient(135deg, #FF9800, #F57C00); 
-  color: white; 
-  border: none; 
-  padding: 12px 24px; 
-  border-radius: 25px; 
-  font-size: 1.2rem; 
-  font-weight: bold; 
-  cursor: pointer; 
-  margin-top: 10px; 
-  display: inline-flex; 
-  align-items: center; 
-  gap: 8px; 
+.step-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e0e0e0;
 }
 
-/* 指導員用メモ */
-.teacher-note { 
-  background: #FFF3E0; 
-  border-radius: 10px; 
-  padding: 12px; 
-  margin: 15px 0; 
-  border-left: 4px solid #FF9800; 
-  font-size: 0.95rem; 
-  color: #5D4037; 
-}
-.teacher-note strong { color: #E65100; }
-
-/* アルバム */
-.album-section { 
-  background: #f8f9fa; 
-  border-radius: 12px; 
-  padding: 12px; 
-  margin-top: 15px; 
-  border: 2px dashed #bbdefb; 
+.step-title {
+  font-size: 1.6rem;
+  color: #1565C0;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px dashed #BBDEFB;
 }
 
-.album-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-  gap: 12px; 
-  margin-top: 15px; 
-}
-.album-item { 
-  position: relative; 
-  border-radius: 8px; 
-  overflow: hidden; 
-  background: white; 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
-  display: flex; 
-  flex-direction: column; 
-  cursor: pointer; 
-  border: 1px solid #e0e0e0; 
-}
-.album-img-wrapper { 
-  position: relative; 
-  aspect-ratio: 1; 
-  overflow: hidden; 
-  background: #f5f5f5; 
-}
-.album-item img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
-.album-info { padding: 8px; }
-.album-name { 
-  font-weight: bold; 
-  font-size: 1rem; 
-  display: block; 
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  margin-bottom: 2px; 
-  color: #333; 
-}
-.album-date { font-size: 0.8rem; color: #757575; }
-
-.add-photo-btn { 
-  background: linear-gradient(135deg, #4caf50, #2e7d32); 
-  color: white; 
-  border: none; 
-  padding: 14px; 
-  border-radius: 12px; 
-  width: 100%; 
-  font-size: 1.2rem; 
-  font-weight: bold; 
-  cursor: pointer; 
-  margin-bottom: 12px; 
-  min-height: 60px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 8px; 
-}
-
-.del-btn { 
-  position: absolute; 
-  top: 6px; 
-  right: 6px; 
-  background: rgba(0,0,0,0.7); 
-  color: white; 
-  border: none; 
-  border-radius: 50%; 
-  width: 30px; 
-  height: 30px; 
-  font-size: 18px; 
-  z-index: 10; 
-  cursor: pointer; 
-}
-
-/* 拡大オーバーレイ（修正版） */
-.overlay { 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100vw; 
-  height: 100vh; 
-  background: rgba(0,0,0,0.95); 
-  z-index: 10000; 
+.photo-container {
+  position: relative;
+  margin: 1.2rem 0;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #f5f5f5;
+  min-height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.overlay.active { 
-  opacity: 1;
-  visibility: visible;
+.step-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.photo-label {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 0.8rem 1.4rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  backdrop-filter: blur(5px);
+}
+
+.status-box {
+  border-radius: 15px;
+  padding: 1.2rem;
+  margin: 1.2rem 0;
+  font-size: 1.2rem;
+}
+
+.status-ok {
+  background: #E8F5E9;
+  border-left: 6px solid #4CAF50;
+  color: #1B5E20;
+  font-weight: bold;
+}
+
+.status-note {
+  background: #FFF3E0;
+  border-left: 6px solid #FF9800;
+  color: #E65100;
+}
+
+/* 状態別カード設定 */
+.card-danger .status-note {
+  background: #FFEBEE;
+  border-left-color: #F44336;
+}
+
+.card-final .status-ok {
+  background: #E3F2FD;
+  border-left-color: #2196F3;
+  font-size: 1.3rem;
+}
+
+/* オーバーレイ設定 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.98);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.overlay.active {
+  display: flex;
 }
 
 .overlay-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .overlay-image {
   max-width: 100%;
-  max-height: 90vh;
+  max-height: 100%;
   object-fit: contain;
-  border: 2px solid white;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.5);
-}
-
-.close-overlay-btn { 
-  position: fixed; 
-  top: 20px; 
-  right: 20px; 
-  width: 60px; 
-  height: 60px; 
-  border-radius: 50%; 
-  background: rgba(255,255,255,0.95); 
-  border: none; 
-  font-weight: bold; 
-  font-size: 2rem; 
-  z-index: 10001; 
-  cursor: pointer; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease;
-}
-.close-overlay-btn:hover {
-  transform: scale(1.1);
-}
-.close-overlay-btn:active {
-  transform: scale(0.95);
-}
-.close-overlay-btn small { 
-  font-size: 0.7rem; 
-  margin-top: 2px; 
-}
-
-/* 指導員用パネル */
-.teacher-panel { 
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-  animation: fadeIn 0.3s ease;
-}
-
-.teacher-panel.active { display: flex; }
-
-.teacher-content {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.teacher-content h3 {
-  text-align: center;
-  color: #1565C0;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e3f2fd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.teacher-section {
-  background: #f5f7fa;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
-}
-
-.teacher-section h4 {
-  color: #0d47a1;
-  margin-bottom: 15px;
-  font-size: 1.1rem;
-}
-
-.counter-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15px 0;
-  gap: 10px;
-}
-
-.counter-control button {
-  background: #2196F3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 15px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.counter-control button:hover {
-  background: #1976D2;
-  transform: translateY(-2px);
-}
-
-.reset-btn {
-  background: #FF9800;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
-  transition: all 0.2s ease;
-}
-
-.reset-btn:hover {
-  background: #F57C00;
-}
-
-.progress-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.progress-table td {
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.progress-table select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+  touch-action: none;
+  transform-origin: center center;
+  transition: transform 0.1s ease-out;
 }
 
 .close-btn {
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 30px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.close-btn:hover {
-  background: #3d8b40;
-}
-
-/* 回転警告メッセージ */
-.rotation-warning { 
-  display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.95);
-  color: white;
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 15px;
-  font-size: 1.2rem;
-}
-.rotation-warning.active { display: flex; }
-
-/* アニメーション */
-@keyframes gentlePulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 10001;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes celebrate {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* タブレット・PC向け */
+/* PC向け設定 */
 @media (min-width: 768px) {
-  .header { padding: 1.2rem; }
-  .header h1 { font-size: 1.8rem; }
-  .header p { font-size: 1.1rem; }
+  body {
+    padding: 1.5rem;
+  }
   
-  .step-title { font-size: 1.7rem; }
+  .header {
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 0;
+  }
   
-  .main-action { font-size: 1.6rem; }
+  .nav-container {
+    border-radius: 0 0 15px 15px;
+  }
   
-  .photo-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-  .photo-container { max-height: 300px; }
+  .nav-scroll {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    min-width: auto;
+  }
   
-  .nav-btn { min-width: 90px; min-height: 60px; font-size: 1.1rem; }
+  .nav-btn {
+    flex: 1;
+    min-width: auto;
+    padding: 1.5rem 0.5rem;
+    font-size: 1.3rem;
+  }
   
-  .big-kids-button { padding: 30px; }
-  .big-kids-button .big-emoji { font-size: 4rem; }
-  .big-kids-button .big-text { font-size: 2rem; }
+  .header h1 {
+    font-size: 2.2rem;
+  }
   
-  .teacher-content { max-width: 600px; }
+  .step-title {
+    font-size: 1.8rem;
+  }
+  
+  .status-box {
+    font-size: 1.3rem;
+    padding: 1.5rem;
+  }
+  
+  .close-btn {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2rem;
+  }
+}
+
+/* 小さなスマホ向け設定 */
+@media (max-width: 480px) {
+  .nav-btn {
+    padding: 1rem 1.2rem;
+    font-size: 1.1rem;
+    min-width: 110px;
+  }
+  
+  .step-title {
+    font-size: 1.4rem;
+  }
+  
+  .status-box {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+}
+
+/* タッチ操作向け最適化 */
+@media (hover: none) and (pointer: coarse) {
+  .nav-btn, .close-btn, .step-image {
+    min-height: 44px;
+  }
+  
+  .photo-label {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
 }
 </style>
 </head>
 <body>
 
+<!-- ============================================================================
+     ヘッダー部 - タイトルと説明
+     ============================================================================ -->
 <header class="header">
   <h1>👀みてつくるシート🚗</h1>
-  <p>工作の手順を確認しながら、作った作品をアルバムに残そう！</p>
+  <p>リモコンカーの作り方を写真で確認</p>
 </header>
 
-<div class="progress-container" id="progressBarContainer">
-  <div class="progress-bar" id="progressBar"></div>
-</div>
-
+<!-- ============================================================================
+     ナビゲーション部 - 工程選択
+     ============================================================================ -->
 <div class="nav-container">
   <div class="nav-scroll" id="navButtons"></div>
 </div>
 
+<!-- ============================================================================
+     メインコンテンツ部 - 工程詳細表示
+     ============================================================================ -->
 <main class="main-content" id="content"></main>
 
-<!-- 指導員用パネル -->
-<div class="teacher-panel" id="teacherPanel">
-  <div class="teacher-content">
-    <h3>👨‍🏫 指導員用管理パネル</h3>
-    
-    <!-- 現在の工程をリセット -->
-    <div class="teacher-section">
-      <h4>現在の工程を調整</h4>
-      <p id="currentStepInfo"></p>
-      <div class="counter-control">
-        <button onclick="adjustCounter(-1)">➖ 1人減らす</button>
-        <span id="currentCountDisplay" style="margin:0 15px; font-size:1.5rem;"></span>
-        <button onclick="adjustCounter(1)">➕ 1人増やす</button>
-      </div>
-      <button onclick="resetCurrentStep()" class="reset-btn">
-        🔄 この工程を0にリセット
-      </button>
-    </div>
-    
-    <!-- 全工程の一括管理 -->
-    <div class="teacher-section">
-      <h4>全工程の進捗</h4>
-      <table class="progress-table" id="allStepsTable">
-        <!-- JavaScriptで動的に生成 -->
-      </table>
-    </div>
-    
-    <!-- データ管理 -->
-    <div class="teacher-section">
-      <h4>データ管理</h4>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button onclick="saveAllProgress()" style="background:#4CAF50; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
-          💾 保存
-        </button>
-        <button onclick="resetAllProgress()" style="background:#f44336; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
-          🔥 全リセット
-        </button>
-        <button onclick="exportProgress()" style="background:#2196F3; color:white; border:none; padding:10px; border-radius:6px; flex:1;">
-          📤 エクスポート
-        </button>
-      </div>
-    </div>
-    
-    <!-- 終了ボタン -->
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="hideTeacherPanel()" class="close-btn">
-        閉じる
-      </button>
-      <p style="font-size:0.8rem; color:#666; margin-top:10px;">
-        隠し機能：進捗バーを3秒長押し→ダブルタップ
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="rotation-warning" id="rotationWarning">
-  <div>
-    <div style="font-size: 3rem; margin-bottom: 15px;">📱</div>
-    <div>このページは縦向きでご利用ください</div>
-    <div style="margin-top: 15px; font-size: 1rem; color: #ccc;">スマートフォンを縦向きに戻すと<br>正しく表示されます</div>
-  </div>
-</div>
-
 <script>
-// ステップデータ
+// ============================================================================
+//     工程データ定義
+//     ----------------------------------------------------------------------------
+//     nav:  ナビゲーションボタン表示テキスト
+//     title: 工程タイトル
+//     img:   画像ファイルパス
+//     ok:    OK確認テキスト
+//     note:  注意事項テキスト
+//     danger:危険工程フラグ（trueの場合警告表示）
+//     final: 最終工程フラグ（trueの場合特別表示）
+// ============================================================================
 const steps = [
   { 
     nav: "① でんち", 
-    title: "① 電池ボックスを作ろう", 
-    img1: "./images/battery_box.jpg", 
-    img2: "", 
-    mainAction: "✅ 電池の向きOK！", 
-    detailAction: "💡 プラス（＋）とマイナス（－）の向きを確認しましょう",
-    emoji: "🔋",
-    tips: "ピタッと電池がくっついてかみてね",
-    keyPoint: "電池の向き（＋と－）"
+    title: "① でんち（BOX）", 
+    img: "images/battery_box.jpg",
+    ok: "電池の向きOK！", 
+    note: "＋と－を確認します。" 
   },
   { 
     nav: "② せん", 
-    title: "② 電線を取り付けよう", 
-    img1: "./images/wire_magnet.jpg", 
-    img2: "./images/wire_zoom.jpg", 
-    mainAction: "✅ 線がつながった！", 
-    detailAction: "🔍 電線の長さ150mm・25㎜（両端を5mmむく）<br>💡 磁石が電池にしっかり付いているか確認",
-    emoji: "🧲",
-    tips: "磁石がビタッとつくのが気持ちいいね！ワンチームで協力して、各自の作品を作りましょう",
-    keyPoint: "磁石の接着力"
+    title: "② 電池につける電線", 
+    img: "images/wire_magnet.jpg",
+    ok: "線がつながった！", 
+    note: "磁石がしっかり付いているか確認。外れていないか見ます。" 
   },
   { 
     nav: "③ スイッチ", 
     title: "③ 前後切り替えスイッチ", 
-    img1: "./images/switch_complete.jpg", 
-    img2: "", 
-    mainAction: "✅ 前後が切り替わる！", 
-    detailAction: "💡 左右SWを押して切り替わるか確認してください",
-    emoji: "🔘",
-    tips: "接点の接触をよくみてね",
-    keyPoint: "スイッチの接触確認"
+    img: "images/switch_complete.jpg",
+    ok: "前後が切り替わる！", 
+    note: "左右SWを押して切り替わるか確認。向きを確認します。" 
   },
   { 
     nav: "④ まわる", 
-    title: "④ モーターが回るか確認", 
-    img1: "./images/motor_test.jpg", 
-    img2: "", 
-    mainAction: "✅ 回れば OK（又は、LEDチェッカーで調べる）", 
-    detailAction: "💡 指を近づけないよう注意<br>💡 回らない（つかない）場合は配線を確認",
-    emoji: "⚙️",
-    tips: "モーターの軸が動いているか（又は、LEDチェッカーが点灯するか）よく見てね",
-    keyPoint: "モーター軸の回転",
-    danger: true
+    title: "④ モーターは回る？", 
+    img: "images/motor_test.jpg",
+    ok: "回れば OK（又は、LEDチェッカーで調べる）", 
+    note: "指を近づけないよう注意。回らない（つかない）場合は配線を確認。" 
   },
   { 
     nav: "⑤ みため", 
-    title: "⑤ 見た目を整えよう", 
-    img1: "./images/car_complete.jpg", 
-    img2: "./images/3ami.gif", 
-    mainAction: "✅ つなぎ方をためそう！（三つ編みしてみよう！）", 
-    detailAction: "💡 前後が逆なら入れ替えてみよう",
-    emoji: "🚗",
-    tips: "三つ編みが難しい時は、みんなで協力してね",
-    keyPoint: "配線の三つ編み"
+    title: "⑤ 見た目完成（実験中）", 
+    img: "images/car_complete.jpg",
+    ok: "つなぎ方をためそう！", 
+    note: "前後が逆なら入れ替えてみよう。", 
+    danger: true 
   },
   { 
     nav: "⑥ かんせい", 
-    title: "⑥ 完成！動かしてみよう", 
-    img1: "./images/complete.jpg", 
-    img2: "", 
-    mainAction: "🎉 前後に動いたら大成功！", 
-    detailAction: "💡 安全な場所で走らせて、完成を確認しましょう",
-    emoji: "🏆",
-    tips: "みんなで完成を喜び合いましょう！",
-    keyPoint: "安全な動作確認",
-    final: true
-  },
-  { 
-    nav: "📸アルバム", 
-    title: "📸 おもいでアルバム",
-    isAlbum: true,
-    albumMessage: "作った作品に「なまえ」をつけて、みんなの思い出を残しましょう！"
+    title: "⑥ ほんとうの完成！", 
+    img: "images/complete.jpg",
+    ok: "前後に動いたら大成功！", 
+    note: "安全に走らせよう。", 
+    final: true 
   }
 ];
 
-// 各工程の目安時間（分）
-const stepTimes = {
-  0: 20, 1: 30, 2: 30, 3: 20, 4: 40, 5: 30
-};
-
-// 超シンプルな進捗管理
-let completedCounts = [0, 0, 0, 0, 0, 0]; // 各工程の完了数（0〜4）
+// ============================================================================
+//     グローバル変数宣言
+//     ----------------------------------------------------------------------------
+//     currentStep: 現在表示中の工程インデックス
+//     navButtons:  ナビゲーションボタンコンテナ要素
+//     content:     メインコンテンツ表示要素
+// ============================================================================
 let currentStep = 0;
-
-// 子ども用ボタンの状態管理
-let undoEnabled = false;
-let undoTimeout = null;
-let buttonLongPressTimer = null;
-
-// 指導員用隠し機能の状態管理
-let teacherLongPressTimer = null;
-let teacherTapCount = 0;
-let teacherDoubleTapTimer = null;
-
-// 拡大写真の状態管理
-let currentOverlay = null;
-let overlayKeydownHandler = null;
-
 const navButtons = document.getElementById('navButtons');
 const content = document.getElementById('content');
-const rotationWarning = document.getElementById('rotationWarning');
-const progressBar = document.getElementById('progressBar');
-const progressBarContainer = document.getElementById('progressBarContainer');
-const teacherPanel = document.getElementById('teacherPanel');
 
-// ================= 拡大写真機能（修正版） =================
-function openOverlay(src) {
-  // 既存のオーバーレイがあれば閉じる
-  closeOverlay();
+// ============================================================================
+//     ナビゲーションボタン作成関数
+//     ----------------------------------------------------------------------------
+//     機能: 6つの工程ボタンを生成し、クリックイベントを設定
+//     特徴: アクティブなボタンは視覚的に強調表示
+// ============================================================================
+function renderNavigation() {
+  navButtons.innerHTML = '';
   
-  // 新しいオーバーレイを作成
-  currentOverlay = document.createElement('div');
-  currentOverlay.className = 'overlay';
-  currentOverlay.setAttribute('role', 'dialog');
-  currentOverlay.setAttribute('aria-modal', 'true');
-  currentOverlay.setAttribute('aria-label', '拡大画像');
+  steps.forEach((step, index) => {
+    const button = document.createElement('button');
+    button.className = `nav-btn ${index === currentStep ? 'active' : ''}`;
+    button.textContent = step.nav;
+    button.addEventListener('click', () => {
+      currentStep = index;
+      renderContent();
+      updateNavigation();
+    });
+    navButtons.appendChild(button);
+  });
+}
+
+// ============================================================================
+//     ナビゲーションボタン更新関数
+//     ----------------------------------------------------------------------------
+//     機能: アクティブなボタンのスタイルを更新
+// ============================================================================
+function updateNavigation() {
+  Array.from(navButtons.children).forEach((button, index) => {
+    button.classList.toggle('active', index === currentStep);
+  });
+}
+
+// ============================================================================
+//     メインコンテンツ表示関数
+//     ----------------------------------------------------------------------------
+//     機能: 現在の工程の詳細情報を表示
+//     表示内容: 工程タイトル、写真、OK確認、注意事項
+//     状態別表示: 危険工程(danger)、最終工程(final)でスタイル変更
+// ============================================================================
+function renderContent() {
+  const step = steps[currentStep];
   
-  currentOverlay.innerHTML = `
-    <div class="overlay-content">
-      <img src="${src}" class="overlay-image" alt="作業の参考写真（拡大表示）">
+  let cardClass = 'step-card';
+  if (step.danger) cardClass += ' card-danger';
+  if (step.final) cardClass += ' card-final';
+  
+  content.innerHTML = `
+    <div class="${cardClass}">
+      <div class="step-title">${step.title}</div>
+      <div class="photo-container">
+        <img src="${step.img}" alt="${step.title}" class="step-image">
+        <div class="photo-label">タップで拡大</div>
+      </div>
+      <div class="status-box status-ok">${step.ok}</div>
+      <div class="status-box status-note">${step.note}</div>
     </div>
-    <button class="close-overlay-btn" onclick="closeOverlay()" aria-label="閉じる">
-      ×<br><small>とじる</small>
-    </button>
   `;
-
-  // bodyに追加
-  document.body.appendChild(currentOverlay);
   
-  // スクロールを無効化
-  document.documentElement.style.overflow = 'hidden';
+  const stepImage = content.querySelector('.step-image');
+  stepImage.addEventListener('click', openOverlay);
+}
+
+// ============================================================================
+//     オーバーレイ変数宣言
+//     ----------------------------------------------------------------------------
+//     scale:          画像拡大率 (1〜5倍)
+//     posX, posY:     画像位置オフセット
+//     pointers:       アクティブなポインター管理オブジェクト
+//     initialDistance:ピンチ開始時の指間距離
+//     lastScale:      前回の拡大率（ピンチ計算用）
+// ============================================================================
+let scale = 1;
+let posX = 0;
+let posY = 0;
+let pointers = {};
+let initialDistance = 0;
+let lastScale = 1;
+
+// ============================================================================
+//     オーバーレイ表示関数
+//     ----------------------------------------------------------------------------
+//     機能: 写真を全画面で拡大表示
+//     処理:
+//       1. オーバーレイ要素を作成・追加
+//       2. 画像のピンチズーム・ドラッグ機能を設定
+//       3. スマホ縦向きの場合、90度回転して表示
+// ============================================================================
+function openOverlay(e) {
+  // オーバーレイ要素の作成
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'overlay-content';
+  
+  const img = document.createElement('img');
+  img.className = 'overlay-image';
+  img.src = e.target.src;
+  
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', () => closeOverlay(overlay));
+  
+  // 要素の追加
+  contentDiv.appendChild(img);
+  overlay.appendChild(contentDiv);
+  overlay.appendChild(closeBtn);
+  document.body.appendChild(overlay);
+  
+  // 表示アニメーション
+  setTimeout(() => overlay.classList.add('active'), 10);
   document.body.style.overflow = 'hidden';
   
-  // アニメーションを開始
-  setTimeout(() => {
-    currentOverlay.classList.add('active');
-    // 閉じるボタンにフォーカスを移動
-    const closeBtn = currentOverlay.querySelector('.close-overlay-btn');
-    if (closeBtn) closeBtn.focus();
-  }, 10);
+  // 初期状態の設定
+  scale = 1;
+  posX = 0;
+  posY = 0;
+  pointers = {};
+  initialDistance = 0;
+  lastScale = 1;
   
-  // オーバーレイ背景クリックで閉じる
-  currentOverlay.addEventListener('click', function(e) {
-    if (e.target === this || e.target.classList.contains('overlay-content')) {
-      closeOverlay();
+  const isMobile = window.innerHeight > window.innerWidth;
+  updateOverlayTransform(img, isMobile);
+  
+  // ==========================================================================
+  //     ポインターイベント設定
+  //     ----------------------------------------------------------------------
+  //     要件通り: pointerイベントの伝播を遮断
+  //     処理内容: 
+  //       - 1本指: ドラッグ移動 (scale > 1.01 の場合のみ)
+  //       - 2本指: ピンチズーム (最大5倍まで)
+  // ==========================================================================
+  
+  // ポインター開始
+  img.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    
+    if (Object.keys(pointers).length === 1) {
+      // 1本指: ドラッグ開始位置を記録
+      startX = e.clientX - posX;
+      startY = e.clientY - posY;
+    } else if (Object.keys(pointers).length === 2) {
+      // 2本指: 初期距離を記録
+      const ids = Object.keys(pointers);
+      const p1 = pointers[ids[0]];
+      const p2 = pointers[ids[1]];
+      initialDistance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      lastScale = scale;
     }
   });
   
-  // ESCキーで閉じる
-  overlayKeydownHandler = function(e) {
-    if (e.key === 'Escape') {
-      closeOverlay();
+  // ポインター移動
+  img.addEventListener('pointermove', (e) => {
+    e.stopPropagation();
+    if (!pointers[e.pointerId]) return;
+    
+    pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+    const ids = Object.keys(pointers);
+    
+    if (ids.length === 2) {
+      // 2本指ピンチズーム
+      const p1 = pointers[ids[0]];
+      const p2 = pointers[ids[1]];
+      const currentDistance = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      
+      if (initialDistance > 0) {
+        // 拡大率計算 (1〜5倍に制限)
+        scale = Math.min(5, Math.max(1, lastScale * (currentDistance / initialDistance)));
+        updateOverlayTransform(img, isMobile);
+      }
+    } else if (ids.length === 1) {
+      // 1本指ドラッグ (要件通り: scale <= 1.01 の場合は無効)
+      if (scale <= 1.01) return;
+      posX = e.clientX - startX;
+      posY = e.clientY - startY;
+      updateOverlayTransform(img, isMobile);
+    }
+  });
+  
+  // ポインター終了
+  const handlePointerUp = (e) => {
+    e.stopPropagation();
+    delete pointers[e.pointerId];
+    
+    if (Object.keys(pointers).length === 1) {
+      // 2本指→1本指になった場合、残りの指を基準に設定
+      const remainingId = Object.keys(pointers)[0];
+      startX = pointers[remainingId].x - posX;
+      startY = pointers[remainingId].y - posY;
+      initialDistance = 0;
+    } else if (Object.keys(pointers).length === 0) {
+      initialDistance = 0;
+      lastScale = scale;
     }
   };
-  document.addEventListener('keydown', overlayKeydownHandler);
   
-  // タッチデバイスでピンチズームを防止
-  currentOverlay.addEventListener('touchmove', function(e) {
-    if (e.touches.length > 1) {
-      e.preventDefault();
+  img.addEventListener('pointerup', handlePointerUp);
+  img.addEventListener('pointercancel', handlePointerUp);
+  
+  // 背景タップで閉じる (要件通り: overlayのみ)
+  overlay.addEventListener('pointerdown', (e) => {
+    if (e.target === overlay) {
+      closeOverlay(overlay);
     }
-  }, { passive: false });
+  });
   
-  return false;
+  // 要件通りのイベント伝播遮断
+  img.addEventListener('pointerdown', e => e.stopPropagation());
+  img.addEventListener('pointermove', e => e.stopPropagation());
+  img.addEventListener('pointerup', e => e.stopPropagation());
+  img.addEventListener('pointercancel', e => e.stopPropagation());
 }
 
-function closeOverlay() {
-  if (!currentOverlay) return;
-  
-  // アニメーションのためにactiveクラスを削除
-  currentOverlay.classList.remove('active');
-  
-  // アニメーション終了後に完全に削除
+// ============================================================================
+//     オーバーレイ画像変形関数
+//     ----------------------------------------------------------------------------
+//     機能: 画像の位置・拡大率・回転を更新
+//     要件: transform順序を厳守
+//         スマホ: translate → scale → rotate(90deg)
+//         PC:     translate → scale
+// ============================================================================
+function updateOverlayTransform(imgElement, isMobile) {
+  if (isMobile) {
+    imgElement.style.transform = `translate(${posX}px, ${posY}px) scale(${scale}) rotate(90deg)`;
+  } else {
+    imgElement.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+  }
+}
+
+// ============================================================================
+//     オーバーレイ閉じる関数
+//     ----------------------------------------------------------------------------
+//     機能: オーバーレイを閉じて状態をリセット
+//     処理: 
+//       1. オーバーレイを非表示
+//       2. 変数を初期値にリセット
+//       3. スクロールを有効化
+// ============================================================================
+function closeOverlay(overlay) {
+  overlay.classList.remove('active');
   setTimeout(() => {
-    if (currentOverlay && currentOverlay.parentNode) {
-      currentOverlay.parentNode.removeChild(currentOverlay);
+    if (overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
     }
-    currentOverlay = null;
-    
-    // スクロールを有効化
-    document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
-    
-    // イベントリスナーを削除
-    if (overlayKeydownHandler) {
-      document.removeEventListener('keydown', overlayKeydownHandler);
-      overlayKeydownHandler = null;
-    }
+    scale = 1;
+    posX = 0;
+    posY = 0;
   }, 300);
 }
 
-function createPhotoElement(imgSrc, altText) {
-  return `
-    <div class="photo-container" onclick="openOverlay('${imgSrc}'); return false;">
-      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
-           onerror="this.style.display='none'">
-      <div class="tap-label">タップで拡大</div>
-    </div>
-  `;
+// ============================================================================
+//     初期化処理
+//     ----------------------------------------------------------------------------
+//     機能: アプリケーションの初期表示を設定
+//     実行: ページ読み込み時に自動実行
+// ============================================================================
+function initializeApp() {
+  renderNavigation();
+  renderContent();
 }
 
-// ================= 進捗管理 =================
-function saveProgress() {
-  localStorage.setItem('simple_progress', JSON.stringify({
-    counts: completedCounts,
-    lastStep: currentStep,
-    timestamp: Date.now(),
-    version: '2.0'
-  }));
-}
+// ページ読み込み完了時に初期化
+window.addEventListener('DOMContentLoaded', initializeApp);
 
-function loadProgress() {
-  const saved = JSON.parse(localStorage.getItem('simple_progress'));
-  if (saved && saved.counts && saved.version === '2.0') {
-    completedCounts = saved.counts;
-    currentStep = saved.lastStep || 0;
-  }
-}
-
-// ================= 子ども用完了機能 =================
-function kidComplete(stepIndex) {
-  if (completedCounts[stepIndex] < 4) {
-    completedCounts[stepIndex]++;
-    
-    // 視覚的・触覚的フィードバック
-    if ('vibrate' in navigator) navigator.vibrate(100);
-    
-    // 保存して表示を更新
-    saveProgress();
-    updateProgressDisplay();
-    renderStepView(steps[currentStep]);
-    
-    // 5秒間取消可能状態に
-    enableUndoMode(stepIndex);
-    
-    // 全員完了の祝い
-    if (completedCounts[stepIndex] === 4) {
-      celebrateAllComplete(stepIndex);
-    }
-  }
-}
-
-function enableUndoMode(stepIndex) {
-  undoEnabled = true;
-  
-  // ボタンを取消可能状態に
-  const kidButton = document.querySelector('.big-kids-button');
-  if (kidButton) {
-    kidButton.classList.add('undo-enabled');
-    kidButton.innerHTML = `
-      <span class="big-emoji">↩️</span>
-      <span class="big-text">取り消す（長押し）</span>
-    `;
-    
-    // 長押しイベントを設定
-    setupUndoLongPress(kidButton, stepIndex);
-    
-    // 5秒後に自動確定
-    undoTimeout = setTimeout(() => {
-      if (undoEnabled) {
-        undoEnabled = false;
-        kidButton.classList.remove('undo-enabled');
-        renderStepView(steps[currentStep]);
-      }
-    }, 5000);
-  }
-}
-
-function setupUndoLongPress(button, stepIndex) {
-  // 既存のイベントをクリア
-  button.onmousedown = button.ontouchstart = null;
-  button.onmouseup = button.ontouchend = null;
-  button.onmouseleave = button.ontouchmove = null;
-  
-  button.addEventListener('mousedown', startUndoTimer);
-  button.addEventListener('touchstart', startUndoTimer);
-  
-  function startUndoTimer(e) {
-    if (e.cancelable) e.preventDefault();
-    buttonLongPressTimer = setTimeout(() => {
-      undoKidCompletion(stepIndex);
-    }, 800); // 0.8秒長押し
-  }
-  
-  button.addEventListener('mouseup', clearUndoTimer);
-  button.addEventListener('touchend', clearUndoTimer);
-  button.addEventListener('mouseleave', clearUndoTimer);
-  button.addEventListener('touchmove', clearUndoTimer);
-  
-  function clearUndoTimer() {
-    if (buttonLongPressTimer) {
-      clearTimeout(buttonLongPressTimer);
-      buttonLongPressTimer = null;
-    }
-  }
-}
-
-function undoKidCompletion(stepIndex) {
-  if (undoEnabled && completedCounts[stepIndex] > 0) {
-    completedCounts[stepIndex]--;
-    undoEnabled = false;
-    
-    if (undoTimeout) {
-      clearTimeout(undoTimeout);
-      undoTimeout = null;
-    }
-    
-    saveProgress();
-    updateProgressDisplay();
-    renderStepView(steps[currentStep]);
-    
-    // 触覚フィードバック
-    if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
-  }
-}
-
-function celebrateAllComplete(stepIndex) {
-  const message = document.querySelector('.all-complete-message');
-  if (message) {
-    message.style.animation = 'celebrate 0.5s ease';
-    setTimeout(() => {
-      message.style.animation = 'gentlePulse 2s infinite';
-    }, 500);
-  }
-  
-  if ('vibrate' in navigator) {
-    navigator.vibrate([100, 50, 100, 50, 100]);
-  }
-}
-
-// ================= 進捗表示更新 =================
-function updateProgressDisplay() {
-  const totalSteps = steps.filter(s => !s.isAlbum).length;
-  let totalCompleted = 0;
-  
-  for (let i = 0; i < totalSteps; i++) {
-    if (completedCounts[i] === 4) totalCompleted++;
-  }
-  
-  const percentage = Math.round((totalCompleted / totalSteps) * 100) || 0;
-  progressBar.style.width = percentage + '%';
-  
-  // ナビゲーションボタンの更新
-  const navBtns = document.querySelectorAll('.nav-btn');
-  navBtns.forEach((btn, index) => {
-    const isCompleted = completedCounts[index] === 4;
-    const isCurrent = index === currentStep;
-    
-    btn.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
-  });
-}
-
-// ================= 指導員用隠し機能 =================
-function initTeacherHiddenFeature() {
-  // 進捗バーの長押し検出
-  progressBarContainer.addEventListener('mousedown', startTeacherLongPress);
-  progressBarContainer.addEventListener('touchstart', startTeacherLongPress);
-  
-  progressBarContainer.addEventListener('mouseup', clearTeacherLongPress);
-  progressBarContainer.addEventListener('mouseleave', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchend', clearTeacherLongPress);
-  progressBarContainer.addEventListener('touchmove', clearTeacherLongPress);
-  
-  // ダブルタップ検出
-  progressBarContainer.addEventListener('click', handleTeacherTap);
-}
-
-function startTeacherLongPress(e) {
-  if (e.cancelable) e.preventDefault();
-  teacherLongPressTimer = setTimeout(() => {
-    // 3秒長押し成功 → ダブルタップ待機モード
-    progressBarContainer.classList.add('teacher-mode-active');
-    
-    // 2秒以内にダブルタップを要求
-    teacherDoubleTapTimer = setTimeout(() => {
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-    }, 2000);
-  }, 3000); // 3秒長押し
-}
-
-function clearTeacherLongPress() {
-  if (teacherLongPressTimer) {
-    clearTimeout(teacherLongPressTimer);
-    teacherLongPressTimer = null;
-  }
-}
-
-function handleTeacherTap() {
-  if (progressBarContainer.classList.contains('teacher-mode-active')) {
-    teacherTapCount++;
-    
-    if (teacherTapCount === 2) {
-      // ダブルタップ成功！
-      clearTimeout(teacherDoubleTapTimer);
-      progressBarContainer.classList.remove('teacher-mode-active');
-      teacherTapCount = 0;
-      showTeacherPanel();
-      
-      // 触覚フィードバック
-      if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
-    }
-  }
-}
-
-// ================= 指導員用パネル機能 =================
-function showTeacherPanel() {
-  updateTeacherPanel();
-  teacherPanel.classList.add('active');
-}
-
-function hideTeacherPanel() {
-  teacherPanel.classList.remove('active');
-  saveProgress();
-  render();
-}
-
-function updateTeacherPanel() {
-  // 現在の工程情報
-  document.getElementById('currentStepInfo').textContent = 
-    `工程 ${currentStep + 1}: ${steps[currentStep].title}`;
-  
-  document.getElementById('currentCountDisplay').textContent = 
-    `${completedCounts[currentStep]}/4人`;
-  
-  // 全工程テーブルを更新
-  const table = document.getElementById('allStepsTable');
-  table.innerHTML = steps.map((step, i) => {
-    if (step.isAlbum) return '';
-    const count = completedCounts[i];
-    return `
-      <tr>
-        <td>${step.nav}</td>
-        <td>
-          <select onchange="setStepCount(${i}, this.value)" style="width:100%; padding:5px;">
-            <option value="0" ${count===0?'selected':''}>0人</option>
-            <option value="1" ${count===1?'selected':''}>1人</option>
-            <option value="2" ${count===2?'selected':''}>2人</option>
-            <option value="3" ${count===3?'selected':''}>3人</option>
-            <option value="4" ${count===4?'selected':''}>4人</option>
-          </select>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function adjustCounter(delta) {
-  const newValue = completedCounts[currentStep] + delta;
-  if (newValue >= 0 && newValue <= 4) {
-    completedCounts[currentStep] = newValue;
-    updateTeacherPanel();
-  }
-}
-
-function resetCurrentStep() {
-  if (confirm('現在の工程の進捗を0にリセットしますか？')) {
-    completedCounts[currentStep] = 0;
-    updateTeacherPanel();
-  }
-}
-
-function setStepCount(stepIndex, value) {
-  completedCounts[stepIndex] = parseInt(value);
-  updateTeacherPanel();
-}
-
-function saveAllProgress() {
-  saveProgress();
-  alert('進捗を保存しました！');
-  hideTeacherPanel();
-}
-
-function resetAllProgress() {
-  if (confirm('すべての進捗をリセットしますか？\nこの操作は元に戻せません。')) {
-    completedCounts = [0, 0, 0, 0, 0, 0];
-    currentStep = 0;
-    saveProgress();
-    alert('すべての進捗をリセットしました！');
-    hideTeacherPanel();
-    render();
-  }
-}
-
-function exportProgress() {
-  const data = {
-    date: new Date().toLocaleString('ja-JP'),
-    progress: completedCounts,
-    steps: steps.filter(s => !s.isAlbum).map((s, i) => ({
-      name: s.title,
-      completed: completedCounts[i]
-    }))
-  };
-  
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `工作進捗_${new Date().toISOString().split('T')[0]}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  
-  alert('進捗データをエクスポートしました！');
-}
-
-// ================= 次工程への移動 =================
-function goToNextStep() {
-  if (currentStep < steps.length - 1) {
-    currentStep++;
-    render();
-    if ('vibrate' in navigator) navigator.vibrate(50);
-  }
-}
-
-// ================= ユーティリティ関数 =================
-function isValidImagePath(path) {
-  return path && path.trim() !== '';
-}
-
-function createDetailLines(detailAction) {
-  const lines = detailAction.split('<br>').map(line => line.trim());
-  return lines.map(line => {
-    const icon = line.includes('🔍') ? '🔍' : '💡';
-    const text = line.replace('🔍', '').replace('💡', '').trim();
-    return `
-      <div class="detail-line">
-        <span class="detail-icon">${icon}</span>
-        <span class="detail-text">${text}</span>
-      </div>
-    `;
-  }).join('');
-}
-
-function showTimeGuide(stepIndex) {
-  if (steps[stepIndex].isAlbum) return '';
-  const time = stepTimes[stepIndex] || 5;
-  return `<div class="time-guide">⏱ 目安: ${time}分</div>`;
-}
-
-function showKeyPoint(stepIndex) {
-  if (steps[stepIndex].isAlbum || !steps[stepIndex].keyPoint) return '';
-  return `
-    <div class="key-point">
-      <span class="key-icon">⭐</span>
-      <strong>最重要ポイント：${steps[stepIndex].keyPoint}</strong>
-    </div>
-  `;
-}
-
-// ================= 子ども用完了エリア表示 =================
-function renderKidsCompleteArea(stepIndex) {
-  if (steps[stepIndex].isAlbum) return '';
-  
-  const count = completedCounts[stepIndex];
-  const percentage = Math.round((count / 4) * 100);
-  const isAllComplete = count === 4;
-  
-  let buttonHtml = '';
-  if (!undoEnabled) {
-    buttonHtml = `
-      <button class="big-kids-button" onclick="kidComplete(${stepIndex})" ${isAllComplete ? 'disabled style="opacity:0.7"' : ''}>
-        <span class="big-emoji">✅</span>
-        <span class="big-text">できました！</span>
-      </button>
-    `;
-  }
-  
-  return `
-    <div class="kids-complete-area">
-      <div class="kids-title">
-        <span>🎯</span>
-        <span>できたら押そう！</span>
-        <span>🎯</span>
-      </div>
-      
-      ${buttonHtml}
-      
-      <div class="completion-counter">
-        <div class="counter-display">
-          ${count === 4 ? '🎉 全員完了！' : `${count}/4人 完了`}
-        </div>
-        <div class="counter-bar">
-          <div class="counter-fill" style="width: ${percentage}%"></div>
-        </div>
-        <p style="color: #666; margin-top: 5px; font-size: 0.9rem;">
-          ${count === 0 ? 'まだ誰も押していません' : 
-            count < 4 ? `あと${4 - count}人で全員完了！` : 
-            'みんなよくできました！'}
-        </p>
-      </div>
-      
-      ${isAllComplete ? renderAllCompleteMessage(stepIndex) : ''}
-      
-      <div class="teacher-note">
-        <strong>👨‍🏫 指導員用メモ：</strong><br>
-        1. まず写真を見せて完成イメージを共有しましょう<br>
-        2. 写真を見ながら工作を進めさせてください<br>
-        3. 完成したら「できました！」ボタンを押させてください<br>
-        4. 押した直後5秒間は長押しで取消可能です<br>
-        5. 全員が押すと次の工程に進めます
-      </div>
-    </div>
-  `;
-}
-
-function renderAllCompleteMessage(stepIndex) {
-  const nextStep = stepIndex + 1;
-  if (nextStep >= steps.length) return '';
-  
-  const nextStepName = steps[nextStep].isAlbum ? 'アルバム' : steps[nextStep].nav;
-  
-  return `
-    <div class="all-complete-message">
-      <h3>
-        <span>🎉</span>
-        ワンチーム成功！
-        <span>🎉</span>
-      </h3>
-      <p>みんなよく頑張りました！指導員の合図で次に進みましょう</p>
-      <button class="next-step-btn" onclick="goToNextStep()">
-        <span>▶️</span>
-        次へ：${nextStepName}
-      </button>
-    </div>
-  `;
-}
-
-// ================= 初期化関数 =================
-function initOrientationLock() {
-  window.addEventListener('orientationchange', checkOrientation);
-  window.addEventListener('resize', checkOrientation);
-  checkOrientation();
-}
-
-function checkOrientation() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
-  if (isMobile && !isPortrait) {
-    rotationWarning.classList.add('active');
-  } else {
-    rotationWarning.classList.remove('active');
-  }
-}
-
-// ================= メイン描画関数 =================
-function render() {
-  // 進捗表示を更新
-  updateProgressDisplay();
-  
-  // ナビゲーションボタンの描画
-  renderNavButtons();
-  
-  // コンテンツの描画
-  const s = steps[currentStep];
-  if (s.isAlbum) {
-    renderAlbumView(s);
-  } else {
-    renderStepView(s);
-  }
-}
-
-function renderNavButtons() {
-  navButtons.innerHTML = '';
-  
-  steps.forEach((s, i) => {
-    const b = document.createElement('button');
-    const isCompleted = completedCounts[i] === 4;
-    const isCurrent = i === currentStep;
-    
-    b.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
-    b.textContent = s.nav;
-    b.onclick = () => { 
-      currentStep = i; 
-      render(); 
-      if ('vibrate' in navigator) navigator.vibrate(20);
-    };
-    
-    navButtons.appendChild(b);
-  });
-}
-
-function renderStepView(s) {
-  const stepIndex = currentStep;
-  
-  // 写真HTML生成
-  let photoHtml = '';
-  let photoCount = 0;
-  
-  if (isValidImagePath(s.img1)) {
-    photoHtml += createPhotoElement(s.img1, s.title + 'の写真');
-    photoCount++;
-  }
-  
-  if (isValidImagePath(s.img2)) {
-    photoHtml += createPhotoElement(s.img2, s.title + 'の写真（詳細）');
-    photoCount++;
-  }
-
-  let actionClass = 'action-section';
-  if (s.danger) actionClass += ' danger-action';
-
-  content.innerHTML = `
-    <div class="step-card">
-      ${showTimeGuide(stepIndex)}
-      ${showKeyPoint(stepIndex)}
-      
-      <div class="step-title">${s.title}</div>
-      
-      <div class="${actionClass}">
-        <div class="main-action">
-          <span class="emoji">${s.emoji || '✅'}</span>
-          <span class="text">${s.mainAction}</span>
-        </div>
-        <div class="detail-action">
-          ${createDetailLines(s.detailAction)}
-        </div>
-        ${s.tips ? `
-        <details class="hint-details">
-          <summary>💡 ヒントを見る（クリック）</summary>
-          <div class="hint-content">
-            ${s.tips}
-          </div>
-        </details>
-        ` : ''}
-      </div>
-      
-      <!-- 📸 写真セクションを先に表示 -->
-      <div class="photo-section">
-        <div class="photo-title">
-          <span class="icon">📸</span>
-          <span>作業の参考写真（タップで拡大）</span>
-        </div>
-        ${photoCount > 0 ? `<div class="photo-list">${photoHtml}</div>` : 
-          '<p style="text-align:center; color:#78909c; padding:15px;">写真はありません</p>'}
-        ${photoCount > 0 ? 
-          '<p style="text-align:center; color:#546e7a; font-size:0.9rem; margin-top:8px;">写真を見て確認してから作業しましょう</p>' : ''}
-      </div>
-      
-      <!-- ✅ 完了ボタンは写真の後に -->
-      ${renderKidsCompleteArea(stepIndex)}
-    </div>`;
-}
-
-function renderAlbumView(s) {
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos.sort((a, b) => b.timestamp - a.timestamp);
-
-  let albumHtml = savedPhotos.map((item, index) => {
-    const dateStr = new Date(item.timestamp).toLocaleString('ja-JP', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    return `
-    <div class="album-item">
-      <button class="del-btn" onclick="deletePhoto(${item.timestamp})" aria-label="削除">×</button>
-      <div class="album-img-wrapper">
-        <img src="${item.dataUrl}" onclick="openOverlay('${item.dataUrl}')" alt="${item.name}の写真" loading="lazy">
-      </div>
-      <div class="album-info">
-        <span class="album-name">${item.name || 'なまえなし'}</span>
-        <span class="album-date">${dateStr}</span>
-      </div>
-    </div>
-  `}).join('');
-
-  const albumCount = savedPhotos.length;
-  const albumMessage = albumCount > 0 
-    ? `これまでに${albumCount}作品が保存されています`
-    : 'まだ作品が保存されていません。写真を追加しましょう！';
-
-  content.innerHTML = `
-    <div class="step-card">
-      <div class="step-title">${s.title}</div>
-      
-      <div class="action-section">
-        <div class="main-action">
-          <span class="emoji">📷</span>
-          <span class="text">作った作品を写真に残しましょう</span>
-        </div>
-        <div class="detail-action">
-          <div class="detail-line">
-            <span class="detail-icon">💡</span>
-            <span class="detail-text">${s.albumMessage}</span>
-          </div>
-        </div>
-        <details class="hint-details">
-          <summary>💡 アルバムの使い方</summary>
-          <div class="hint-content">
-            1. 「写真をとる・えらぶ」をタップ<br>
-            2. 工作の「なまえ」を入力<br>
-            3. 写真を撮影または選択<br>
-            4. アルバムに自動保存されます
-          </div>
-        </details>
-      </div>
-      
-      <div class="album-section">
-        <p style="text-align: center; margin-bottom: 15px; color: #546e7a; font-size: 1.1rem;">
-          ${albumMessage}
-        </p>
-        
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="savePhoto(event)">
-        <button class="add-photo-btn" onclick="document.getElementById('cameraInput').click()">
-          <span>📷</span>
-          <span>写真をとる・えらぶ</span>
-        </button>
-        
-        ${albumCount > 0 ? `<div class="album-grid">${albumHtml}</div>` : ''}
-      </div>
-    </div>`;
-}
-
-// ================= アルバム機能 =================
-function savePhoto(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
-  if (workName === null) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-    const newItem = {
-      dataUrl: e.target.result,
-      name: workName,
-      timestamp: Date.now()
-    };
-    savedPhotos.push(newItem);
-    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-    render();
-    
-    alert(`🎉 「${workName}」をアルバムに保存しました！`);
-  };
-  reader.readAsDataURL(file);
-}
-
-function deletePhoto(timestamp) {
-  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
-  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-  render();
-}
-
-// ================= 初期化 =================
-window.addEventListener('DOMContentLoaded', () => {
-  initOrientationLock();
-  initTeacherHiddenFeature();
-  loadProgress();
-  render();
-});
-
-// キーボード操作サポート
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeOverlay();
-    if (teacherPanel.classList.contains('active')) {
-      hideTeacherPanel();
-    }
+// ウィンドウリサイズ時にモバイル判定を更新
+window.addEventListener('resize', () => {
+  if (document.querySelector('.overlay-image')) {
+    const img = document.querySelector('.overlay-image');
+    const isMobile = window.innerHeight > window.innerWidth;
+    updateOverlayTransform(img, isMobile);
   }
 });
-
-console.log(`
-👨‍🏫 工作指導アプリ 完成版！
-特徴：
-1. 📸✅ 写真→完了ボタンの自然な流れ
-2. 🔧 拡大写真機能のバグ修正完了
-3. ⏰ 子ども用長押し取消機能（0.8秒）
-4. 🔒 指導員用隠し機能（進捗バー3秒長押し→ダブルタップ）
-5. 👨‍🏫 指導員用管理パネル
-6. 🎯 ワンチーム方式（4人全員完了で次へ）
-7. ⏱️ 時間目安表示
-
-拡大写真の修正内容：
-・オーバーレイ閉じた後のスクロール問題を解決
-・ESCキーでの閉じる機能を追加
-・背景クリックでの閉じる機能を追加
-・適切な状態管理とクリーンアップ
-・アニメーションの改善
-`);
 </script>
 </body>
 </html>
