@@ -28,7 +28,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 .header p { font-size: 0.85rem; opacity: 0.95; }
 
-/* 進捗バー（視覚的フィードバックのみ） */
+/* 進捗バー */
 .progress-container { 
   height: 8px; 
   background: #e0e0e0; 
@@ -378,7 +378,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   max-height: 100%;
   object-fit: contain;
   cursor: grab;
-  transition: transform 0.2s ease;
+  transition: transform 0.15s ease;
   transform-origin: center center;
   user-select: none;
   -webkit-user-drag: none;
@@ -705,7 +705,8 @@ let zoomState = {
   lastX: 0,
   lastY: 0,
   isDragging: false,
-  isPinching: false
+  isPinching: false,
+  startDistance: null
 };
 
 const navButtons = document.getElementById('navButtons');
@@ -714,7 +715,7 @@ const rotationWarning = document.getElementById('rotationWarning');
 const progressBar = document.getElementById('progressBar');
 const headerTitle = document.querySelector('.header h1');
 
-// ================= 拡大写真機能（強化版） =================
+// ================= 拡大写真機能（スマホドラッグ改善版） =================
 function openOverlay(src) {
   closeOverlay();
   
@@ -794,25 +795,32 @@ function initZoomControls(imgElement) {
   const container = imgElement.parentElement;
   const indicator = document.getElementById('zoomIndicator');
   
-  // ダブルタップ/クリックでズーム
-  imgElement.addEventListener('dblclick', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  // ダブルタップでズーム
+  let lastTap = 0;
+  imgElement.addEventListener('touchstart', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
     
-    if (zoomState.scale === 1) {
-      // クリック位置を中心にズームイン
-      const rect = imgElement.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      
-      const newScale = 2;
-      const offsetX = (clickX / zoomState.scale) * (1 - newScale);
-      const offsetY = (clickY / zoomState.scale) * (1 - newScale);
-      
-      applyZoom(newScale, offsetX, offsetY, imgElement, indicator);
-    } else {
-      resetZoom(imgElement, indicator);
+    if (tapLength < 300 && tapLength > 0) {
+      // ダブルタップ
+      e.preventDefault();
+      if (zoomState.scale === 1) {
+        // タップ位置を中心にズームイン
+        const touch = e.touches[0];
+        const rect = imgElement.getBoundingClientRect();
+        const tapX = touch.clientX - rect.left;
+        const tapY = touch.clientY - rect.top;
+        
+        const newScale = 2.5;
+        const offsetX = (tapX / zoomState.scale) * (1 - newScale);
+        const offsetY = (tapY / zoomState.scale) * (1 - newScale);
+        
+        applyZoom(newScale, offsetX, offsetY, imgElement, indicator);
+      } else {
+        resetZoom(imgElement, indicator);
+      }
     }
+    lastTap = currentTime;
   });
   
   // マウスホイールズーム（PC）
@@ -826,7 +834,7 @@ function initZoomControls(imgElement) {
     const mouseY = e.clientY - rect.top;
     
     zoomState.scale *= delta;
-    zoomState.scale = Math.max(0.5, Math.min(5, zoomState.scale));
+    zoomState.scale = Math.max(1, Math.min(5, zoomState.scale));
     
     // マウス位置を中心にズーム
     zoomState.offsetX = mouseX / zoomState.scale - mouseX / zoomState.lastScale + zoomState.offsetX;
@@ -836,9 +844,38 @@ function initZoomControls(imgElement) {
     zoomState.lastScale = zoomState.scale;
   }, { passive: false });
   
-  // ドラッグ移動
-  imgElement.addEventListener('mousedown', startDrag);
-  imgElement.addEventListener('touchstart', startDrag);
+  // ドラッグ移動（スマホ対応改善）
+  imgElement.addEventListener('touchstart', function(e) {
+    if (zoomState.scale <= 1) return;
+    if (e.touches.length !== 1) return;
+    
+    zoomState.isDragging = true;
+    imgElement.classList.add('dragging');
+    
+    const touch = e.touches[0];
+    zoomState.lastX = touch.clientX - zoomState.offsetX;
+    zoomState.lastY = touch.clientY - zoomState.offsetY;
+  });
+  
+  container.addEventListener('touchmove', function(e) {
+    if (!zoomState.isDragging || zoomState.scale <= 1 || e.touches.length !== 1) return;
+    
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    const deltaX = touch.clientX - zoomState.lastX;
+    const deltaY = touch.clientY - zoomState.lastY;
+    
+    zoomState.offsetX = deltaX;
+    zoomState.offsetY = deltaY;
+    
+    applyZoom(zoomState.scale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
+  });
+  
+  container.addEventListener('touchend', function(e) {
+    zoomState.isDragging = false;
+    imgElement.classList.remove('dragging');
+  });
   
   // ピンチズーム（タッチデバイス）
   container.addEventListener('touchstart', function(e) {
@@ -852,9 +889,6 @@ function initZoomControls(imgElement) {
     if (e.touches.length === 2) {
       e.preventDefault();
       handlePinch(e);
-    } else if (zoomState.isDragging) {
-      e.preventDefault();
-      handleDrag(e);
     }
   });
   
@@ -862,38 +896,7 @@ function initZoomControls(imgElement) {
     if (e.touches.length < 2) {
       zoomState.isPinching = false;
     }
-    if (e.touches.length === 0) {
-      zoomState.isDragging = false;
-      imgElement.classList.remove('dragging');
-    }
   });
-}
-
-function startDrag(e) {
-  if (zoomState.scale <= 1) return;
-  
-  zoomState.isDragging = true;
-  const img = e.target;
-  img.classList.add('dragging');
-  
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-  
-  zoomState.lastX = clientX - zoomState.offsetX;
-  zoomState.lastY = clientY - zoomState.offsetY;
-}
-
-function handleDrag(e) {
-  if (!zoomState.isDragging || zoomState.scale <= 1) return;
-  
-  e.preventDefault();
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-  
-  zoomState.offsetX = clientX - zoomState.lastX;
-  zoomState.offsetY = clientY - zoomState.lastY;
-  
-  applyZoom(zoomState.scale, zoomState.offsetX, zoomState.offsetY, e.target, document.getElementById('zoomIndicator'));
 }
 
 function startPinch(e) {
@@ -925,7 +928,7 @@ function handlePinch(e) {
   
   if (zoomState.startDistance) {
     const scale = zoomState.lastScale * (distance / zoomState.startDistance);
-    zoomState.scale = Math.max(0.5, Math.min(5, scale));
+    zoomState.scale = Math.max(1, Math.min(5, scale));
     
     // ピンチ中心を計算
     const centerX = (touch1.clientX + touch2.clientX) / 2;
@@ -958,10 +961,35 @@ function resetZoomState() {
 }
 
 function applyZoom(scale, offsetX, offsetY, imgElement, indicator) {
-  // 境界チェック
-  const maxOffset = (scale - 1) * 50;
-  offsetX = Math.max(-maxOffset, Math.min(maxOffset, offsetX));
-  offsetY = Math.max(-maxOffset, Math.min(maxOffset, offsetY));
+  // スマホのドラッグ移動を改善 - 制限を緩和
+  const container = imgElement.parentElement;
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+  
+  // 画像の実際のサイズを取得
+  let imgWidth = imgElement.naturalWidth || imgElement.width;
+  let imgHeight = imgElement.naturalHeight || imgElement.height;
+  
+  if (imgWidth === 0 || imgHeight === 0) {
+    // 自然サイズが取得できない場合
+    imgWidth = imgElement.clientWidth;
+    imgHeight = imgElement.clientHeight;
+  }
+  
+  // スケーリングされた画像サイズ
+  const scaledWidth = imgWidth * scale;
+  const scaledHeight = imgHeight * scale;
+  
+  // 移動制限を計算（画像がコンテナより大きい場合のみ移動可能）
+  if (scaledWidth > containerWidth) {
+    const maxOffsetX = (scaledWidth - containerWidth) / 2;
+    offsetX = Math.max(-maxOffsetX, Math.min(maxOffsetX, offsetX));
+  }
+  
+  if (scaledHeight > containerHeight) {
+    const maxOffsetY = (scaledHeight - containerHeight) / 2;
+    offsetY = Math.max(-maxOffsetY, Math.min(maxOffsetY, offsetY));
+  }
   
   imgElement.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
   
@@ -971,11 +999,10 @@ function applyZoom(scale, offsetX, offsetY, imgElement, indicator) {
     indicator.textContent = `${percentage}%`;
     indicator.style.display = 'block';
     
-    // 3秒後に非表示
     clearTimeout(indicator.hideTimeout);
     indicator.hideTimeout = setTimeout(() => {
       indicator.style.display = 'none';
-    }, 3000);
+    }, 2000);
   }
   
   // 状態更新
@@ -989,7 +1016,7 @@ function zoomIn() {
   const indicator = document.getElementById('zoomIndicator');
   if (!imgElement) return;
   
-  const newScale = Math.min(5, zoomState.scale * 1.2);
+  const newScale = Math.min(5, zoomState.scale * 1.3);
   applyZoom(newScale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
 }
 
@@ -998,7 +1025,7 @@ function zoomOut() {
   const indicator = document.getElementById('zoomIndicator');
   if (!imgElement) return;
   
-  const newScale = Math.max(0.5, zoomState.scale * 0.8);
+  const newScale = Math.max(1, zoomState.scale * 0.7);
   applyZoom(newScale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
 }
 
@@ -1017,7 +1044,7 @@ function resetZoom(imgElement = null, indicator = null) {
     clearTimeout(targetIndicator.hideTimeout);
     targetIndicator.hideTimeout = setTimeout(() => {
       targetIndicator.style.display = 'none';
-    }, 3000);
+    }, 2000);
   }
 }
 
@@ -1502,27 +1529,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-console.log(`
-👨‍🏫 工作指導アプリ 最終完成版
-特徴：
-1. 📸 写真閲覧（拡大表示対応）
-2. ✅ 子ども：押すだけ完了ボタン
-3. 🔒 指導員：タイトル長押しで-1減算
-4. 🔄 全工程リセット機能
-5. 📱 記念写真撮影ガイド（スマホカメラ活用）
-
-拡大表示強化機能：
-• 📱 ピンチズーム対応（スマホ/タブレット）
-• 🖱️ マウスホイールズーム対応（PC）
-• 👆 ダブルタップで拡大/縮小
-• 👉 ドラッグで画像移動
-• 🔄 ズームリセットボタン
-• ⚡ スムーズな操作感
-
-設計哲学：
-「子どもは迷わず、指導員は困らず」
-「複雑な機能より、現場の実用性」
-`);
+console.log('👨‍🏫 工作指導アプリ - スマホドラッグ改善版 起動完了');
 </script>
 </body>
 </html>
