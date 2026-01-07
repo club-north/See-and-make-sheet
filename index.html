@@ -331,14 +331,14 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   color: #333;
 }
 
-/* ============ 拡大オーバーレイ（ズーム機能付き） ============ */
+/* 拡大オーバーレイ */
 .overlay { 
   position: fixed; 
   top: 0; 
   left: 0; 
   width: 100vw; 
   height: 100vh; 
-  background: rgba(0,0,0,0.98); 
+  background: rgba(0,0,0,0.95); 
   z-index: 10000; 
   display: flex;
   align-items: center;
@@ -346,7 +346,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  padding: 10px;
+  overflow: hidden;
 }
 
 .overlay.active { 
@@ -355,48 +355,93 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 
 .overlay-content {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  overflow: hidden;
 }
 
 .overlay-image-container {
   position: relative;
-  max-width: 100%;
-  max-height: 100%;
-  cursor: grab;
-  user-select: none;
-  overflow: hidden;
-  touch-action: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .overlay-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(0,0,0,0.5);
-  display: block;
-  transform-origin: center center;
+  cursor: grab;
   transition: transform 0.2s ease;
-  will-change: transform;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* 閉じるボタン */
+.overlay-image.dragging {
+  cursor: grabbing;
+}
+
+/* オーバーレイコントロール */
+.overlay-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  z-index: 10002;
+}
+
+.overlay-btn {
+  background: rgba(255,255,255,0.95);
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.overlay-btn:hover {
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.overlay-btn:active {
+  transform: translateY(0);
+}
+
+.overlay-btn:focus {
+  outline: 3px solid #FF9800;
+  outline-offset: 2px;
+}
+
 .close-overlay-btn { 
   position: fixed; 
-  top: 15px; 
-  right: 15px; 
-  width: 50px; 
-  height: 50px; 
+  top: 20px; 
+  right: 20px; 
+  width: 60px; 
+  height: 60px; 
   border-radius: 50%; 
   background: rgba(255,255,255,0.95); 
   border: none; 
   font-weight: bold; 
-  font-size: 1.8rem; 
+  font-size: 2rem; 
   z-index: 10001; 
   cursor: pointer; 
   display: flex;
@@ -417,70 +462,18 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   margin-top: 2px; 
 }
 
-/* ズームリセットボタン */
-.reset-zoom-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.95);
-  border: none;
-  font-size: 1.5rem;
-  z-index: 10001;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease;
-}
-.reset-zoom-btn:hover {
-  transform: scale(1.1);
-}
-.reset-zoom-btn:active {
-  transform: scale(0.95);
-}
-
-/* オーバーレイヒント */
-.overlay-hint {
-  position: fixed;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  color: rgba(255,255,255,0.9);
-  font-size: 0.9rem;
-  padding: 10px;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(5px);
-  transition: opacity 0.5s ease;
-  z-index: 10001;
-}
-.overlay-hint.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ズームインジケーター */
 .zoom-indicator {
   position: fixed;
-  top: 80px;
-  right: 15px;
-  background: rgba(0,0,0,0.8);
+  top: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.7);
   color: white;
-  padding: 8px 12px;
+  padding: 8px 15px;
   border-radius: 20px;
   font-size: 0.9rem;
-  opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 10001;
-}
-.zoom-indicator.show {
-  opacity: 1;
-  transform: translateX(0);
+  display: none;
 }
 
 /* フッター */
@@ -558,6 +551,19 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   
   .usage-options {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* タッチデバイス向け */
+@media (hover: none) and (pointer: coarse) {
+  .overlay-controls {
+    bottom: 10px;
+    gap: 10px;
+  }
+  
+  .overlay-btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
   }
 }
 </style>
@@ -688,32 +694,27 @@ let currentStep = 0;
 // 指導員用タイトル長押し機能の状態管理
 let titleHoldTimer = null;
 
-// ================= 拡大写真機能（ズーム付き） =================
+// 拡大写真の状態管理
 let currentOverlay = null;
 let overlayKeydownHandler = null;
-let hintTimeout = null;
-
-// ズーム状態管理
 let zoomState = {
   scale: 1,
-  x: 0,
-  y: 0,
+  lastScale: 1,
+  offsetX: 0,
+  offsetY: 0,
+  lastX: 0,
+  lastY: 0,
   isDragging: false,
-  startX: 0,
-  startY: 0,
-  lastTouchDistance: 0
+  isPinching: false
 };
 
-function createPhotoElement(imgSrc, altText) {
-  return `
-    <div class="photo-container" onclick="openOverlay('${imgSrc}'); return false;">
-      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
-           onerror="this.style.display='none'">
-      <div class="tap-label">タップで拡大</div>
-    </div>
-  `;
-}
+const navButtons = document.getElementById('navButtons');
+const content = document.getElementById('content');
+const rotationWarning = document.getElementById('rotationWarning');
+const progressBar = document.getElementById('progressBar');
+const headerTitle = document.querySelector('.header h1');
 
+// ================= 拡大写真機能（強化版） =================
 function openOverlay(src) {
   closeOverlay();
   
@@ -723,22 +724,31 @@ function openOverlay(src) {
   currentOverlay.setAttribute('aria-modal', 'true');
   currentOverlay.setAttribute('aria-label', '拡大画像');
   
+  // ズーム状態をリセット
+  resetZoomState();
+  
   currentOverlay.innerHTML = `
+    <div class="zoom-indicator" id="zoomIndicator">100%</div>
     <div class="overlay-content">
       <div class="overlay-image-container">
-        <img src="${src}" class="overlay-image" alt="作業の参考写真（拡大表示）">
+        <img src="${src}" class="overlay-image" alt="作業の参考写真（拡大表示）" 
+             onload="initZoomControls(this)">
       </div>
+    </div>
+    <div class="overlay-controls">
+      <button class="overlay-btn" onclick="zoomOut()" aria-label="縮小">
+        <span>➖</span> 縮小
+      </button>
+      <button class="overlay-btn" onclick="resetZoom()" aria-label="リセット">
+        <span>🔄</span> リセット
+      </button>
+      <button class="overlay-btn" onclick="zoomIn()" aria-label="拡大">
+        <span>➕</span> 拡大
+      </button>
     </div>
     <button class="close-overlay-btn" onclick="closeOverlay()" aria-label="閉じる">
       ×<br><small>とじる</small>
     </button>
-    <button class="reset-zoom-btn" onclick="resetZoom()" aria-label="ズームリセット">
-      ↺
-    </button>
-    <div class="overlay-hint">
-      ピンチで拡大・縮小 ╱ ダブルタップでズーム ╱ ドラッグで移動
-    </div>
-    <div class="zoom-indicator"></div>
   `;
 
   document.body.appendChild(currentOverlay);
@@ -751,36 +761,264 @@ function openOverlay(src) {
     if (closeBtn) closeBtn.focus();
   }, 10);
   
-  resetZoom();
-  
-  // ヒントを5秒後に非表示
-  hintTimeout = setTimeout(() => {
-    const hint = currentOverlay.querySelector('.overlay-hint');
-    if (hint) hint.classList.add('hidden');
-  }, 5000);
-  
-  setupZoomEvents();
-  
+  // オーバーレイ背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
     if (e.target === this || e.target.classList.contains('overlay-content')) {
       closeOverlay();
     }
   });
   
+  // キーボードイベント
   overlayKeydownHandler = function(e) {
     if (e.key === 'Escape') {
       closeOverlay();
+    } else if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      zoomIn();
+    } else if (e.key === '-') {
+      e.preventDefault();
+      zoomOut();
+    } else if (e.key === '0') {
+      e.preventDefault();
+      resetZoom();
     }
   };
   document.addEventListener('keydown', overlayKeydownHandler);
   
-  currentOverlay.addEventListener('touchmove', function(e) {
-    if (e.touches.length > 1) {
-      e.preventDefault();
+  return false;
+}
+
+function initZoomControls(imgElement) {
+  if (!currentOverlay) return;
+  
+  const container = imgElement.parentElement;
+  const indicator = document.getElementById('zoomIndicator');
+  
+  // ダブルタップ/クリックでズーム
+  imgElement.addEventListener('dblclick', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (zoomState.scale === 1) {
+      // クリック位置を中心にズームイン
+      const rect = imgElement.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      
+      const newScale = 2;
+      const offsetX = (clickX / zoomState.scale) * (1 - newScale);
+      const offsetY = (clickY / zoomState.scale) * (1 - newScale);
+      
+      applyZoom(newScale, offsetX, offsetY, imgElement, indicator);
+    } else {
+      resetZoom(imgElement, indicator);
     }
+  });
+  
+  // マウスホイールズーム（PC）
+  container.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const rect = imgElement.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    zoomState.scale *= delta;
+    zoomState.scale = Math.max(0.5, Math.min(5, zoomState.scale));
+    
+    // マウス位置を中心にズーム
+    zoomState.offsetX = mouseX / zoomState.scale - mouseX / zoomState.lastScale + zoomState.offsetX;
+    zoomState.offsetY = mouseY / zoomState.scale - mouseY / zoomState.lastScale + zoomState.offsetY;
+    
+    applyZoom(zoomState.scale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
+    zoomState.lastScale = zoomState.scale;
   }, { passive: false });
   
-  return false;
+  // ドラッグ移動
+  imgElement.addEventListener('mousedown', startDrag);
+  imgElement.addEventListener('touchstart', startDrag);
+  
+  // ピンチズーム（タッチデバイス）
+  container.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      startPinch(e);
+    }
+  });
+  
+  container.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      handlePinch(e);
+    } else if (zoomState.isDragging) {
+      e.preventDefault();
+      handleDrag(e);
+    }
+  });
+  
+  container.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) {
+      zoomState.isPinching = false;
+    }
+    if (e.touches.length === 0) {
+      zoomState.isDragging = false;
+      imgElement.classList.remove('dragging');
+    }
+  });
+}
+
+function startDrag(e) {
+  if (zoomState.scale <= 1) return;
+  
+  zoomState.isDragging = true;
+  const img = e.target;
+  img.classList.add('dragging');
+  
+  const clientX = e.clientX || e.touches[0].clientX;
+  const clientY = e.clientY || e.touches[0].clientY;
+  
+  zoomState.lastX = clientX - zoomState.offsetX;
+  zoomState.lastY = clientY - zoomState.offsetY;
+}
+
+function handleDrag(e) {
+  if (!zoomState.isDragging || zoomState.scale <= 1) return;
+  
+  e.preventDefault();
+  const clientX = e.clientX || e.touches[0].clientX;
+  const clientY = e.clientY || e.touches[0].clientY;
+  
+  zoomState.offsetX = clientX - zoomState.lastX;
+  zoomState.offsetY = clientY - zoomState.lastY;
+  
+  applyZoom(zoomState.scale, zoomState.offsetX, zoomState.offsetY, e.target, document.getElementById('zoomIndicator'));
+}
+
+function startPinch(e) {
+  if (e.touches.length !== 2) return;
+  
+  zoomState.isPinching = true;
+  const touch1 = e.touches[0];
+  const touch2 = e.touches[1];
+  
+  const distance = Math.sqrt(
+    Math.pow(touch2.clientX - touch1.clientX, 2) +
+    Math.pow(touch2.clientY - touch1.clientY, 2)
+  );
+  
+  zoomState.lastScale = zoomState.scale;
+  zoomState.startDistance = distance;
+}
+
+function handlePinch(e) {
+  if (!zoomState.isPinching || e.touches.length !== 2) return;
+  
+  const touch1 = e.touches[0];
+  const touch2 = e.touches[1];
+  
+  const distance = Math.sqrt(
+    Math.pow(touch2.clientX - touch1.clientX, 2) +
+    Math.pow(touch2.clientY - touch1.clientY, 2)
+  );
+  
+  if (zoomState.startDistance) {
+    const scale = zoomState.lastScale * (distance / zoomState.startDistance);
+    zoomState.scale = Math.max(0.5, Math.min(5, scale));
+    
+    // ピンチ中心を計算
+    const centerX = (touch1.clientX + touch2.clientX) / 2;
+    const centerY = (touch1.clientY + touch2.clientY) / 2;
+    
+    const img = document.querySelector('.overlay-image');
+    const rect = img.getBoundingClientRect();
+    const mouseX = centerX - rect.left;
+    const mouseY = centerY - rect.top;
+    
+    zoomState.offsetX = mouseX / zoomState.scale - mouseX / zoomState.lastScale + zoomState.offsetX;
+    zoomState.offsetY = mouseY / zoomState.scale - mouseY / zoomState.lastScale + zoomState.offsetY;
+    
+    applyZoom(zoomState.scale, zoomState.offsetX, zoomState.offsetY, img, document.getElementById('zoomIndicator'));
+  }
+}
+
+function resetZoomState() {
+  zoomState = {
+    scale: 1,
+    lastScale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    lastX: 0,
+    lastY: 0,
+    isDragging: false,
+    isPinching: false,
+    startDistance: null
+  };
+}
+
+function applyZoom(scale, offsetX, offsetY, imgElement, indicator) {
+  // 境界チェック
+  const maxOffset = (scale - 1) * 50;
+  offsetX = Math.max(-maxOffset, Math.min(maxOffset, offsetX));
+  offsetY = Math.max(-maxOffset, Math.min(maxOffset, offsetY));
+  
+  imgElement.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+  
+  // インジケーター更新
+  if (indicator) {
+    const percentage = Math.round(scale * 100);
+    indicator.textContent = `${percentage}%`;
+    indicator.style.display = 'block';
+    
+    // 3秒後に非表示
+    clearTimeout(indicator.hideTimeout);
+    indicator.hideTimeout = setTimeout(() => {
+      indicator.style.display = 'none';
+    }, 3000);
+  }
+  
+  // 状態更新
+  zoomState.scale = scale;
+  zoomState.offsetX = offsetX;
+  zoomState.offsetY = offsetY;
+}
+
+function zoomIn() {
+  const imgElement = document.querySelector('.overlay-image');
+  const indicator = document.getElementById('zoomIndicator');
+  if (!imgElement) return;
+  
+  const newScale = Math.min(5, zoomState.scale * 1.2);
+  applyZoom(newScale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
+}
+
+function zoomOut() {
+  const imgElement = document.querySelector('.overlay-image');
+  const indicator = document.getElementById('zoomIndicator');
+  if (!imgElement) return;
+  
+  const newScale = Math.max(0.5, zoomState.scale * 0.8);
+  applyZoom(newScale, zoomState.offsetX, zoomState.offsetY, imgElement, indicator);
+}
+
+function resetZoom(imgElement = null, indicator = null) {
+  const targetImg = imgElement || document.querySelector('.overlay-image');
+  const targetIndicator = indicator || document.getElementById('zoomIndicator');
+  if (!targetImg) return;
+  
+  resetZoomState();
+  targetImg.style.transform = 'translate(0px, 0px) scale(1)';
+  
+  if (targetIndicator) {
+    targetIndicator.textContent = '100%';
+    targetIndicator.style.display = 'block';
+    
+    clearTimeout(targetIndicator.hideTimeout);
+    targetIndicator.hideTimeout = setTimeout(() => {
+      targetIndicator.style.display = 'none';
+    }, 3000);
+  }
 }
 
 function closeOverlay() {
@@ -797,201 +1035,21 @@ function closeOverlay() {
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     
-    if (hintTimeout) {
-      clearTimeout(hintTimeout);
-      hintTimeout = null;
-    }
-    
     if (overlayKeydownHandler) {
       document.removeEventListener('keydown', overlayKeydownHandler);
       overlayKeydownHandler = null;
     }
-    
-    // ズーム状態をリセット
-    resetZoom();
   }, 300);
 }
 
-// ================= ズーム機能 =================
-function resetZoom() {
-  zoomState = {
-    scale: 1,
-    x: 0,
-    y: 0,
-    isDragging: false,
-    startX: 0,
-    startY: 0,
-    lastTouchDistance: 0
-  };
-  
-  applyTransform();
-  
-  if (currentOverlay) {
-    const zoomIndicator = currentOverlay.querySelector('.zoom-indicator');
-    if (zoomIndicator) {
-      zoomIndicator.classList.remove('show');
-    }
-  }
-}
-
-function applyTransform() {
-  if (!currentOverlay) return;
-  
-  const image = currentOverlay.querySelector('.overlay-image');
-  if (image) {
-    image.style.transform = `translate(${zoomState.x}px, ${zoomState.y}px) scale(${zoomState.scale})`;
-  }
-  
-  // ズームインジケーターを更新
-  updateZoomIndicator();
-}
-
-function updateZoomIndicator() {
-  if (!currentOverlay) return;
-  
-  const indicator = currentOverlay.querySelector('.zoom-indicator');
-  if (indicator) {
-    const percentage = Math.round(zoomState.scale * 100);
-    indicator.textContent = `${percentage}%`;
-    
-    if (zoomState.scale > 1) {
-      indicator.classList.add('show');
-    } else {
-      indicator.classList.remove('show');
-    }
-  }
-}
-
-function zoomTo(scale, centerX = window.innerWidth / 2, centerY = window.innerHeight / 2) {
-  if (!currentOverlay) return;
-  
-  const oldScale = zoomState.scale;
-  zoomState.scale = Math.max(0.5, Math.min(5, scale));
-  
-  // ズーム中心を維持
-  const image = currentOverlay.querySelector('.overlay-image');
-  if (image) {
-    const rect = image.getBoundingClientRect();
-    const offsetX = (centerX - rect.left) / oldScale;
-    const offsetY = (centerY - rect.top) / oldScale;
-    
-    zoomState.x += (centerX - rect.left) - (offsetX * zoomState.scale);
-    zoomState.y += (centerY - rect.top) - (offsetY * zoomState.scale);
-    
-    applyTransform();
-  }
-}
-
-function setupZoomEvents() {
-  if (!currentOverlay) return;
-  
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  const image = currentOverlay.querySelector('.overlay-image');
-  
-  if (!container || !image) return;
-  
-  // マウスホイールズーム
-  container.addEventListener('wheel', handleWheel, { passive: false });
-  
-  // タッチイベント
-  container.addEventListener('touchstart', handleTouchStart, { passive: false });
-  container.addEventListener('touchmove', handleTouchMove, { passive: false });
-  container.addEventListener('touchend', handleTouchEnd);
-  
-  // マウスドラッグ
-  container.addEventListener('mousedown', handleMouseDown);
-  container.addEventListener('mousemove', handleMouseMove);
-  container.addEventListener('mouseup', handleMouseUp);
-  container.addEventListener('mouseleave', handleMouseUp);
-  
-  // ダブルクリック/タップ
-  container.addEventListener('dblclick', handleDoubleClick);
-}
-
-function handleWheel(e) {
-  e.preventDefault();
-  const delta = e.deltaY > 0 ? 0.9 : 1.1;
-  zoomTo(zoomState.scale * delta, e.clientX, e.clientY);
-}
-
-function handleTouchStart(e) {
-  if (e.touches.length === 1) {
-    // シングルタッチ（ドラッグ）
-    zoomState.isDragging = true;
-    zoomState.startX = e.touches[0].clientX - zoomState.x;
-    zoomState.startY = e.touches[0].clientY - zoomState.y;
-    const container = currentOverlay.querySelector('.overlay-image-container');
-    if (container) container.style.cursor = 'grabbing';
-  } else if (e.touches.length === 2) {
-    // ピンチズーム
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    zoomState.lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
-  }
-}
-
-function handleTouchMove(e) {
-  if (e.touches.length === 1 && zoomState.isDragging) {
-    // ドラッグ
-    e.preventDefault();
-    zoomState.x = e.touches[0].clientX - zoomState.startX;
-    zoomState.y = e.touches[0].clientY - zoomState.startY;
-    applyTransform();
-  } else if (e.touches.length === 2) {
-    // ピンチズーム
-    e.preventDefault();
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    
-    if (zoomState.lastTouchDistance > 0) {
-      const scaleChange = distance / zoomState.lastTouchDistance;
-      zoomTo(zoomState.scale * scaleChange, 
-             (e.touches[0].clientX + e.touches[1].clientX) / 2,
-             (e.touches[0].clientY + e.touches[1].clientY) / 2);
-    }
-    zoomState.lastTouchDistance = distance;
-  }
-}
-
-function handleTouchEnd(e) {
-  zoomState.isDragging = false;
-  zoomState.lastTouchDistance = 0;
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (container) container.style.cursor = 'grab';
-}
-
-function handleMouseDown(e) {
-  e.preventDefault();
-  zoomState.isDragging = true;
-  zoomState.startX = e.clientX - zoomState.x;
-  zoomState.startY = e.clientY - zoomState.y;
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (container) container.style.cursor = 'grabbing';
-}
-
-function handleMouseMove(e) {
-  if (zoomState.isDragging) {
-    e.preventDefault();
-    zoomState.x = e.clientX - zoomState.startX;
-    zoomState.y = e.clientY - zoomState.startY;
-    applyTransform();
-  }
-}
-
-function handleMouseUp() {
-  zoomState.isDragging = false;
-  const container = currentOverlay.querySelector('.overlay-image-container');
-  if (container) container.style.cursor = 'grab';
-}
-
-function handleDoubleClick(e) {
-  e.preventDefault();
-  if (zoomState.scale > 1.5) {
-    resetZoom();
-  } else {
-    zoomTo(2.5, e.clientX, e.clientY);
-  }
+function createPhotoElement(imgSrc, altText) {
+  return `
+    <div class="photo-container" onclick="openOverlay('${imgSrc}'); return false;">
+      <img src="${imgSrc}" class="step-image" alt="${altText}" loading="lazy"
+           onerror="this.style.display='none'">
+      <div class="tap-label">タップで拡大</div>
+    </div>
+  `;
 }
 
 // ================= 進捗管理 =================
@@ -1445,22 +1503,21 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log(`
-👨‍🏫 工作指導アプリ 最終完成版（ズーム機能付き）
+👨‍🏫 工作指導アプリ 最終完成版
 特徴：
 1. 📸 写真閲覧（拡大表示対応）
-2. 🔍 ズーム機能（ピンチ・ホイール・ダブルクリック）
-3. ✅ 子ども：押すだけ完了ボタン
-4. 🔒 指導員：タイトル長押しで-1減算
-5. 🔄 全工程リセット機能
-6. 📱 記念写真撮影ガイド（スマホカメラ活用）
+2. ✅ 子ども：押すだけ完了ボタン
+3. 🔒 指導員：タイトル長押しで-1減算
+4. 🔄 全工程リセット機能
+5. 📱 記念写真撮影ガイド（スマホカメラ活用）
 
-ズーム機能：
-• ピンチで拡大・縮小
-• マウスホイールでズーム
-• ダブルクリック/タップで2.5倍ズーム
-• ドラッグで画像移動
-• ズームインジケーター表示
-• ズームリセットボタン
+拡大表示強化機能：
+• 📱 ピンチズーム対応（スマホ/タブレット）
+• 🖱️ マウスホイールズーム対応（PC）
+• 👆 ダブルタップで拡大/縮小
+• 👉 ドラッグで画像移動
+• 🔄 ズームリセットボタン
+• ⚡ スムーズな操作感
 
 設計哲学：
 「子どもは迷わず、指導員は困らず」
