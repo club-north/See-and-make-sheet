@@ -931,6 +931,67 @@ function checkOrientation() {
   }
 }
 
+// ================= アルバム機能（修正版） =================
+function savePhoto(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    // ファイルが選択されなかった場合もinputをリセット
+    event.target.value = '';
+    return;
+  }
+
+  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
+  if (workName === null) {
+    // キャンセルした場合もinputをリセット（重要！）
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
+    const newItem = {
+      dataUrl: e.target.result,
+      name: workName,
+      timestamp: Date.now()
+    };
+    savedPhotos.push(newItem);
+    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
+    
+    // アルバム画面を再描画
+    if (steps[currentStep].isAlbum) {
+      renderAlbumView(steps[currentStep]);
+    } else {
+      render();
+    }
+    
+    // 入力フィールドをリセット（2枚目以降も保存できるように）
+    event.target.value = '';
+    
+    alert(`🎉 「${workName}」をアルバムに保存しました！`);
+  };
+  
+  reader.onerror = function() {
+    alert('写真の読み込みに失敗しました。もう一度お試しください。');
+    event.target.value = '';
+  };
+  
+  reader.readAsDataURL(file);
+}
+
+function deletePhoto(timestamp) {
+  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
+  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
+  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
+  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
+  
+  if (steps[currentStep].isAlbum) {
+    renderAlbumView(steps[currentStep]);
+  } else {
+    render();
+  }
+}
+
 // ================= メイン描画関数 =================
 function render() {
   updateProgressDisplay();
@@ -1095,39 +1156,6 @@ function renderAlbumView(s) {
     </div>`;
 }
 
-// ================= アルバム機能 =================
-function savePhoto(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
-  if (workName === null) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-    const newItem = {
-      dataUrl: e.target.result,
-      name: workName,
-      timestamp: Date.now()
-    };
-    savedPhotos.push(newItem);
-    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-    render();
-    
-    alert(`🎉 「${workName}」をアルバムに保存しました！`);
-  };
-  reader.readAsDataURL(file);
-}
-
-function deletePhoto(timestamp) {
-  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
-  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-  render();
-}
-
 // ================= 初期化 =================
 window.addEventListener('DOMContentLoaded', () => {
   initOrientationLock();
@@ -1144,21 +1172,18 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log(`
-👨‍🏫 工作指導アプリ 最終完成版
+👨‍🏫 工作指導アプリ 最終完成版（アルバム修正済み）
 特徴：
 1. 📸 写真閲覧（拡大表示対応）
 2. ✅ 子ども：押すだけ完了ボタン
 3. 🔒 指導員：タイトル長押しで-1減算
 4. 🔄 全工程リセット機能
-5. 📁 思い出アルバム
-6. 🎯 ワンチーム方式（4人全員完了で次へ）
+5. 📁 思い出アルバム（複数保存可能）
 
-削除した不要機能：
-・管理パネル
-・進捗確認画面
-・工程別調整
-・データエクスポート
-・複雑な隠し機能
+アルバム修正内容：
+・2枚目以降も保存できるように修正
+・ファイル選択後にinputをリセット
+・キャンセル時もinputをクリア
 
 設計哲学：
 「子どもは迷わず、指導員は困らず」
