@@ -238,87 +238,97 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 }
 .teacher-note strong { color: #E65100; }
 
-/* アルバム */
-.album-section { 
-  background: #f8f9fa; 
-  border-radius: 12px; 
-  padding: 12px; 
-  margin-top: 15px; 
-  border: 2px dashed #bbdefb; 
+/* 撮影ガイドエリア */
+.photo-guide-area {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 2px solid #4CAF50;
 }
 
-.album-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-  gap: 12px; 
-  margin-top: 15px; 
-}
-.album-item { 
-  position: relative; 
-  border-radius: 8px; 
-  overflow: hidden; 
-  background: white; 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08); 
-  display: flex; 
-  flex-direction: column; 
-  cursor: pointer; 
-  border: 1px solid #e0e0e0; 
-}
-.album-img-wrapper { 
-  position: relative; 
-  aspect-ratio: 1; 
-  overflow: hidden; 
-  background: #f5f5f5; 
-}
-.album-item img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
-.album-info { padding: 8px; }
-.album-name { 
-  font-weight: bold; 
-  font-size: 1rem; 
-  display: block; 
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  margin-bottom: 2px; 
-  color: #333; 
-}
-.album-date { font-size: 0.8rem; color: #757575; }
-
-.add-photo-btn { 
-  background: linear-gradient(135deg, #4caf50, #2e7d32); 
-  color: white; 
-  border: none; 
-  padding: 14px; 
-  border-radius: 12px; 
-  width: 100%; 
-  font-size: 1.2rem; 
-  font-weight: bold; 
-  cursor: pointer; 
-  margin-bottom: 12px; 
-  min-height: 60px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 8px; 
+.guide-title {
+  text-align: center;
+  color: #1B5E20;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
 }
 
-.del-btn { 
-  position: absolute; 
-  top: 6px; 
-  right: 6px; 
-  background: rgba(0,0,0,0.7); 
-  color: white; 
-  border: none; 
-  border-radius: 50%; 
-  width: 30px; 
-  height: 30px; 
-  font-size: 18px; 
-  z-index: 10; 
-  cursor: pointer; 
+.guide-step {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4CAF50;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.step-icon {
+  background: #4CAF50;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  color: #1B5E20;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.photo-tips {
+  background: #FFF3E0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #5D4037;
+  border-left: 3px solid #FF9800;
+}
+
+.usage-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.usage-option {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #E0E0E0;
+  transition: transform 0.2s ease;
+}
+
+.usage-option:hover {
+  transform: translateY(-2px);
+  border-color: #4CAF50;
+}
+
+.usage-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.usage-text {
+  font-size: 0.9rem;
+  color: #333;
 }
 
 /* 拡大オーバーレイ */
@@ -464,6 +474,10 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   .big-kids-button { padding: 30px; }
   .big-kids-button .big-emoji { font-size: 4rem; }
   .big-kids-button .big-text { font-size: 2rem; }
+  
+  .usage-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
 </head>
@@ -471,7 +485,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 
 <header class="header">
   <h1>👀みてつくるシート🚗</h1>
-  <p>工作の手順を確認しながら、作った作品をアルバムに残そう！</p>
+  <p>工作の手順を確認しながら、作った作品を記念写真に残そう！</p>
 </header>
 
 <div class="progress-container">
@@ -574,10 +588,10 @@ const steps = [
     final: true
   },
   { 
-    nav: "📸アルバム", 
-    title: "📸 おもいでアルバム",
+    nav: "📸記念写真", 
+    title: "📸 記念写真を撮ろう！",
     isAlbum: true,
-    albumMessage: "作った作品に「なまえ」をつけて、みんなの思い出を残しましょう！"
+    albumMessage: "完成した作品をスマホ・タブレットで撮影して、素敵な思い出を残しましょう！"
   }
 ];
 
@@ -895,7 +909,7 @@ function renderAllCompleteMessage(stepIndex) {
   const nextStep = stepIndex + 1;
   if (nextStep >= steps.length) return '';
   
-  const nextStepName = steps[nextStep].isAlbum ? 'アルバム' : steps[nextStep].nav;
+  const nextStepName = steps[nextStep].isAlbum ? '記念写真' : steps[nextStep].nav;
   
   return `
     <div class="all-complete-message">
@@ -913,83 +927,59 @@ function renderAllCompleteMessage(stepIndex) {
   `;
 }
 
-// ================= 初期化関数 =================
-function initOrientationLock() {
-  window.addEventListener('orientationchange', checkOrientation);
-  window.addEventListener('resize', checkOrientation);
-  checkOrientation();
-}
-
-function checkOrientation() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
-  if (isMobile && !isPortrait) {
-    rotationWarning.classList.add('active');
-  } else {
-    rotationWarning.classList.remove('active');
-  }
-}
-
-// ================= アルバム機能（修正版） =================
-function savePhoto(event) {
-  const file = event.target.files[0];
-  if (!file) {
-    // ファイルが選択されなかった場合もinputをリセット
-    event.target.value = '';
-    return;
-  }
-
-  const workName = prompt("工作の「なまえ」を教えてね！\n（例：はじめての電気自動車）", "じぶんの工作");
-  if (workName === null) {
-    // キャンセルした場合もinputをリセット（重要！）
-    event.target.value = '';
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-    const newItem = {
-      dataUrl: e.target.result,
-      name: workName,
-      timestamp: Date.now()
-    };
-    savedPhotos.push(newItem);
-    localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-    
-    // アルバム画面を再描画
-    if (steps[currentStep].isAlbum) {
-      renderAlbumView(steps[currentStep]);
-    } else {
-      render();
-    }
-    
-    // 入力フィールドをリセット（2枚目以降も保存できるように）
-    event.target.value = '';
-    
-    alert(`🎉 「${workName}」をアルバムに保存しました！`);
-  };
-  
-  reader.onerror = function() {
-    alert('写真の読み込みに失敗しました。もう一度お試しください。');
-    event.target.value = '';
-  };
-  
-  reader.readAsDataURL(file);
-}
-
-function deletePhoto(timestamp) {
-  if (!confirm('この写真をアルバムから削除してもいいですか？')) return;
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos = savedPhotos.filter(item => item.timestamp !== timestamp);
-  localStorage.setItem('myAlbumV3', JSON.stringify(savedPhotos));
-  
-  if (steps[currentStep].isAlbum) {
-    renderAlbumView(steps[currentStep]);
-  } else {
-    render();
-  }
+// ================= 撮影ガイドのレンダリング =================
+function renderPhotoGuide() {
+  return `
+    <div class="photo-guide-area">
+      <h3 class="guide-title">
+        <span>📱</span>
+        撮影の手順
+        <span>📱</span>
+      </h3>
+      
+      <div class="guide-step">
+        <div class="step-icon">1</div>
+        <div class="step-content">
+          <strong>スマホ・タブレットのカメラアプリを開く</strong>
+          <p>ホーム画面の「カメラ」アイコンをタップ</p>
+        </div>
+      </div>
+      
+      <div class="guide-step">
+        <div class="step-icon">2</div>
+        <div class="step-content">
+          <strong>作品を撮影する</strong>
+          <p>みんなで作品を持って、記念写真を撮りましょう！</p>
+          <div class="photo-tips">
+            ✅ 明るい場所で撮る<br>
+            ✅ 作品全体が入るように<br>
+            ✅ 笑顔で「はい、チーズ！」
+          </div>
+        </div>
+      </div>
+      
+      <div class="guide-step">
+        <div class="step-icon">3</div>
+        <div class="step-content">
+          <strong>写真を活用する</strong>
+          <div class="usage-options">
+            <div class="usage-option">
+              <span class="usage-icon">👨‍👩‍👧</span>
+              <span class="usage-text">保護者と共有</span>
+            </div>
+            <div class="usage-option">
+              <span class="usage-icon">🏫</span>
+              <span class="usage-text">クラスの記録</span>
+            </div>
+            <div class="usage-option">
+              <span class="usage-icon">💾</span>
+              <span class="usage-text">思い出として保存</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 // ================= メイン描画関数 =================
@@ -1085,35 +1075,6 @@ function renderStepView(s) {
 }
 
 function renderAlbumView(s) {
-  let savedPhotos = JSON.parse(localStorage.getItem('myAlbumV3') || '[]');
-  savedPhotos.sort((a, b) => b.timestamp - a.timestamp);
-
-  let albumHtml = savedPhotos.map((item, index) => {
-    const dateStr = new Date(item.timestamp).toLocaleString('ja-JP', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    return `
-    <div class="album-item">
-      <button class="del-btn" onclick="deletePhoto(${item.timestamp})" aria-label="削除">×</button>
-      <div class="album-img-wrapper">
-        <img src="${item.dataUrl}" onclick="openOverlay('${item.dataUrl}')" alt="${item.name}の写真" loading="lazy">
-      </div>
-      <div class="album-info">
-        <span class="album-name">${item.name || 'なまえなし'}</span>
-        <span class="album-date">${dateStr}</span>
-      </div>
-    </div>
-  `}).join('');
-
-  const albumCount = savedPhotos.length;
-  const albumMessage = albumCount > 0 
-    ? `これまでに${albumCount}作品が保存されています`
-    : 'まだ作品が保存されていません。写真を追加しましょう！';
-
   content.innerHTML = `
     <div class="step-card">
       <div class="step-title">${s.title}</div>
@@ -1121,7 +1082,7 @@ function renderAlbumView(s) {
       <div class="action-section">
         <div class="main-action">
           <span class="emoji">📷</span>
-          <span class="text">作った作品を写真に残しましょう</span>
+          <span class="text">完成した作品を写真に残そう！</span>
         </div>
         <div class="detail-action">
           <div class="detail-line">
@@ -1130,30 +1091,47 @@ function renderAlbumView(s) {
           </div>
         </div>
         <details class="hint-details">
-          <summary>💡 アルバムの使い方</summary>
+          <summary>💡 記念写真のアイデア</summary>
           <div class="hint-content">
-            1. 「写真をとる・えらぶ」をタップ<br>
-            2. 工作の「なまえ」を入力<br>
-            3. 写真を撮影または選択<br>
-            4. アルバムに自動保存されます
+            • 作品だけを撮る<br>
+            • 作品を持って写る<br>
+            • 友達と一緒に撮る<br>
+            • 動いているところを撮る<br>
+            • いろんな角度から撮る
           </div>
         </details>
       </div>
       
-      <div class="album-section">
-        <p style="text-align: center; margin-bottom: 15px; color: #546e7a; font-size: 1.1rem;">
-          ${albumMessage}
-        </p>
-        
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="savePhoto(event)">
-        <button class="add-photo-btn" onclick="document.getElementById('cameraInput').click()">
-          <span>📷</span>
-          <span>写真をとる・えらぶ</span>
-        </button>
-        
-        ${albumCount > 0 ? `<div class="album-grid">${albumHtml}</div>` : ''}
+      ${renderPhotoGuide()}
+      
+      <div class="teacher-note">
+        <strong>👨‍🏫 指導員用メモ：</strong><br>
+        1. 「では記念写真を撮ります！カメラの準備をしてください」と声かけ<br>
+        2. 「3、2、1、はい、チーズ！」と合図<br>
+        3. 作品を持った子どもの写真を数枚撮影<br>
+        4. 必要に応じて個別にも撮影<br>
+        5. 撮った写真はスマホの「写真」アプリに自動保存されます
       </div>
-    </div>`;
+    </div>
+  `;
+}
+
+// ================= 初期化関数 =================
+function initOrientationLock() {
+  window.addEventListener('orientationchange', checkOrientation);
+  window.addEventListener('resize', checkOrientation);
+  checkOrientation();
+}
+
+function checkOrientation() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
+  if (isMobile && !isPortrait) {
+    rotationWarning.classList.add('active');
+  } else {
+    rotationWarning.classList.remove('active');
+  }
 }
 
 // ================= 初期化 =================
@@ -1172,21 +1150,23 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log(`
-👨‍🏫 工作指導アプリ 最終完成版（アルバム修正済み）
+👨‍🏫 工作指導アプリ 最終完成版
 特徴：
 1. 📸 写真閲覧（拡大表示対応）
 2. ✅ 子ども：押すだけ完了ボタン
 3. 🔒 指導員：タイトル長押しで-1減算
 4. 🔄 全工程リセット機能
-5. 📁 思い出アルバム（複数保存可能）
+5. 📱 記念写真撮影ガイド（スマホカメラ活用）
 
-アルバム修正内容：
-・2枚目以降も保存できるように修正
-・ファイル選択後にinputをリセット
-・キャンセル時もinputをクリア
+削除した不要機能：
+・画像アップロード/保存機能
+・複雑なアルバム管理
+・カウントダウン撮影会
+・バイブレーション機能
 
 設計哲学：
 「子どもは迷わず、指導員は困らず」
+「複雑な機能より、現場の実用性」
 `);
 </script>
 </body>
