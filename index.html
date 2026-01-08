@@ -50,6 +50,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .nav-btn.active { background: #FF9800; color: white; box-shadow: 0 0 0 2px white, 0 0 0 4px #FF9800; }
 .nav-btn:focus { outline: 3px solid #4CAF50; outline-offset: 1px; }
 .nav-btn.completed::before { content: "✅ "; }
+.nav-btn.quiz-step::before { content: "🧠 "; }
 
 /* メインコンテンツ */
 .main-content { padding: 12px 8px; }
@@ -331,6 +332,244 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   color: #333;
 }
 
+/* ================= クイズセクションのスタイル ================= */
+.quiz-section {
+  background: linear-gradient(135deg, #FFF3E0, #FFECB3);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 25px 0;
+  border: 3px solid #FF9800;
+  position: relative;
+}
+
+.quiz-section::before {
+  content: "🧠 理屈を考えよう！";
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  background: #FF9800;
+  color: white;
+  padding: 4px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.quiz-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.quiz-title {
+  color: #E65100;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quiz-subtitle {
+  color: #5D4037;
+  font-size: 1rem;
+}
+
+.quiz-question {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-left: 5px solid #4CAF50;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1B5E20;
+  line-height: 1.4;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.quiz-option {
+  background: white;
+  border: 2px solid #E0E0E0;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.quiz-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: #2196F3;
+}
+
+.quiz-option.selected {
+  border-color: #2196F3;
+  background: #E3F2FD;
+}
+
+.quiz-option.correct {
+  border-color: #4CAF50;
+  background: #E8F5E9;
+}
+
+.quiz-option.incorrect {
+  border-color: #F44336;
+  background: #FFEBEE;
+}
+
+.option-marker {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E0E0E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #666;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.quiz-option.selected .option-marker {
+  background: #2196F3;
+  color: white;
+}
+
+.quiz-option.correct .option-marker {
+  background: #4CAF50;
+  color: white;
+}
+
+.quiz-option.incorrect .option-marker {
+  background: #F44336;
+  color: white;
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.option-hint {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+  display: none;
+}
+
+.quiz-option.selected .option-hint {
+  display: block;
+}
+
+.quiz-feedback {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  border: 2px solid #4CAF50;
+  display: none;
+}
+
+.quiz-feedback.show {
+  display: block;
+  animation: gentlePulse 0.5s ease;
+}
+
+.feedback-header {
+  color: #1B5E20;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feedback-explanation {
+  background: #F1F8E9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4CAF50;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.quiz-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.quiz-btn {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.quiz-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.quiz-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.quiz-btn.secondary {
+  background: linear-gradient(135deg, #2196F3, #0D47A1);
+}
+
+/* ミッションクリア表示 */
+.mission-clear {
+  text-align: center;
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 20px 0;
+  border: 3px solid #4CAF50;
+  animation: celebrate 0.5s ease;
+}
+
+.correct-badge {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 1.2rem;
+}
+
 /* 拡大オーバーレイ */
 .overlay { 
   position: fixed; 
@@ -552,6 +791,17 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   .usage-options {
     grid-template-columns: repeat(2, 1fr);
   }
+  
+  .quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .quiz-question {
+    font-size: 1.4rem;
+    padding: 25px;
+  }
 }
 
 /* タッチデバイス向け */
@@ -604,7 +854,7 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 </div>
 
 <script>
-// ステップデータ（元のまま）
+// ステップデータ（クイズ付きに拡張）
 const steps = [
   { 
     nav: "① でんち", 
@@ -626,7 +876,30 @@ const steps = [
     detailAction: "🔍 電線の長さ150mm・25㎜（両端を5mmむく）<br>💡 磁石が電池にしっかり付いているか確認",
     emoji: "🧲",
     tips: "磁石がビタッとつくのが気持ちいいね！ワンチームで協力して、各自の作品を作りましょう",
-    keyPoint: "磁石の接着力"
+    keyPoint: "磁石の接着力",
+    // クイズデータを追加
+    hasQuiz: true,
+    quizData: {
+      question: "電線(10mm)を磁石2個(各5mm)ではさんで、銅テープで包みます。必要なテープの長さは？",
+      options: [
+        { 
+          text: "15mm", 
+          correct: false, 
+          hint: "電線だけを包む長さですが、磁石も一緒に包む必要があります" 
+        },
+        { 
+          text: "20mm", 
+          correct: true, 
+          hint: "電線(10mm) + 上磁石(5mm) + 下磁石(5mm) = 20mm！ちょうど良い長さです" 
+        },
+        { 
+          text: "25mm", 
+          correct: false, 
+          hint: "少し長すぎて無駄が出てしまいます" 
+        }
+      ],
+      explanation: "🧠 考え方：<br><br>1. まず、包むものを確認：<br>　・電線のむいた部分：10mm<br>　・上側の磁石：5mm<br>　・下側の磁石：5mm<br><br>2. 全部を足す：<br>　10mm + 5mm + 5mm = <strong>20mm</strong><br><br>3. 銅テープはこの合計の長さが必要！<br>　→ おにぎりをラップで包むときも、中身より少し大きめのラップを使うのと同じ考え方です。"
+    }
   },
   { 
     nav: "③ スイッチ", 
@@ -694,6 +967,10 @@ let currentStep = 0;
 // 指導員用タイトル長押し機能の状態管理
 let titleHoldTimer = null;
 
+// クイズ状態管理
+let currentQuizAnswer = null;
+let quizCompleted = false;
+
 // 拡大写真の状態管理（修正版）
 let currentOverlay = null;
 let overlayKeydownHandler = null;
@@ -716,6 +993,138 @@ const content = document.getElementById('content');
 const rotationWarning = document.getElementById('rotationWarning');
 const progressBar = document.getElementById('progressBar');
 const headerTitle = document.querySelector('.header h1');
+
+// ================= クイズ機能 =================
+function renderQuizSection(step) {
+  if (!step.hasQuiz || !step.quizData) return '';
+  
+  return `
+    <div class="quiz-section" id="quizSection">
+      <div class="quiz-question">
+        ${step.quizData.question}
+      </div>
+      
+      <div class="quiz-options" id="quizOptions">
+        ${step.quizData.options.map((option, index) => `
+          <div class="quiz-option" onclick="selectQuizOption(${index})" data-correct="${option.correct}">
+            <div class="option-marker">${String.fromCharCode(65 + index)}</div>
+            <div class="option-content">
+              <div class="option-text">${option.text}</div>
+              <div class="option-hint">${option.hint}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="quiz-controls">
+        <button class="quiz-btn" onclick="checkQuizAnswer()" id="checkBtn" disabled>
+          <span>✅</span> 答えを確認
+        </button>
+      </div>
+      
+      <div class="quiz-feedback" id="quizFeedback">
+        <div class="feedback-header">
+          <span>💡</span>
+          <span>解説</span>
+        </div>
+        <div class="feedback-explanation">
+          ${step.quizData.explanation}
+        </div>
+        <div class="quiz-controls">
+          <button class="quiz-btn secondary" onclick="proceedAfterQuiz()" id="proceedBtn">
+            <span>▶️</span> 次のステップへ進む
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectQuizOption(optionIndex) {
+  if (quizCompleted) return;
+  
+  const options = document.querySelectorAll('.quiz-option');
+  const checkBtn = document.getElementById('checkBtn');
+  
+  options.forEach((option, index) => {
+    option.classList.remove('selected');
+    if (index === optionIndex) {
+      option.classList.add('selected');
+    }
+  });
+  
+  currentQuizAnswer = optionIndex;
+  checkBtn.disabled = false;
+  
+  // バイブレーション（オプション）
+  if ('vibrate' in navigator) navigator.vibrate(30);
+}
+
+function checkQuizAnswer() {
+  if (currentQuizAnswer === null) return;
+  
+  const step = steps[currentStep];
+  const correctIndex = step.quizData.options.findIndex(opt => opt.correct);
+  const options = document.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById('quizFeedback');
+  const checkBtn = document.getElementById('checkBtn');
+  const proceedBtn = document.getElementById('proceedBtn');
+  
+  // 選択肢のスタイルを更新
+  options.forEach((option, index) => {
+    const isCorrect = step.quizData.options[index].correct;
+    if (isCorrect) {
+      option.classList.add('correct');
+    } else if (index === currentQuizAnswer) {
+      option.classList.add('incorrect');
+    }
+    option.classList.remove('selected');
+  });
+  
+  // フィードバック表示
+  feedback.classList.add('show');
+  
+  // 正解かどうかで処理
+  const isCorrect = step.quizData.options[currentQuizAnswer].correct;
+  
+  if (isCorrect) {
+    // 正解時の処理
+    quizCompleted = true;
+    checkBtn.style.display = 'none';
+    proceedBtn.style.display = 'flex';
+    
+    // ミッションクリアメッセージを追加
+    const quizSection = document.getElementById('quizSection');
+    const clearMessage = document.createElement('div');
+    clearMessage.className = 'mission-clear';
+    clearMessage.innerHTML = `
+      <div style="font-size: 3rem; margin-bottom: 15px;">🎉</div>
+      <h3 style="color: #1B5E20; margin-bottom: 10px;">クイズクリア！</h3>
+      <p>よくできました！理屈を理解できています。</p>
+      <div class="correct-badge">
+        ✅ 理解度チェック完了
+      </div>
+    `;
+    quizSection.appendChild(clearMessage);
+    
+    // バイブレーション
+    if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+  } else {
+    // 不正解時の処理
+    checkBtn.textContent = 'もう一度考える';
+    checkBtn.disabled = true;
+    currentQuizAnswer = null;
+    
+    // バイブレーション
+    if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
+  }
+}
+
+function proceedAfterQuiz() {
+  if (quizCompleted) {
+    goToNextStep();
+  }
+}
 
 // ================= 拡大写真機能（シンプル修正版） =================
 function openOverlay(src) {
@@ -766,7 +1175,7 @@ function openOverlay(src) {
   
   // オーバーレイ背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
-    if (e.target === this || e.target.classList.contains('overlay-content')) {
+    if (e.target === this || e.target.classList.contains('.overlay-content')) {
       closeOverlay();
     }
   });
@@ -1105,12 +1514,13 @@ function createPhotoElement(imgSrc, altText) {
   `;
 }
 
-// ================= 以下、元の関数（変更なし） =================
+// ================= 以下、元の関数（修正あり） =================
 function saveProgress() {
   localStorage.setItem('simple_progress', JSON.stringify({
     counts: completedCounts,
     lastStep: currentStep,
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    quizCompleted: quizCompleted
   }));
 }
 
@@ -1119,6 +1529,7 @@ function loadProgress() {
   if (saved && saved.counts) {
     completedCounts = saved.counts;
     currentStep = saved.lastStep || 0;
+    quizCompleted = saved.quizCompleted || false;
   }
 }
 
@@ -1167,8 +1578,9 @@ function updateProgressDisplay() {
   navBtns.forEach((btn, index) => {
     const isCompleted = completedCounts[index] === 4;
     const isCurrent = index === currentStep;
+    const hasQuiz = steps[index].hasQuiz;
     
-    btn.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+    btn.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${hasQuiz ? 'quiz-step' : ''}`;
   });
 }
 
@@ -1218,6 +1630,8 @@ function executeMinusOneFunction() {
 function resetAllProgress() {
   if (confirm('全ての進捗をリセットしますか？\nこれまでの完了記録が全て消えます。')) {
     completedCounts = [0, 0, 0, 0, 0, 0];
+    currentStep = 0;
+    quizCompleted = false;
     saveProgress();
     render();
   }
@@ -1226,6 +1640,7 @@ function resetAllProgress() {
 function goToNextStep() {
   if (currentStep < steps.length - 1) {
     currentStep++;
+    quizCompleted = false; // クイズ状態をリセット
     render();
     if ('vibrate' in navigator) navigator.vibrate(50);
   }
@@ -1399,9 +1814,18 @@ function renderNavButtons() {
     const b = document.createElement('button');
     const isCompleted = completedCounts[i] === 4;
     const isCurrent = i === currentStep;
+    const hasQuiz = s.hasQuiz;
     
-    b.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+    b.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${hasQuiz ? 'quiz-step' : ''}`;
     b.textContent = s.nav;
+    
+    // クイズがあるステップで未完了の場合、次のステップをロック
+    if (hasQuiz && !quizCompleted && i > currentStep) {
+      b.disabled = true;
+      b.style.opacity = '0.5';
+      b.title = '先にクイズをクリアしてください';
+    }
+    
     b.onclick = () => { 
       currentStep = i; 
       render(); 
@@ -1430,6 +1854,11 @@ function renderStepView(s) {
 
   let actionClass = 'action-section';
   if (s.danger) actionClass += ' danger-action';
+  
+  // クイズ状態をリセット（新規表示時）
+  if (!s.hasQuiz) {
+    quizCompleted = false;
+  }
 
   content.innerHTML = `
     <div class="step-card">
@@ -1467,7 +1896,9 @@ function renderStepView(s) {
           '<p style="text-align:center; color:#546e7a; font-size:0.9rem; margin-top:8px;">写真を見て確認してから作業しましょう</p>' : ''}
       </div>
       
-      ${renderKidsCompleteArea(stepIndex)}
+      ${s.hasQuiz ? renderQuizSection(s) : ''}
+      
+      ${!s.hasQuiz ? renderKidsCompleteArea(stepIndex) : ''}
     </div>`;
 }
 
@@ -1543,7 +1974,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-console.log('👨‍🏫 工作指導アプリ - 安定版 起動完了');
+console.log('👨‍🏫 工作指導アプリ - 理屈理解クイズ付き 起動完了');
 </script>
 </body>
 </html>
