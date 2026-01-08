@@ -509,6 +509,188 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
   line-height: 1.5;
 }
 
+/* 色分け計算セクション */
+.color-calc-section {
+  background: #E8F5E9;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 25px 0;
+  border: 2px solid #4CAF50;
+}
+
+.color-calc-section .title-area {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.color-calc-section .main-title {
+  font-size: 1.4rem;
+  color: #1B5E20;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.color-items {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+.color-item {
+  min-width: 150px;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-top: 5px solid;
+}
+
+.color-item.orange { border-top-color: #FF9800; }
+.color-item.green { border-top-color: #4CAF50; }
+.color-item.blue { border-top-color: #2196F3; }
+.color-item.blue-highlight {
+  background: #E3F2FD;
+  border: 3px solid #2196F3;
+  position: relative;
+}
+
+.blue-highlight::before {
+  content: "ポイント！";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2196F3;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.color-item.brown { border-top-color: #FFD600; }
+
+.color-item .emoji {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.color-item .size {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.color-item.orange .size { color: #FF9800; }
+.color-item.green .size { color: #4CAF50; }
+.color-item.blue .size { color: #2196F3; }
+.color-item.brown .size { color: #E65100; }
+
+.color-item .label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 5px;
+  line-height: 1.3;
+}
+
+.calculation-result {
+  text-align: center;
+}
+
+.calculation-box {
+  display: inline-block;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  border: 2px solid #1B5E20;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.calculation-box .calc-note {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.calculation-box .calc-formula {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #1B5E20;
+  line-height: 1.6;
+}
+
+.calc-formula .orange { color: #FF9800; }
+.calc-formula .green { color: #4CAF50; }
+.calc-formula .blue { 
+  color: #2196F3; 
+  background: #E3F2FD; 
+  padding: 5px 10px; 
+  border-radius: 5px;
+}
+.calc-formula .brown { color: #E65100; }
+.calc-formula .result { color: #E91E63; font-size: 2rem; }
+
+.color-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.color-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.color-dot.orange { background: #FF9800; }
+.color-dot.green { background: #4CAF50; }
+.color-dot.blue { background: #2196F3; }
+.color-dot.brown { background: #E65100; }
+
+.color-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #666;
+}
+
+.team-message {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: #FFF3E0;
+  border-radius: 8px;
+  border-left: 4px solid #FF9800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #E65100;
+}
+
+.team-message .emoji {
+  font-size: 1.5rem;
+}
+
+.team-message .text {
+  flex: 1;
+}
+
+.team-message strong {
+  display: block;
+}
+
 .quiz-controls {
   display: flex;
   justify-content: center;
@@ -802,6 +984,12 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
     font-size: 1.4rem;
     padding: 25px;
   }
+  
+  .color-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    overflow-x: visible;
+  }
 }
 
 /* タッチデバイス向け */
@@ -1030,10 +1218,120 @@ function renderQuizSection(step) {
         <div class="feedback-explanation">
           ${step.quizData.explanation}
         </div>
+        
+        <!-- 色分け計算セクションを追加 -->
+        ${renderColorCalcSection()}
+        
         <div class="quiz-controls">
           <button class="quiz-btn secondary" onclick="proceedAfterQuiz()" id="proceedBtn">
             <span>▶️</span> 次のステップへ進む
           </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 色分け計算セクション
+function renderColorCalcSection() {
+  return `
+    <div class="color-calc-section">
+      <div class="title-area">
+        <div class="main-title">
+          <span>🎨</span>
+          <span>色でつながる！数字の意味</span>
+          <span>🎨</span>
+        </div>
+      </div>
+      
+      <!-- イラスト部分（色付き数値） -->
+      <div class="color-items">
+        <!-- 絶縁カバー（前） -->
+        <div class="color-item orange">
+          <div class="emoji">🧤</div>
+          <div class="size">2mm</div>
+          <div class="label">絶縁カバー<br>（前）</div>
+        </div>
+        
+        <!-- 電線 -->
+        <div class="color-item green">
+          <div class="emoji">🔌</div>
+          <div class="size">5mm</div>
+          <div class="label">電線<br>むき出し</div>
+        </div>
+        
+        <!-- 磁石（特別強調） -->
+        <div class="color-item blue blue-highlight">
+          <div class="emoji">🧲×2</div>
+          <div class="size">5mm + 5mm</div>
+          <div class="label">上下の磁石<br>2個セット！</div>
+        </div>
+        
+        <!-- 絶縁カバー（後） -->
+        <div class="color-item orange">
+          <div class="emoji">🧤</div>
+          <div class="size">2mm</div>
+          <div class="label">絶縁カバー<br>（後）</div>
+        </div>
+        
+        <!-- 余裕 -->
+        <div class="color-item brown">
+          <div class="emoji">📏</div>
+          <div class="size">1mm</div>
+          <div class="label">テープの<br>余裕</div>
+        </div>
+      </div>
+      
+      <!-- 合計（色を完全同期） -->
+      <div class="calculation-result">
+        <div class="calculation-box">
+          <div class="calc-note">
+            🧮 同じ色の数字を全部足すと…
+          </div>
+          <div class="calc-formula">
+            <span class="orange">2</span> 
+            <span>+</span>
+            <span class="green">5</span> 
+            <span>+</span>
+            <span class="blue">(5+5)</span> 
+            <span>+</span>
+            <span class="orange">2</span> 
+            <span>+</span>
+            <span class="brown">1</span> 
+            <span>=</span>
+            <span class="result">20mm</span>
+          </div>
+          
+          <!-- 色の説明 -->
+          <div class="color-legend">
+            <div class="color-legend-item">
+              <div class="color-dot orange"></div>
+              <span>絶縁カバー</span>
+            </div>
+            <div class="color-legend-item">
+              <div class="color-dot green"></div>
+              <span>電線</span>
+            </div>
+            <div class="color-legend-item">
+              <div class="color-dot blue"></div>
+              <span>磁石</span>
+            </div>
+            <div class="color-legend-item">
+              <div class="color-dot brown"></div>
+              <span>余裕</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ワンチームメッセージ -->
+      <div class="team-message">
+        <span class="emoji">💡</span>
+        <div class="text">
+          <strong>色で覚えよう！</strong>
+          <div style="font-size: 0.9rem; color: #5D4037;">
+            オレンジの2 + 緑の5 + 青の(5+5) + オレンジの2 + 茶色の1
+          </div>
         </div>
       </div>
     </div>
