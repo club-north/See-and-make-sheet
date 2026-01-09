@@ -48,7 +48,6 @@ body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "游ゴシッ�
 .nav-btn { flex-shrink: 0; padding: 10px 12px; font-size: 1rem; font-weight: bold; border: none; border-radius: 10px; background: #e8f5e9; color: #2E7D32; min-width: 80px; min-height: 50px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
 .nav-btn:hover, .nav-btn:focus { background: #c8e6c9; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
 .nav-btn.active { background: #FF9800; color: white; box-shadow: 0 0 0 2px white, 0 0 0 4px #FF9800; }
-.nav-btn:focus { outline: 3px solid #4CAF50; outline-offset: 1px; }
 .nav-btn.completed::before { content: "✅ "; }
 .nav-btn.quiz-step::before { content: "🧠 "; }
 
@@ -859,7 +858,7 @@ const steps = [
   { 
     nav: "① でんち", 
     title: "① 電池ボックスを作ろう", 
-    img1: "./images/battery_box.jpg", 
+    img1: "images/battery_box.jpg", 
     img2: "", 
     mainAction: "✅ 電池の向きOK！", 
     detailAction: "💡 プラス（＋）とマイナス（－）の向きを確認しましょう",
@@ -870,8 +869,8 @@ const steps = [
   { 
     nav: "② せん", 
     title: "② 電線を取り付けよう", 
-    img1: "./images/wire_magnet.jpg", 
-    img2: "./images/wire_zoom.jpg", 
+    img1: "images/wire_magnet.jpg", 
+    img2: "images/wire_zoom.jpg", 
     mainAction: "✅ 線がつながった！", 
     detailAction: "🔍 電線の長さ150mm・25㎜（両端を5mmむく）<br>💡 磁石が電池にしっかり付いているか確認",
     emoji: "🧲",
@@ -890,7 +889,7 @@ const steps = [
         { 
           text: "20mm", 
           correct: true, 
-          hint: "絶縁カバー(2mm) + 電線(5mm) + 磁石(5+5mm) + 絶縁カバー(2mm) + 余裕(1mm) = 20mm" 
+          hint: "磁石の幅5mmをしっかり包むために必要な長さです" 
         },
         { 
           text: "25mm", 
@@ -900,119 +899,194 @@ const steps = [
       ],
       explanation: `
         <div style="background:#E8F5E9; padding:20px; border-radius:12px; margin-top:20px; border:2px solid #4CAF50;">
-          <div style="text-align:center; margin-bottom:20px;">
-            <div style="font-size:1.3rem; color:#1B5E20; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:10px;">
-              <span>🎨</span>
-              <span>色でつながる！数字の意味</span>
-              <span>🎨</span>
-            </div>
-          </div>
-          
-          <!-- 画像をここに配置 -->
+      
+          <!-- 画像を参照しながら解説 -->
           <div style="text-align:center; margin-bottom:25px; padding:15px; background:white; border-radius:10px; border:2px solid #E0E0E0;">
-            <img src="./images/magnet_insulation.png" alt="磁石と絶縁部分の構造図" style="max-width:100%; max-height:300px; border-radius:8px;">
+            <img src="images/magnet_insulation.png" alt="磁石と絶縁部分の構造図" style="max-width:100%; max-height:250px; border-radius:8px;">
             <div style="font-size:0.9rem; color:#666; margin-top:10px; text-align:center;">
-              磁石（5mm）と絶縁部分（2mm）の構造
+              参考：磁石と絶縁部分の構造図
             </div>
           </div>
-          
-          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:25px;">
-            <div style="display:flex; align-items:center; gap:15px;">
-              <div style="width:25px; height:25px; background:#FF9800; border-radius:50%; flex-shrink:0;"></div>
-              <div>
-                <strong style="color:#FF9800;">2mm</strong>
-                <div style="font-size:0.9rem; color:#666;">絶縁カバー（前）</div>
-              </div>
-            </div>
+      
+          <!-- 構造の詳細解説 -->
+          <div style="background:white; border-radius:10px; padding:20px; margin-bottom:20px; border:1px solid #E0E0E0;">
+            <h3 style="color:#1B5E20; text-align:center; margin-bottom:15px; display:flex; align-items:center; justify-content:center; gap:10px;">
+              <span>🔍</span>
+              構造を詳しく見てみよう
+              <span>🔍</span>
+            </h3>
             
-            <div style="display:flex; align-items:center; gap:15px;">
-              <div style="width:25px; height:25px; background:#4CAF50; border-radius:50%; flex-shrink:0;"></div>
-              <div>
-                <strong style="color:#4CAF50;">5mm</strong>
-                <div style="font-size:0.9rem; color:#666;">電線むき出し</div>
-              </div>
-            </div>
-            
-            <div style="display:flex; align-items:center; gap:15px; background:#E3F2FD; padding:12px; border-radius:8px; border-left:4px solid #2196F3;">
-              <div style="width:30px; height:30px; background:#2196F3; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">
-                !
-              </div>
-              <div>
-                <strong style="color:#2196F3;">5mm + 5mm</strong>
-                <div style="font-size:0.9rem; color:#666;">上下の磁石2個セット！</div>
-              </div>
-            </div>
-            
-            <div style="display:flex; align-items:center; gap:15px;">
-              <div style="width:25px; height:25px; background:#FF9800; border-radius:50%; flex-shrink:0;"></div>
-              <div>
-                <strong style="color:#FF9800;">2mm</strong>
-                <div style="font-size:0.9rem; color:#666;">絶縁カバー（後）</div>
-              </div>
-            </div>
-            
-            <div style="display:flex; align-items:center; gap:15px; margin-top:10px;">
-              <div style="width:25px; height:25px; background:#FFD600; border-radius:50%; flex-shrink:0;"></div>
-              <div>
-                <strong style="color:#E65100;">1mm</strong>
-                <div style="font-size:0.9rem; color:#666;">テープの余裕</div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="text-align:center; background:white; padding:20px; border-radius:10px; border:2px solid #1B5E20;">
-            <div style="font-size:1.1rem; color:#666; margin-bottom:15px; display:flex; align-items:center; justify-content:center; gap:8px;">
-              <span>🧮</span>
-              <span>同じ色の数字を全部足すと…</span>
-            </div>
-            
-            <div style="font-size:1.8rem; font-weight:bold; color:#1B5E20; line-height:1.6;">
-              <span style="color:#FF9800;">2</span> 
-              <span>+</span>
-              <span style="color:#4CAF50;">5</span> 
-              <span>+</span>
-              <span style="color:#2196F3; background:#E3F2FD; padding:5px 10px; border-radius:5px;">
-                (5+5)
-              </span> 
-              <span>+</span>
-              <span style="color:#FF9800;">2</span> 
-              <span>+</span>
-              <span style="color:#E65100;">1</span> 
-              <span>=</span>
-              <span style="color:#E91E63; font-size:2rem;">20mm</span>
-            </div>
-            
-            <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:15px; margin-top:20px; font-size:0.9rem;">
-              <div style="display:flex; align-items:center; gap:5px;">
-                <div style="width:15px; height:15px; background:#FF9800; border-radius:3px;"></div>
-                <span style="color:#666;">絶縁カバー</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:5px;">
-                <div style="width:15px; height:15px; background:#4CAF50; border-radius:3px;"></div>
-                <span style="color:#666;">電線</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:5px;">
-                <div style="width:15px; height:15px; background:#2196F3; border-radius:3px;"></div>
-                <span style="color:#666;">磁石</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:5px;">
-                <div style="width:15px; height:15px; background:#FFD600; border-radius:3px;"></div>
-                <span style="color:#666;">余裕</span>
-              </div>
-            </div>
-          </div>
-          
-          <div style="background:#E3F2FD; padding:15px; border-radius:8px; margin-top:20px; border-left:4px solid #2196F3;">
-            <div style="display:flex; align-items:center; gap:10px; color:#0D47A1;">
-              <span style="font-size:1.5rem;">🔧</span>
-              <div>
-                <strong>実際の工作手順：</strong>
-                <div style="font-size:0.95rem; color:#1565C0; margin-top:5px;">
-                  1. 電線の被覆を<strong>5mmだけ</strong>剥く<br>
-                  2. 剥いた部分に磁石2個（計10mm）をはさむ<br>
-                  3. 20mmの銅テープでしっかり巻き、絶縁する
+            <div style="display:flex; flex-direction:column; gap:15px;">
+              
+              <!-- 絶縁カバー -->
+              <div style="display:flex; align-items:center; gap:15px; background:#FFF3E0; padding:12px; border-radius:8px; border-left:4px solid #FF9800;">
+                <div style="width:40px; height:40px; background:#FF9800; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0;">
+                  ①
+                </div>
+                <div>
+                  <strong style="color:#E65100;">絶縁カバー（前） 3mm</strong>
+                  <div style="font-size:0.9rem; color:#5D4037;">
+                    電線と磁石を包むためのテープの始まり部分
+                  </div>
                 </div>
               </div>
+              
+              <!-- 磁石（上） -->
+              <div style="display:flex; align-items:center; gap:15px; background:#E3F2FD; padding:12px; border-radius:8px; border-left:4px solid #2196F3;">
+                <div style="width:40px; height:40px; background:#2196F3; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0;">
+                  ②
+                </div>
+                <div>
+                  <strong style="color:#0D47A1;">磁石（上） 1.5mm</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    上側の磁石の高さ
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 電線 -->
+              <div style="display:flex; align-items:center; gap:15px; background:#E8F5E9; padding:12px; border-radius:8px; border-left:4px solid #4CAF50;">
+                <div style="width:40px; height:40px; background:#4CAF50; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0;">
+                  ③
+                </div>
+                <div>
+                  <strong style="color:#1B5E20;">電線むき出し部分 1mm</strong>
+                  <div style="font-size:0.9rem; color:#2E7D32;">
+                    被覆を剥いた電線の厚み
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 磁石（下） -->
+              <div style="display:flex; align-items:center; gap:15px; background:#E3F2FD; padding:12px; border-radius:8px; border-left:4px solid #2196F3;">
+                <div style="width:40px; height:40px; background:#2196F3; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0;">
+                  ④
+                </div>
+                <div>
+                  <strong style="color:#0D47A1;">磁石（下） 1.5mm</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    下側の磁石の高さ
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 絶縁カバー（後） -->
+              <div style="display:flex; align-items:center; gap:15px; background:#FFF3E0; padding:12px; border-radius:8px; border-left:4px solid #FF9800;">
+                <div style="width:40px; height:40px; background:#FF9800; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0;">
+                  ⑤
+                </div>
+                <div>
+                  <strong style="color:#E65100;">絶縁カバー（後） 3mm</strong>
+                  <div style="font-size:0.9rem; color:#5D4037;">
+                    テープの終わり部分
+                  </div>
+                </div>
+              </div>
+              
+              <!-- 重ねしろ -->
+              <div style="display:flex; align-items:center; gap:15px; background:#FFFDE7; padding:12px; border-radius:8px; border-left:4px solid #FFD600; border:2px dashed #FF9800;">
+                <div style="width:40px; height:40px; background:#FFD600; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#333; font-weight:bold; flex-shrink:0;">
+                  ⑥
+                </div>
+                <div>
+                  <strong style="color:#F57C00;">テープの重ねしろ 1mm</strong>
+                  <div style="font-size:0.9rem; color:#FF8F00;">
+                    テープがしっかり固定されるための余裕
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- 重要なポイント -->
+          <div style="background:#FFF3E0; padding:15px; border-radius:10px; margin-bottom:20px; border:2px solid #FF9800;">
+            <div style="display:flex; align-items:flex-start; gap:15px;">
+              <div style="font-size:1.5rem; color:#E65100; flex-shrink:0;">💡</div>
+              <div>
+                <strong style="color:#E65100;">重要なポイント：厚み方向と幅方向の違い</strong>
+                <div style="margin-top:8px; color:#5D4037; line-height:1.5;">
+                  この計算は「厚み方向」の合計です（約11mm）。<br>
+                  でも、実際に磁石を包むには「幅方向」にテープが必要です。<br>
+                  磁石の幅は<strong>5mm</strong>なので、それをしっかり包むためには<br>
+                  <strong>幅5mm + 絶縁分 + 重ねしろ = 約20mm</strong>のテープが必要です！
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 実際の工作手順 -->
+          <div style="background:#E3F2FD; padding:20px; border-radius:10px; border:2px solid #2196F3;">
+            <h3 style="color:#0D47A1; text-align:center; margin-bottom:15px; display:flex; align-items:center; justify-content:center; gap:10px;">
+              <span>🔧</span>
+              実際の工作手順
+              <span>🔧</span>
+            </h3>
+            
+            <div style="display:grid; grid-template-columns:1fr; gap:12px;">
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <div style="background:#2196F3; color:white; width:25px; height:25px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">
+                  1
+                </div>
+                <div>
+                  <strong>電線を5mmむく</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    ニッパーで被覆を丁寧に剥く
+                  </div>
+                </div>
+              </div>
+              
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <div style="background:#2196F3; color:white; width:25px; height:25px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">
+                  2
+                </div>
+                <div>
+                  <strong>磁石2個ではさむ</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    上から1.5mm、下から1.5mmの磁石ではさむ
+                  </div>
+                </div>
+              </div>
+              
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <div style="background:#2196F3; color:white; width:25px; height:25px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">
+                  3
+                </div>
+                <div>
+                  <strong>20mmの銅テープで巻く</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    幅5mmの磁石をしっかり包める長さ
+                  </div>
+                </div>
+              </div>
+              
+              <div style="display:flex; align-items:flex-start; gap:10px;">
+                <div style="background:#2196F3; color:white; width:25px; height:25px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; flex-shrink:0;">
+                  4
+                </div>
+                <div>
+                  <strong>しっかり固定</strong>
+                  <div style="font-size:0.9rem; color:#1565C0;">
+                    テープの端を1mm重ねてしっかり貼る
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- まとめ -->
+          <div style="text-align:center; margin-top:25px; padding-top:20px; border-top:2px solid #4CAF50;">
+            <div style="font-size:1.2rem; color:#1B5E20; font-weight:bold; margin-bottom:10px;">
+              <span>🎯</span>
+              まとめ
+              <span>🎯</span>
+            </div>
+            <div style="background:white; padding:15px; border-radius:8px; border:1px solid #C8E6C9;">
+              <p style="color:#333; line-height:1.6; margin:0;">
+                磁石の<strong>幅5mm</strong>をしっかり絶縁するために、<br>
+                <strong>約20mmの銅テープ</strong>が必要です！<br>
+                厚み方向の計算と、幅方向の実際の長さの違いを理解しましょう。
+              </p>
             </div>
           </div>
         </div>
@@ -1022,7 +1096,7 @@ const steps = [
   { 
     nav: "③ スイッチ", 
     title: "③ 前後切り替えスイッチ", 
-    img1: "./images/switch_complete.jpg", 
+    img1: "images/switch_complete.jpg", 
     img2: "", 
     mainAction: "✅ 前後が切り替わる！", 
     detailAction: "💡 左右SWを押して切り替わるか確認してください",
@@ -1033,7 +1107,7 @@ const steps = [
   { 
     nav: "④ まわる", 
     title: "④ モーターが回るか確認", 
-    img1: "./images/motor_test.jpg", 
+    img1: "images/motor_test.jpg", 
     img2: "", 
     mainAction: "✅ 回れば OK（又は、LEDチェッカーで調べる）", 
     detailAction: "💡 指を近づけないよう注意<br>💡 回らない（つかない）場合は配線を確認",
@@ -1045,8 +1119,8 @@ const steps = [
   { 
     nav: "⑤ みため", 
     title: "⑤ 見た目を整えよう", 
-    img1: "./images/car_complete.jpg", 
-    img2: "./images/3ami.gif", 
+    img1: "images/car_complete.jpg", 
+    img2: "images/3ami.gif", 
     mainAction: "✅ つなぎ方をためそう！（三つ編みしてみよう！）", 
     detailAction: "💡 前後が逆なら入れ替えてみよう",
     emoji: "🚗",
@@ -1056,7 +1130,7 @@ const steps = [
   { 
     nav: "⑥ かんせい", 
     title: "⑥ 完成！動かしてみよう", 
-    img1: "./images/complete.jpg", 
+    img1: "images/complete.jpg", 
     img2: "", 
     mainAction: "🎉 前後に動いたら大成功！", 
     detailAction: "💡 安全な場所で走らせて、完成を確認しましょう",
@@ -1078,8 +1152,8 @@ const stepTimes = {
   0: 20, 1: 30, 2: 30, 3: 20, 4: 40, 5: 30
 };
 
-// 進捗管理（元のまま）
-let completedCounts = [0, 0, 0, 0, 0, 0]; // 各工程の完了数（0〜4）
+// 進捗管理
+let completedCounts = [0, 0, 0, 0, 0, 0];
 let currentStep = 0;
 
 // 指導員用タイトル長押し機能の状態管理
@@ -1089,7 +1163,7 @@ let titleHoldTimer = null;
 let currentQuizAnswer = null;
 let quizCompleted = false;
 
-// 拡大写真の状態管理（修正版）
+// 拡大写真の状態管理
 let currentOverlay = null;
 let overlayKeydownHandler = null;
 let zoomState = {
@@ -1174,7 +1248,6 @@ function selectQuizOption(optionIndex) {
   currentQuizAnswer = optionIndex;
   checkBtn.disabled = false;
   
-  // バイブレーション（オプション）
   if ('vibrate' in navigator) navigator.vibrate(30);
 }
 
@@ -1188,7 +1261,6 @@ function checkQuizAnswer() {
   const checkBtn = document.getElementById('checkBtn');
   const proceedBtn = document.getElementById('proceedBtn');
   
-  // 選択肢のスタイルを更新
   options.forEach((option, index) => {
     const isCorrect = step.quizData.options[index].correct;
     if (isCorrect) {
@@ -1199,19 +1271,15 @@ function checkQuizAnswer() {
     option.classList.remove('selected');
   });
   
-  // フィードバック表示
   feedback.classList.add('show');
   
-  // 正解かどうかで処理
   const isCorrect = step.quizData.options[currentQuizAnswer].correct;
   
   if (isCorrect) {
-    // 正解時の処理
     quizCompleted = true;
     checkBtn.style.display = 'none';
     proceedBtn.style.display = 'flex';
     
-    // ミッションクリアメッセージを追加
     const quizSection = document.getElementById('quizSection');
     const clearMessage = document.createElement('div');
     clearMessage.className = 'mission-clear';
@@ -1225,15 +1293,12 @@ function checkQuizAnswer() {
     `;
     quizSection.appendChild(clearMessage);
     
-    // バイブレーション
     if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
   } else {
-    // 不正解時の処理
     checkBtn.textContent = 'もう一度考える';
     checkBtn.disabled = true;
     currentQuizAnswer = null;
     
-    // バイブレーション
     if ('vibrate' in navigator) navigator.vibrate([50, 100, 50]);
   }
 }
@@ -1244,7 +1309,7 @@ function proceedAfterQuiz() {
   }
 }
 
-// ================= 拡大写真機能（シンプル修正版） =================
+// ================= 拡大写真機能 =================
 function openOverlay(src) {
   closeOverlay();
   
@@ -1254,7 +1319,6 @@ function openOverlay(src) {
   currentOverlay.setAttribute('aria-modal', 'true');
   currentOverlay.setAttribute('aria-label', '拡大画像');
   
-  // ズーム状態をリセット
   resetZoomState();
   
   currentOverlay.innerHTML = `
@@ -1291,14 +1355,12 @@ function openOverlay(src) {
     if (closeBtn) closeBtn.focus();
   }, 10);
   
-  // オーバーレイ背景クリックで閉じる
   currentOverlay.addEventListener('click', function(e) {
     if (e.target === this || e.target.classList.contains('.overlay-content')) {
       closeOverlay();
     }
   });
   
-  // キーボードイベント
   overlayKeydownHandler = function(e) {
     if (e.key === 'Escape') {
       closeOverlay();
@@ -1324,17 +1386,14 @@ function initZoomControls(imgElement) {
   const container = imgElement.parentElement;
   const indicator = document.getElementById('zoomIndicator');
   
-  // ダブルタップでズーム
   let lastTap = 0;
   imgElement.addEventListener('touchstart', function(e) {
     const currentTime = new Date().getTime();
     const tapLength = currentTime - lastTap;
     
     if (tapLength < 300 && tapLength > 0 && e.touches.length === 1) {
-      // ダブルタップ
       e.preventDefault();
       if (zoomState.scale === 1) {
-        // ズームイン（2倍）
         const touch = e.touches[0];
         const rect = imgElement.getBoundingClientRect();
         const tapX = touch.clientX - rect.left;
@@ -1345,7 +1404,6 @@ function initZoomControls(imgElement) {
         zoomState.posY = tapY / newScale - tapY / zoomState.scale + zoomState.posY;
         zoomState.scale = newScale;
       } else {
-        // ズームアウト（リセット）
         resetZoom(imgElement, indicator);
       }
       
@@ -1354,7 +1412,6 @@ function initZoomControls(imgElement) {
     lastTap = currentTime;
   });
   
-  // マウスホイールズーム（PC）
   container.addEventListener('wheel', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -1366,7 +1423,6 @@ function initZoomControls(imgElement) {
     
     const newScale = Math.max(1, Math.min(5, zoomState.scale * delta));
     
-    // マウス位置を中心にズーム
     zoomState.posX = mouseX / newScale - mouseX / zoomState.scale + zoomState.posX;
     zoomState.posY = mouseY / newScale - mouseY / zoomState.scale + zoomState.posY;
     zoomState.scale = newScale;
@@ -1374,12 +1430,10 @@ function initZoomControls(imgElement) {
     updateTransform(imgElement, indicator);
   }, { passive: false });
   
-  // タッチイベント
   container.addEventListener('touchstart', function(e) {
     e.preventDefault();
     
     if (e.touches.length === 1) {
-      // 1本指：ドラッグ開始
       zoomState.isDragging = true;
       zoomState.isPinching = false;
       
@@ -1391,14 +1445,12 @@ function initZoomControls(imgElement) {
       
       imgElement.classList.add('dragging');
     } else if (e.touches.length === 2) {
-      // 2本指：ピンチズーム開始
       zoomState.isDragging = false;
       zoomState.isPinching = true;
       
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       
-      // 初期距離を計算
       zoomState.startDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +
         Math.pow(touch2.clientY - touch1.clientY, 2)
@@ -1406,7 +1458,6 @@ function initZoomControls(imgElement) {
       
       zoomState.startScale = zoomState.scale;
       
-      // ピンチ中心を計算
       const centerX = (touch1.clientX + touch2.clientX) / 2;
       const centerY = (touch1.clientY + touch2.clientY) / 2;
       const rect = imgElement.getBoundingClientRect();
@@ -1420,7 +1471,6 @@ function initZoomControls(imgElement) {
     e.preventDefault();
     
     if (zoomState.isDragging && e.touches.length === 1) {
-      // 1本指ドラッグ
       const touch = e.touches[0];
       const deltaX = touch.clientX - zoomState.startX;
       const deltaY = touch.clientY - zoomState.startY;
@@ -1432,22 +1482,18 @@ function initZoomControls(imgElement) {
         updateTransform(imgElement, indicator);
       }
     } else if (zoomState.isPinching && e.touches.length === 2) {
-      // 2本指ピンチズーム
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
       
-      // 現在の距離を計算
       const currentDistance = Math.sqrt(
         Math.pow(touch2.clientX - touch1.clientX, 2) +
         Math.pow(touch2.clientY - touch1.clientY, 2)
       );
       
       if (zoomState.startDistance > 0) {
-        // スケール計算
         const scale = zoomState.startScale * (currentDistance / zoomState.startDistance);
         const newScale = Math.max(1, Math.min(5, scale));
         
-        // ピンチ中心を維持
         if (zoomState.pinchCenterX !== undefined) {
           const centerX = zoomState.pinchCenterX;
           const centerY = zoomState.pinchCenterY;
@@ -1488,7 +1534,6 @@ function applyBoundary(imgElement) {
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
   
-  // X方向の制限
   if (scaledWidth > containerWidth) {
     const maxX = (scaledWidth - containerWidth) / (2 * zoomState.scale);
     zoomState.posX = Math.max(-maxX, Math.min(maxX, zoomState.posX));
@@ -1496,7 +1541,6 @@ function applyBoundary(imgElement) {
     zoomState.posX = 0;
   }
   
-  // Y方向の制限
   if (scaledHeight > containerHeight) {
     const maxY = (scaledHeight - containerHeight) / (2 * zoomState.scale);
     zoomState.posY = Math.max(-maxY, Math.min(maxY, zoomState.posY));
@@ -1543,7 +1587,6 @@ function zoomIn() {
   
   const newScale = Math.min(5, zoomState.scale * 1.3);
   
-  // 中心を維持
   const container = imgElement.parentElement;
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
@@ -1566,7 +1609,6 @@ function zoomOut() {
   
   const newScale = Math.max(1, zoomState.scale * 0.7);
   
-  // 中心を維持
   const container = imgElement.parentElement;
   const containerWidth = container.clientWidth;
   const containerHeight = container.clientHeight;
@@ -1632,7 +1674,7 @@ function createPhotoElement(imgSrc, altText) {
   `;
 }
 
-// ================= 以下、元の関数（修正あり） =================
+// ================= 以下、元の関数 =================
 function saveProgress() {
   localStorage.setItem('simple_progress', JSON.stringify({
     counts: completedCounts,
@@ -1758,7 +1800,7 @@ function resetAllProgress() {
 function goToNextStep() {
   if (currentStep < steps.length - 1) {
     currentStep++;
-    quizCompleted = false; // クイズ状態をリセット
+    quizCompleted = false;
     render();
     if ('vibrate' in navigator) navigator.vibrate(50);
   }
@@ -1937,7 +1979,6 @@ function renderNavButtons() {
     b.className = `nav-btn ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${hasQuiz ? 'quiz-step' : ''}`;
     b.textContent = s.nav;
     
-    // クイズがあるステップで未完了の場合、次のステップをロック
     if (hasQuiz && !quizCompleted && i > currentStep) {
       b.disabled = true;
       b.style.opacity = '0.5';
@@ -1973,7 +2014,6 @@ function renderStepView(s) {
   let actionClass = 'action-section';
   if (s.danger) actionClass += ' danger-action';
   
-  // クイズ状態をリセット（新規表示時）
   if (!s.hasQuiz) {
     quizCompleted = false;
   }
